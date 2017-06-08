@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>甲鱼的大数据之旅</title>
+  <subtitle>从入门到跑路</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://gpdream.github.io/"/>
+  <updated>2017-06-08T09:55:17.000Z</updated>
+  <id>https://gpdream.github.io/</id>
+  
+  <author>
+    <name>甲鱼</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Pattern和Matcher.find源码解读</title>
+    <link href="https://gpdream.github.io/2017/06/08/java/Pattern%E5%92%8CMatcher-find%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"/>
+    <id>https://gpdream.github.io/2017/06/08/java/Pattern和Matcher-find源码解读/</id>
+    <published>2017-06-08T09:49:10.000Z</published>
+    <updated>2017-06-08T09:55:17.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Pattern和Matcher.find做的动作，以及Matcher.find可能带来的指数级性能下降原因分析.
+    
+    </summary>
+    
+    
+      <category term="java" scheme="https://gpdream.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>阿里云EDAS介绍</title>
+    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS%25A2%25DA+_/"/>
+    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/</id>
+    <published>2017-03-17T05:28:51.000Z</published>
+    <updated>2017-03-17T05:46:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>阿里云tableStore介绍</title>
+    <link href="https://gpdream.github.io/2017/03/17/aliyun/tableStore%25A2%25DA+_/"/>
+    <id>https://gpdream.github.io/2017/03/17/aliyun/tableStore%A2%DA+_/</id>
+    <published>2017-03-17T05:28:51.000Z</published>
+    <updated>2017-03-17T05:30:42.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Table Store前身是阿里云的OTS&lt;br&gt;贴一段阿里云上Table Store（原OTS）的产品概述&lt;/p&gt;
+&lt;p&gt;表格存储（Table Store）是构建在阿里云飞天分布式系统之上的 NoSQL 数据存储服务，提供海量结构化数据的存储和实时访问。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;表格存储以实例和表的形式组织数据，通过数据分片和负载均衡技术，达到规模的无缝扩展。&lt;/li&gt;
+&lt;li&gt;表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提供非常高的服务可用性。&lt;/li&gt;
+&lt;li&gt;表格存储管理的数据全部存储在 SSD 中并具有多个备份，提供了快速的访问性能和极高的数据可靠性。&lt;/li&gt;
+&lt;li&gt;用户在使用表格存储服务时，只需要按照预留和使用的资源进行付费，无需关心数据库的软硬件升级维护、集群缩容扩容等复杂问题。
+    
+    </summary>
+    
+    
+      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>分布式一致性算法</title>
+    <link href="https://gpdream.github.io/2017/02/23/hadoop/%25C0%CD%A6+-%25A2%25CA+%25CD-%25F0%25C8-%25D2%25C0%25BF/"/>
+    <id>https://gpdream.github.io/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/</id>
+    <published>2017-02-23T05:23:49.000Z</published>
+    <updated>2017-02-23T05:26:52.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;介绍一致性hash,raft和gossip三种一致性算法&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="https://gpdream.github.io/tags/hadoop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mycat源码解读1-登录mycat</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycatA%CC%87-%25D9-%25C1%25C3-+/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycatȦ-%D9-%C1%C3-+/</id>
+    <published>2017-02-14T05:28:51.000Z</published>
+    <updated>2017-02-14T06:35:10.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mycat源码解读2-sql处理</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycatA%CC%87-%25D9-sql%25A6%25AA+%25DD/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycatȦ-%D9-sql%A6%AA+%DD/</id>
+    <published>2017-02-14T05:28:51.000Z</published>
+    <updated>2017-02-14T06:38:42.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本章解读mycat接收到一条sql命令后使如何处理的&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mycat源码解读3-请求数据库</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycatA%CC%87-%25D9--%25B2%25A5%25A6+%25D4%25C3%25D9%C3%BE/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycatȦ-%D9--%B2%A5%A6+%D4%C3%D9þ/</id>
+    <published>2017-02-14T05:28:51.000Z</published>
+    <updated>2017-02-14T06:41:20.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上篇讲了mycat接受到sql后是如何处理的，本篇讲mycat在接受到sql后如何数据库连接并将执行结果返回给客户端。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>hadoop 3.0特性</title>
+    <link href="https://gpdream.github.io/2017/01/05/hadoop/hadoop3%25F0-%25A6%25CF%25F0%25C8/"/>
+    <id>https://gpdream.github.io/2017/01/05/hadoop/hadoop3%F0-%A6%CF%F0%C8/</id>
+    <published>2017-01-05T01:22:49.000Z</published>
+    <updated>2017-01-05T01:39:46.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;hadoop当前版本是3.0.0-alpha1，3.0release版本预计是2016年年底出，在这几个月期间指不定还会出一些什么幺蛾子。这里主要介绍下目前为止hadoop3.0的新特性。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="hadoop" scheme="https://gpdream.github.io/tags/hadoop/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>greenplum OOM的难问题定位</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gp%20OOM+-%25A6%25D4%25C0%25CD+%25F7/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:14:04.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;背景描述&quot;&gt;&lt;a href=&quot;#背景描述&quot; class=&quot;headerlink&quot; title=&quot;背景描述&quot;&gt;&lt;/a&gt;背景描述&lt;/h2&gt;&lt;p&gt;使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。&lt;/p&gt;
+&lt;h2 id=&quot;问题定位&quot;&gt;&lt;a href=&quot;#问题定位&quot; class=&quot;headerlink&quot; title=&quot;问题定位&quot;&gt;&lt;/a&gt;问题定位&lt;/h2&gt;&lt;h3 id=&quot;用户的最大进程数导致segment失效&quot;&gt;&lt;a href=&quot;#用户的最大进程数导致segment失效&quot; class=&quot;headerlink&quot; title=&quot;用户的最大进程数导致segment失效&quot;&gt;&lt;/a&gt;用户的最大进程数导致segment失效&lt;/h3&gt;&lt;p&gt;查询pg_log日志，发现如下信息&lt;code&gt;could not fork new process for connection: Resource temporarily unavailable。&lt;/code&gt;&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>由于gpstop -M immediate导致gp reciverseg失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/GP%20recoverseg-%25BA%25A6_/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg-%BA%A6_/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:01:16.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;h3 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h3&gt;&lt;p&gt;有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。&lt;/p&gt;
+&lt;h3 id=&quot;现象-1&quot;&gt;&lt;a href=&quot;#现象-1&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h3&gt;&lt;p&gt;gpstart -a 集群启动成功，但带告警&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>greenplum的worlkoad详解</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/greenplum%25C1-worlkoad%25A4%DB%A2%25D4/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/greenplum%C1-worlkoad%A4ۢ%D4/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:19:06.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;默认8192，内存资源限制。计算公式为（x&lt;em&gt;单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1&lt;/em&gt;126)/16=7.875GB.则该值设置为7875.&lt;br&gt;gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被statement_mem和resource queue memory limits所限，设置为none,当设置为None，memory management与4.1版本GP相同。当设置为eager_free时，将会最大程度的使用内存，但不超过max_statement_mem和resourece queue的内存限制。&lt;/p&gt;
+&lt;h1 id=&quot;描述&quot;&gt;&lt;a href=&quot;#描述&quot; class=&quot;headerlink&quot; title=&quot;描述&quot;&gt;&lt;/a&gt;描述&lt;/h1&gt;&lt;p&gt;主要起控制查询队列和防止系统过载的作用。&lt;br&gt;当用户提交一个查询的时候，这个查询会被评估是否超过了资源队列的限制。如果这个查询没有超过资源限制，则会被立即执行。如果该查询超过了资源队列的限制，则查询必须等到资源队列里前面的查询执行结束有空闲才会进行。查询请求默认先进先出。如果启用了查询优先级的设置，超级管理员的。&lt;br&gt;使Workload生效需要如下几步：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;配置workload Managermnat的配置项（可使用默认配置）&lt;/li&gt;
+&lt;li&gt;创建资源队列，并设置资源队列的limit值&lt;/li&gt;
+&lt;li&gt;将用户添加到资源队列中&lt;/li&gt;
+&lt;li&gt;检查/监控资源队列状态&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>greenplum的motion机制</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/greenplum%25C1-motion+%25B7%25CD%25E3/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/greenplum%C1-motion+%B7%CD%E3/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:17:02.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;查询计划会根据sql语句的预估开销来决策选择哪种motion，一般情况下，假设我有语句GP相比其他数据库有的操作类型，有一个额外操作类型叫做motion,一个motion操作会涉及segment进行查询时的数据移动。并非所有的操作都会触发moiton操作。例如精确查询，不会涉及到segment之间的数据交互。当sql语句涉及到join、aggregation、sort（或其他对于行的操作)，就会有移动数据的需求，GP生成查询计划的时候会有motion node出现。&lt;/p&gt;
+&lt;p&gt;GP有如下几种motion方式：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Broadcast Motion：广播方式，每个节点向其他节点广播需要发送的数据。&lt;/li&gt;
+&lt;li&gt;redistribute motion：重分布移动数据，当sql语句做join的时候，join的列值hash不同，将筛选后的数据在其他segment重新发布.&lt;/li&gt;
+&lt;li&gt;explicit redistribute motion：&lt;/li&gt;
+&lt;li&gt;gather motion : segment数据汇聚到master。
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>机器有大量剩余内存时但java进程还是报OOM错误</title>
+    <link href="https://gpdream.github.io/2017/01/04/java/gp%20OOM+-%25A6%25D4%25C0%25CD+%25F7/"/>
+    <id>https://gpdream.github.io/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T07:05:34.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;p&gt;当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。&lt;br&gt;但在运行&lt;code&gt;java -version&lt;/code&gt;的时候出错，提示&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;[root@m1 tmp]# Error occurred during initialization of VM&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;Could not reserve enough space for object heap&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;Error: Could not create the Java Virtual Machine.&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;Error: A fatal exception has occurred. Program will exit.&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;通过&lt;code&gt;free -h&lt;/code&gt;查看发现机器有很大的空余内存，但还是报内存不够初始化jvm。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;[root@m1 ~]# free -h&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;              total        used        free      shared  buff/cache   available&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;Mem:            94G        1.4G         90G        2.2G        2.5G         90G&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;Swap:          4.0G          0B        4.0G&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="java" scheme="https://gpdream.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>信号量问题导致gp启动失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/%25F0+%25A6+-++-%25A6%25D4%25C1+%25CD-gp%25E3%25B6%C2%BB-%25BA%25A6_/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/%F0+%A6+-++-%A6%D4%C1+%CD-gp%E3%B6»-%BA%A6_/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:05:16.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;[toc]&lt;/p&gt;
+&lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;p&gt;在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;/p&gt;
+&lt;p&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…&lt;br&gt;.. &lt;/p&gt;
+&lt;p&gt;20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>由于缓存文件存在导致gpinitsystem失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/%25CB+%25CB++%25A6%25A6%25B5+-+%25A6%25A6%25B5%25C8+%25C1+%25CD-gpinitsystem-%25BA%25A6_/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/%CB+%CB++%A6%A6%B5+-+%A6%A6%B5%C8+%C1+%CD-gpinitsystem-%BA%A6_/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:15:38.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;GP集群：master, segment1, segment2&lt;/p&gt;
+&lt;p&gt;问题描述：&lt;br&gt;segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。&lt;/p&gt;
+&lt;p&gt;在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>gp参数详解</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/GP%25A6+-%25B2%25A4%DB%A2%25D4%25FA%25BF%25A6%25A6%25A6%25AA-_%25FA%25AE/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T05:49:18.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt; 官方文档：&lt;a href=&quot;http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+</feed>
