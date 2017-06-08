@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>greenplum OOM的难问题定位 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景描述使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。 问题定位用户的最大进程数导致segment失效查询pg_log日志，发现如下信息could not fork new process for connection: Resourc">
+<meta name="keywords" content="greenplum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="greenplum OOM的难问题定位">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="背景描述使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。 问题定位用户的最大进程数导致segment失效查询pg_log日志，发现如下信息could not fork new process for connection: Resourc">
+<meta property="og:updated_time" content="2017-01-04T06:14:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="greenplum OOM的难问题定位">
+<meta name="twitter:description" content="背景描述使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。 问题定位用户的最大进程数导致segment失效查询pg_log日志，发现如下信息could not fork new process for connection: Resourc">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-greenplum/gp OOM+-%A6%D4%C0%CD+%F7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      greenplum OOM的难问题定位
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="用户的最大进程数导致segment失效"><a href="#用户的最大进程数导致segment失效" class="headerlink" title="用户的最大进程数导致segment失效"></a>用户的最大进程数导致segment失效</h3><p>查询pg_log日志，发现如下信息<code>could not fork new process for connection: Resource temporarily unavailable。</code><br><a id="more"></a><br>当该日志反复出现后，会出现segment与gpmaster连接断开，认为segment已挂的情况，导致segment不可用。初步估计是一台机器上起了过多的segment，每次连接都会在segment上打开一个新的请求。<br>于是查看业务程序的gp连接数，发现连接数有240个之多，而配置的最大连接数为250个。虽然连接很多，但还没达到上限。通过<code>ulimit -a</code>查看系统配置参数，发现用户最大进程数存在问题。gpadmin用户的系统内核配置项<code>max user processes              (-u) 4096</code>,和gp官方推荐的131072相差较大，在<code>vi /etc/security/limits.conf</code> 配置如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">* soft nofile 65536</div><div class="line">* hard nofile 65536</div><div class="line">* soft nproc 131072</div><div class="line">* hard nproc 131072</div></pre></td></tr></table></figure></p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>nproc为用户进程数，可以看出最大进程数被配置为了131072，但是gpadmin用户的没有配置，于是追加两行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">gpadmin soft nproc 131072</div><div class="line">gpadmin hard nproc 131072</div></pre></td></tr></table></figure></p>
+<p>修改完gp集群各操作系统的该配置项后，不再报该错误。但第二天发现集群又有segment挂了，继续定位。</p>
+<h3 id="OOM导致segment挂了，致使集群不可用"><a href="#OOM导致segment挂了，致使集群不可用" class="headerlink" title="OOM导致segment挂了，致使集群不可用"></a>OOM导致segment挂了，致使集群不可用</h3><p>看到日志<code>could not fork new process for connection: Cannot allocate memory</code>。出现这种错误，一般是由于操作系统无法给segment分配所需要的内存导致的。但gp的每个segment有个安全阈值，配置项<code>gp_vmem_protect_limit</code>的值，默认为8192，当segment使用的内存占用到了<code>runaway_detector_activation_percent</code>（默认90%）的值时候，就会拒绝掉新的sql请求，以此保证不会出现OOM的情况。gpadmin用户同样会收到该限制。那gp为什么会挂呢，检查<code>gpconfig -s gp_vmem_protect_limit</code>发现是默认值8192，按照官网上的建议配置，该值应该设置成一台机器上的(总内存+<br>swap 内存)<em>0.9</em>0.5/主segmemnt数目 ，我们的机器一台是256GB内存，一台运行16个主segment，那所需要配置的内存应该是256GB<em>0.9</em>0.5/16=7372M<br>.修改gp_vmem_protect_limit为7372MB，重启集群。但在业务程序开始使用的时候，再次出现segment挂了的情况。把该值调整成一半，再次挂掉。让我们分析下GP在哪些情况上可能出现OOM的情况。</p>
+<h3 id="OOM可能出现的情况。"><a href="#OOM可能出现的情况。" class="headerlink" title="OOM可能出现的情况。"></a>OOM可能出现的情况。</h3><p>当集群出现oom的时候，能在日志下看到类似内容:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&quot;ERROR&quot;,&quot;53400&quot;,&quot;Out of memory (seg13 slice13 sdw1-1:40001 pid=10183)&quot;,&quot;VM Protect failed to allocate 8388608 bytes, 6 MB available&quot;`</div><div class="line">&quot;ERROR&quot;,&quot;53200&quot;,&quot;Out of memory. Failed on request of size 156 bytes. (context &apos;CacheMemoryContext&apos;) (aset.c:840)&quot;</div></pre></td></tr></table></figure></p>
+<p>避免集群出现OOM参数的关键配置项是<code>gp_vmem_protect_limit</code><br>关于上面报错码为53400的，往往会有如下日志相伴出现:</p>
+<ul>
+<li><code>&quot;VM Protect failed to allocate %d bytes,%d MB available&quot;</code>：这种情况一般是由于request请求所需要的结果集很大造成，例如查询需要返回的内容为10G，而segment的保护阈值为8G，就有可能出现该问题。</li>
+<li><code>&quot;Per-query VM protect limit reached: current limit is %d kB, requested %d bytes, available %d MB&quot;</code>:一个请求超出极限：gp_vmem_protect_limit_per_query</li>
+<li><code>&quot;VM protect failed to allocate %d bytes from system, VM Protect %d MB available&quot;</code>:这种情况是虽然segment看上去还有很多内存可申请，但操作系统已经无法分配更多内存给他了。当集群挂的时候，出现过错误allocate 1024 bytes,7000MB available的情况。虽然segment看上去可以申请很多内存，但操作系统已经无法进行内存分配。</li>
+<li><code>&quot;Failed to allocate memory under virtual memory protection&quot; &quot;Error %d, errno %d, %s&quot;</code>: 该问题是由于应用的内存分配，具体不知。但与上面三个的原因不同。</li>
+</ul>
+<h4 id="官网给出的OOM解决办法"><a href="#官网给出的OOM解决办法" class="headerlink" title="官网给出的OOM解决办法"></a>官网给出的OOM解决办法</h4><h5 id="错误码53400"><a href="#错误码53400" class="headerlink" title="错误码53400"></a>错误码53400</h5><ol>
+<li>资源队列使用的配置的内存太大，超过了<code>gp_vmem_protect_limit</code>,如果是这种情况，需要把资源对列的最大可用内存调小。</li>
+<li>超大的查询计划占用掉太多内存，这种情况需要设置<code>gp_max_plan_size</code>，来避免超大的查询计划出现</li>
+<li><code>gp_vmem_protect_limit</code>设置不合理，如果设置的太高容易OOM，调低该值</li>
+<li>有其他进程占用掉系统内存，导致程序分不到资源</li>
+</ol>
+<h5 id="错误码53200"><a href="#错误码53200" class="headerlink" title="错误码53200"></a>错误码53200</h5><p>segment的postmaster 进程不能从操作系统申请内存，需要配合系统日志一起分析解决。</p>
+<h3 id="解决我们的问题"><a href="#解决我们的问题" class="headerlink" title="解决我们的问题"></a>解决我们的问题</h3><h4 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h4><p>毫无疑问我们的错误是属于53400那种。业务程序最早使用的用户是gpadmin，连接数最多会接近max_connections值。当进行大量查询的时候就会出现OOM异常。而调小segment的内存值我们已经设置过了，并不生效。按照官网文档给的segment保护内存值，8192也是一个比较接近我们环境应该配置的值。于是尝试自己写了个并发程序来看gp到什么程度下会OOM。在自己的并发程序中。<br>模拟业务程序操作GP的方法，取5条业务程序执行的sql语句，该语句Limit 100000，每条sql语句都会占据较大的内存，语句执行完成后，不释放ResultSet，若干个线程反复执行，造成的情况如下。<br>同时起若干个线程，每个线程占用掉一个连接，每个线程循环执行若干次，出现了如下的情况。<br><code>ACTIVE_STATEMENTS=1,MEMORY_LIMIT=&#39;6000MB&#39; 35个线程可以正常运行
+ACTIVE_STATEMENTS=2,MEMORY_LIMIT=&#39;6000MB&#39; 35个线程 一定时间后少量被取消。
+ACTIVE_STATEMENTS=2,MEMORY_LIMIT=&#39;6000MB&#39; 25个线程 一段时间后少量报错。
+ACTIVE_STATEMENTS=2,MEMORY_LIMIT=&#39;6000MB&#39; 20个线程 无报错。
+ACTIVE_STATEMENTS=3,MEMORY_LIMIT=&#39;6000MB&#39; 20个线程 无报错。
+ACTIVE_STATEMENTS=4,MEMORY_LIMIT=&#39;6000MB&#39; 20个线程 无报错。</code><br>当连接数和同时执行的sql达到一定值后，就会报OOM异常。初步猜测是有由于原先建立的连接占用的资源未释放，同时业务程序不停的创建新的连接下发sql来消耗掉大量的内存，直至申请不到内存，导致OOM异常。由于GP是不会去限制gpadmin的内存使用的，只要有空闲连接，gp就会允许gpadmin的sql语句往下执行。假如刚好某个segment内存已到瓶颈，此时gpadmin再申请一个连接，就有可能会报oom异常 <code>can not fork process for new connection:can not allocate memory</code>.当内存耗尽的时候，便报了segment oom错误，gp集群不可使用。</p>
+<h4 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h4><p>我们创建一个资源队列，并把用户添加到该资源队列中。限制该资源对列允许使用的内存值为7000MB。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CREATE RESOURCE QUEUE i3 WITH (ACTIVE_STATEMENTS=5, MEMORY_LIMIT=&apos;7000MB&apos;);</div><div class="line">CREATE ROLE i3user LOGIN RESOURCE QUEUE i3;</div></pre></td></tr></table></figure></p>
+<p>让业务程序使用非超级用户来访问GP,但由于业务程序会不停的申请使用gp的内存资源，把最大连接数也限制为25，以此避免业务程序操作gp时候创建大量连接消耗掉资源，当资源达到7000MB时候，便拒绝掉后续的请求。以此保证gp集群的正常可用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/" data-id="cj3o8nb5s000adxi94kbdw7br" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/05/hadoop/hadoop3%F0-%A6%CF%F0%C8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          hadoop 3.0特性
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">gp参数详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/08/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

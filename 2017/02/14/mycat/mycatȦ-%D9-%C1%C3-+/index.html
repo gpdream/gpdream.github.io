@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mycat源码解读1-登录mycat | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="mycat的启动过程及mycat登录部分代码">
+<meta name="keywords" content="mycat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mycat源码解读1-登录mycat">
+<meta property="og:url" content="https://gpdream.github.io/2017/02/14/mycat/mycatȦ-%D9-%C1%C3-+/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="mycat的启动过程及mycat登录部分代码">
+<meta property="og:updated_time" content="2017-02-14T06:35:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mycat源码解读1-登录mycat">
+<meta name="twitter:description" content="mycat的启动过程及mycat登录部分代码">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mycat/mycatȦ-%D9-%C1%C3-+" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/14/mycat/mycatȦ-%D9-%C1%C3-+/" class="article-date">
+  <time datetime="2017-02-14T05:28:51.000Z" itemprop="datePublished">2017-02-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mycat源码解读1-登录mycat
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>mycat的启动过程及mycat登录部分代码<br><a id="more"></a><br>mycat的启动类是MycatStartup，启动的时候会启动两个Server。分别是FrontendServer和ManagerServer。ManageServer先不管，暂时关注于FrontendServer.</p>
+<ul>
+<li><p>FrontendServer的初始化为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ServerConnectionFactory sf = new ServerConnectionFactory();</div><div class="line">...</div><div class="line">...</div><div class="line">server = new NIOAcceptor(DirectByteBufferPool.LOCAL_BUF_THREAD_PREX + NAME</div><div class="line">					+ &quot;Server&quot;, system.getBindIp(), system.getServerPort(), sf, reactorPool);</div></pre></td></tr></table></figure>
+</li>
+<li><p>再看ServerConnectionFactory的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class ServerConnectionFactory extends FrontendConnectionFactory &#123;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected FrontendConnection getConnection(NetworkChannel channel) throws IOException &#123;</div><div class="line">        SystemConfig sys = MycatServer.getInstance().getConfig().getSystem();</div><div class="line">        //使用该connection，channel丢给该connection。</div><div class="line">        ServerConnection c = new ServerConnection(channel);</div><div class="line">        MycatServer.getInstance().getConfig().setSocketParams(c, true);</div><div class="line">        c.setPrivileges(MycatPrivileges.instance());</div><div class="line">        c.setQueryHandler(new ServerQueryHandler(c));</div><div class="line">        c.setLoadDataInfileHandler(new ServerLoadDataInfileHandler(c));</div><div class="line">        c.setPrepareHandler(new ServerPrepareHandler(c));</div><div class="line">        c.setTxIsolation(sys.getTxIsolation());</div><div class="line">        c.setSession2(new NonBlockingSession(c));</div><div class="line">        return c;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>每次请求获得的Connection为ServerConnection。ServerConnection直接使用父类的构造方法.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">public FrontendConnection(NetworkChannel channel) throws IOException &#123;</div><div class="line">		super(channel);</div><div class="line">		InetSocketAddress localAddr = (InetSocketAddress) channel.getLocalAddress();</div><div class="line">		InetSocketAddress remoteAddr = null;</div><div class="line">		if (channel instanceof SocketChannel) &#123;</div><div class="line">			remoteAddr = (InetSocketAddress) ((SocketChannel) channel).getRemoteAddress();	</div><div class="line">			</div><div class="line">		&#125; else if (channel instanceof AsynchronousSocketChannel) &#123;</div><div class="line">			remoteAddr = (InetSocketAddress) ((AsynchronousSocketChannel) channel).getRemoteAddress();</div><div class="line">		&#125;</div><div class="line">		</div><div class="line">		this.host = remoteAddr.getHostString();</div><div class="line">		this.port = localAddr.getPort();</div><div class="line">		this.localPort = remoteAddr.getPort();</div><div class="line">		//将handler指向为FrontendAuthenticator</div><div class="line">		this.handler = new FrontendAuthenticator(this);</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>可以看到使用的handler为FrontendAuthenticator，该handler起个认证的作用。看该类的handle方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">public void handle(byte[] data) &#123;</div><div class="line">        // check quit packet</div><div class="line">        if (data.length == QuitPacket.QUIT.length &amp;&amp; data[4] == MySQLPacket.COM_QUIT) &#123;</div><div class="line">            source.close(&quot;quit packet&quot;);</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        AuthPacket auth = new AuthPacket();</div><div class="line">        auth.read(data);</div><div class="line">        </div><div class="line">        ...</div><div class="line">        ...</div><div class="line">        default:</div><div class="line">            success(auth);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">protected void success(AuthPacket auth) &#123;</div><div class="line">    source.setAuthenticated(true);</div><div class="line">    source.setUser(auth.user);</div><div class="line">    source.setSchema(auth.database);</div><div class="line">    source.setCharsetIndex(auth.charsetIndex);</div><div class="line">    //成功后将handler指向FrontendCommandHandler</div><div class="line">    source.setHandler(new FrontendCommandHandler(source));</div><div class="line"></div><div class="line">    if (LOGGER.isInfoEnabled()) &#123;</div><div class="line">        StringBuilder s = new StringBuilder();</div><div class="line">        s.append(source).append(&apos;\&apos;&apos;).append(auth.user).append(&quot;&apos; login success&quot;);</div><div class="line">        byte[] extra = auth.extra;</div><div class="line">        if (extra != null &amp;&amp; extra.length &gt; 0) &#123;</div><div class="line">            s.append(&quot;,extra:&quot;).append(new String(extra));</div><div class="line">        &#125;</div><div class="line">        LOGGER.info(s.toString());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ByteBuffer buffer = source.allocate();</div><div class="line">    source.write(source.writeToBuffer(AUTH_OK, buffer));</div><div class="line">    boolean clientCompress = Capabilities.CLIENT_COMPRESS==(Capabilities.CLIENT_COMPRESS &amp; auth.clientFlags);</div><div class="line">    boolean usingCompress= MycatServer.getInstance().getConfig().getSystem().getUseCompression()==1 ;</div><div class="line">    if(clientCompress&amp;&amp;usingCompress)</div><div class="line">    &#123;</div><div class="line">        source.setSupportCompress(true);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>到此步骤为止，完成登录验证。登录成功后FrontendCOnnection的handler指向了FrontendCommandHandler。后续继续阅读mycat 请求sql部分代码。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/02/14/mycat/mycatȦ-%D9-%C1%C3-+/" data-id="cj3o8nb6h000tdxi95iopbur9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/14/mycat/mycatȦ-%D9--%B2%A5%A6+%D4%C3%D9þ/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          mycat源码解读3-请求数据库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/14/mycat/mycatȦ-%D9-sql%A6%AA+%DD/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mycat源码解读2-sql处理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/08/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

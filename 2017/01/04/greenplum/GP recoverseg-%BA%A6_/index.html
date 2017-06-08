@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>由于gpstop -M immediate导致gp reciverseg失败 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="现象操作有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。 现象gpstart -a 集群启动成功，但带告警123456789101120161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:---------">
+<meta name="keywords" content="greenplum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由于gpstop -M immediate导致gp reciverseg失败">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg-%BA%A6_/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="现象操作有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。 现象gpstart -a 集群启动成功，但带告警123456789101120161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:---------">
+<meta property="og:updated_time" content="2017-01-04T06:01:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="由于gpstop -M immediate导致gp reciverseg失败">
+<meta name="twitter:description" content="现象操作有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。 现象gpstart -a 集群启动成功，但带告警123456789101120161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:---------">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-greenplum/GP recoverseg-%BA%A6_" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/GP recoverseg-%BA%A6_/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      由于gpstop -M immediate导致gp reciverseg失败
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。</p>
+<h3 id="现象-1"><a href="#现象-1" class="headerlink" title="现象"></a>现象</h3><p>gpstart -a 集群启动成功，但带告警<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1</div><div class="line">20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active</div><div class="line">20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>此时集群处于一个无法连接的状态，但通过<code>gpstate</code>查看集群状态，集群正常无告警，但有2个segment处于resync状态，这两个segment对应的正是原先主备挂掉了的segment。</p>
+<h3 id="原因定位"><a href="#原因定位" class="headerlink" title="原因定位"></a>原因定位</h3><p>通过命令行工具模式直接psql连接<code>PGOPTIONS=&#39;-c gp_session_role=utility&#39; psql -h192.168.124.32 -p 50000</code>，连接其他segment正常，但当连接到原先准备做gprecoverseg的那个mirror失败，提示Database is Starting。这个segment没有正常启动。进入这个segment，查看下面的日志，发现有如下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">2016-10-31 09:56:38.668411 CST,,,p4738,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;run resync worker&apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync worker #2 process(4738)&apos; &apos;cdbfilerepresyncworker.c&apos; &apos;L114&apos; &apos;FileRepPrimary_RunResyncWorker&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.668460 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;run resync transition, record last lsn in change tracking&apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbfilerepresyncmanager.c&apos; &apos;L843&apos; &apos;FileRepResyncManager_InResyncTransition&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.668492 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;full resync &apos;false&apos; resync lsn &apos;0/4F44B30(0/83118896)&apos; &apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbfilerepresyncmanager.c&apos; &apos;L350&apos; &apos;FileRepResyncManager_SetEndResyncLSN&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.668519 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;setting resync lsn &apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbresynchronizechangetracking.c&apos; &apos;L2417&apos; &apos;ChangeTracking_RecordLastChangeTrackedLoc&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.739675 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;no ct records to flush count &apos;0&apos; size &apos;0&apos; max &apos;32768&apos; offset -1 fileseg &apos;0&apos; &apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbresynchronizechangetracking.c&apos; &apos;L2456&apos; &apos;ChangeTracking_RecordLastChangeTrackedLoc&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.743869 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;run resync transition, mark scan incremental&apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbfilerepresyncmanager.c&apos; &apos;L878&apos; &apos;FileRepResyncManager_InResyncTransition&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.744573 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;run resync transition, mark page incremental&apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbfilerepresyncmanager.c&apos; &apos;L887&apos; &apos;FileRepResyncManager_InResyncTransition&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.744633 CST,,,p4736,th-1827370944,,,,0,,,seg-1,,,,,&quot;LOG&quot;,&quot;00000&quot;,&quot;&apos;running a full round of compacting the logs &apos;, mirroring role &apos;primary role&apos; mirroring state &apos;resync&apos; segment state &apos;transition to resync&apos; filerep state &apos;up and running&apos; process name(pid) &apos;primary resync manager process(4736)&apos; &apos;cdbresynchronizechangetracking.c&apos; &apos;L3093&apos; &apos;ChangeTracking_DoFullCompactingRound&apos;&quot;,,,,,,,0,,&quot;cdbfilerep.c&quot;,1837,</div><div class="line">2016-10-31 09:56:38.794314 CST,,,p4736,th0,,,,0,,cmd1,seg-1,,,,,&quot;PANIC&quot;,&quot;XX000&quot;,&quot;Unexpected internal error: Segment process received signal SIGSEGV&quot;,,,,,,,0,,,,&quot;1    0x944ea3 postgres StandardHandlerForSigillSigsegvSigbus_OnMainThread + 0x163</div><div class="line">2    0x7fda90ae4100 libpthread.so.0 &lt;symbol not found&gt; + 0x90ae4100</div><div class="line">3    0x4cabd8 postgres heap_compute_data_size + 0x68</div><div class="line">4    0x50ecba postgres gp_changetracking_log + 0x10a</div><div class="line">5    0x690b51 postgres ExecMakeTableFunctionResult + 0x251</div><div class="line">6    0x6ac897 postgres &lt;symbol not found&gt; + 0x6ac897</div></pre></td></tr></table></figure>
+<p>启动进程是crash掉了的，虽然主进程postgres在，但该segment的启动还是crash掉了，日志里可以看出他在尝试再次执行增量的sync。再联想之前的操作，是在继续前面未完成的gprecoverseg。但是该动作被gpstop -M immediate打断了。看看immediate的帮助信息</p>
+<p><code>immediate shut down. Any transactions in progress are aborted. This 
+ shutdown mode is not recommended, and in some circumstances can cause 
+ database corruption requiring manual recovery.</code></p>
+<p> immediate强制中断了gprecovreseg的事务，当segment再次起来尝试执行增量recoverseg的时候需要借助segment下的pg_changetracking目录里的文件，但文件内容并不完整，导致segment的增量resync失败。<br> 将该文件的内容移走<code>mv pg_changetracking/* /tmp/pg_changetracking</code>.</p>
+<p> 重启集群<code>gpstop -ar</code>集群恢复正常</p>
+<p> <em>强制停止集群的时候最好用<code>gpstop -M fast</code>来代替<code>gpstop -M immediate</code>fast 会中断事务并尝试让事务回滚，虽然有的事务回滚会比较慢，但相比immediate的粗暴，并不需要做太多环境恢复的事情。</em></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg-%BA%A6_/" data-id="cj3o8nb5q0007dxi9d389con1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/04/greenplum/greenplum%C1-worlkoad%A4ۢ%D4/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          greenplum的worlkoad详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">机器有大量剩余内存时但java进程还是报OOM错误</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/08/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

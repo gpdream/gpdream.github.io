@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>阿里云tableStore介绍 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Table Store前身是阿里云的OTS贴一段阿里云上Table Store（原OTS）的产品概述 表格存储（Table Store）是构建在阿里云飞天分布式系统之上的 NoSQL 数据存储服务，提供海量结构化数据的存储和实时访问。  表格存储以实例和表的形式组织数据，通过数据分片和负载均衡技术，达到规模的无缝扩展。 表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提">
+<meta name="keywords" content="aliyun">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云tableStore介绍">
+<meta property="og:url" content="https://gpdream.github.io/2017/03/17/aliyun/tableStore%A2%DA+_/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="Table Store前身是阿里云的OTS贴一段阿里云上Table Store（原OTS）的产品概述 表格存储（Table Store）是构建在阿里云飞天分布式系统之上的 NoSQL 数据存储服务，提供海量结构化数据的存储和实时访问。  表格存储以实例和表的形式组织数据，通过数据分片和负载均衡技术，达到规模的无缝扩展。 表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提">
+<meta property="og:image" content="http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/pic/27281/cn_zh/1470029774660/DataModel.jpg">
+<meta property="og:updated_time" content="2017-03-17T05:30:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="阿里云tableStore介绍">
+<meta name="twitter:description" content="Table Store前身是阿里云的OTS贴一段阿里云上Table Store（原OTS）的产品概述 表格存储（Table Store）是构建在阿里云飞天分布式系统之上的 NoSQL 数据存储服务，提供海量结构化数据的存储和实时访问。  表格存储以实例和表的形式组织数据，通过数据分片和负载均衡技术，达到规模的无缝扩展。 表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提">
+<meta name="twitter:image" content="http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/pic/27281/cn_zh/1470029774660/DataModel.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-aliyun/tableStore%A2%DA+_" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/" class="article-date">
+  <time datetime="2017-03-17T05:28:51.000Z" itemprop="datePublished">2017-03-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      阿里云tableStore介绍
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Table Store前身是阿里云的OTS<br>贴一段阿里云上Table Store（原OTS）的产品概述</p>
+<p>表格存储（Table Store）是构建在阿里云飞天分布式系统之上的 NoSQL 数据存储服务，提供海量结构化数据的存储和实时访问。</p>
+<ol>
+<li>表格存储以实例和表的形式组织数据，通过数据分片和负载均衡技术，达到规模的无缝扩展。</li>
+<li>表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提供非常高的服务可用性。</li>
+<li>表格存储管理的数据全部存储在 SSD 中并具有多个备份，提供了快速的访问性能和极高的数据可靠性。</li>
+<li>用户在使用表格存储服务时，只需要按照预留和使用的资源进行付费，无需关心数据库的软硬件升级维护、集群缩容扩容等复杂问题。<a id="more"></a>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2>Table Store前身是阿里云的OTS<br>贴一段阿里云上Table Store（原OTS）的产品概述</li>
+</ol>
+<p>表格存储（Table Store）是构建在阿里云飞天分布式系统之上的 NoSQL 数据存储服务，提供海量结构化数据的存储和实时访问。</p>
+<ol>
+<li>表格存储以实例和表的形式组织数据，通过数据分片和负载均衡技术，达到规模的无缝扩展。</li>
+<li>表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提供非常高的服务可用性。</li>
+<li>表格存储管理的数据全部存储在 SSD 中并具有多个备份，提供了快速的访问性能和极高的数据可靠性。</li>
+<li>用户在使用表格存储服务时，只需要按照预留和使用的资源进行付费，无需关心数据库的软硬件升级维护、集群缩容扩容等复杂问题。</li>
+</ol>
+<h3 id="简介解读"><a href="#简介解读" class="headerlink" title="简介解读"></a>简介解读</h3><p>Table Store是原OTS，OTS是据说是根据谷歌论文的BigTable自己实现的。hadoop生态圈中对应bigTable的是hbase。而OTS完美兼容hbase .解读ots的时候和hbase的做一些简单对比。</p>
+<ol>
+<li>简介1解读<br>简介1的重点是数据模型和数据自动分片，自动负载均衡，无缝扩展。<br>表格存储的数据模型概念包括表、行、主键和属性，如下图所示(图片来自阿里云TableStore)。<br><img src="http://docs-aliyun.cn-hangzhou.oss.aliyun-inc.com/assets/pic/27281/cn_zh/1470029774660/DataModel.jpg" alt="image"><br>如果有对应数据的话，那数据展示就会如下所示</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Type</th>
+<th>ISBN </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4476</td>
+<td>Book</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>65555</td>
+<td>NULL</td>
+<td>Music</td>
+</tr>
+</tbody>
+</table>
+<p>这个模型完美的说明了简介1.这是一个很常见的K/V结构,主键以外任意的字段可以为空。这种形式和hbase的数据模型是完全相同的。能自动根据id来做分区达成自动数据分片和负载均衡。和hbase的Resgion会自动分片数据，Resgion自动增长切割迁移也是一样。<br>差异在于，主键有4个字段，而且每一列都包装好了数值类型，在操作的时候会更方便。</p>
+<ol>
+<li>简介2解读<br>简介2是服务高可用。<br>ots提供的服务如果和hbase一样，hbase提供服务的region server，会在出现故障的时候自动迁移到集群的其他机器中。</li>
+<li>简介3解读<br>简介3是数据高可靠，多备份，高速访问。TableStore的数据存储在盘古上，自然解决了这些问题，用的还是SSD的盘古。</li>
+<li>简介4解读<br>一些维护啥的就不用关心了，给钱我帮你做。</li>
+</ol>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>DataStore有http api和阿里云的DataStore的sdk两种。</p>
+<h3 id="http-api"><a href="#http-api" class="headerlink" title="http api"></a>http api</h3><p>他们的http api看上去比hbase rest api要强大。支持大部分的功能，但是为了尽可能多的支持功能，他们的api里只能用post方法请求。</p>
+<h3 id="dataStroe-sdk的api"><a href="#dataStroe-sdk的api" class="headerlink" title="dataStroe sdk的api"></a>dataStroe sdk的api</h3><p>sdk有aliyun_tablestore_java_sdk和TableStore HBase Client。使用TableStore HBase Client 支持 1.x.x 版本以上的开源 HBase API。无休修改代码就可将hbase上的业务迁移过来。</p>
+<h2 id="TableStore和hbase的区别"><a href="#TableStore和hbase的区别" class="headerlink" title="TableStore和hbase的区别"></a>TableStore和hbase的区别</h2><p>TableStore的官网介绍里有文章<a href="https://help.aliyun.com/document_detail/50220.html?spm=5176.doc27299.6.586.2QpxJ8" target="_blank" rel="external">表格存储和 HBase 的区别</a> 写的是他们和hbase的差异。支持表示TableStore有的而hbase没有的。不支持表示hbase有的TableStore没有的。</p>
+<h3 id="Table"><a href="#Table" class="headerlink" title="Table"></a>Table</h3><p>Table</p>
+<p>不支持多列族，只支持单列族。</p>
+<h4 id="解读"><a href="#解读" class="headerlink" title="解读"></a>解读</h4><p>hbase的多列族比较鸡肋，给干掉了。</p>
+<h3 id="Row和Cell"><a href="#Row和Cell" class="headerlink" title="Row和Cell"></a>Row和Cell</h3><p>不支持设置 ACL<br>不支持设置 Cell Visibility<br>不支持设置 Tag</p>
+<h4 id="解读-1"><a href="#解读-1" class="headerlink" title="解读"></a>解读</h4><p>DataStore做了权限，而hbase没有。cell可见和tag，也是方便拿来做权限的。</p>
+<h3 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h3><p>表格存储只支持单列族，所以不支持列族相关的接口，包括：<br>setColumnFamilyTimeRange(byte[] cf, long minStamp, long maxStamp)<br>setMaxResultsPerColumnFamily(int limit)<br>setRowOffsetPerColumnFamily(int offset)</p>
+<h4 id="解读-2"><a href="#解读-2" class="headerlink" title="解读"></a>解读</h4><p>还是多列族单列族的事情。</p>
+<h3 id="SCAN"><a href="#SCAN" class="headerlink" title="SCAN"></a>SCAN</h3><p>类似于 GET，既不支持列族相关的接口，也不能设置优化类的部分接口，包括：</p>
+<p>setBatch(int batch)<br>setMaxResultSize(long maxResultSize)<br>setAllowPartialResults(boolean allowPartialResults)<br>setLoadColumnFamiliesOnDemand(boolean value)<br>setSmall(boolean small)</p>
+<p>####<br>还是列族的事情</p>
+<h3 id="Batch"><a href="#Batch" class="headerlink" title="Batch"></a>Batch</h3><p>暂时不支持 BatchCallback。</p>
+<h4 id="解读-3"><a href="#解读-3" class="headerlink" title="解读"></a>解读</h4><p>没有对应hbase的batchCallback接口。</p>
+<h3 id="Mutations-和-Deletions"><a href="#Mutations-和-Deletions" class="headerlink" title="Mutations 和 Deletions"></a>Mutations 和 Deletions</h3><p>不支持删除特定列族<br>不支持删除最新时间戳的版本<br>不支持删除小于某个时间戳的所有版本</p>
+<h4 id="解读-4"><a href="#解读-4" class="headerlink" title="解读"></a>解读</h4><p>我去，这个都不支持？</p>
+<h3 id="Increment-和-Append"><a href="#Increment-和-Append" class="headerlink" title="Increment 和 Append"></a>Increment 和 Append</h3><p>暂时不支持</p>
+<h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><p>支持 ColumnPaginationFilter<br>支持 FilterList<br>部分支持 SingleColumnValueFilter，比较器仅支持 BinaryComparator<br>其他 Filter 暂时都不支持</p>
+<h4 id="解读-5"><a href="#解读-5" class="headerlink" title="解读"></a>解读</h4><p>我要这filter又有何用，我要这过滤器又如何？这支持的几个都是hbase后面版本也支持的。</p>
+<h3 id="Optimization"><a href="#Optimization" class="headerlink" title="Optimization"></a>Optimization</h3><p>HBase 的部分接口涉及到访问、存储优化等，这些接口目前没有开放：</p>
+<p>blockcache：默认为 true，不允许用户更改<br>blocksize：默认为 64K，不允许用户更改<br>IsolationLevel：默认为 READ_COMMITTED，不允许用户更改<br>Consistency：默认为 STRONG，不允许用户更改<br>Admin</p>
+<h4 id="解读-6"><a href="#解读-6" class="headerlink" title="解读"></a>解读</h4><p>我曹，解读不下去了，下面还有一堆的区别对比。你丫写个区别对比全是自己和hbase相比的缺点，要你何用。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OTS参考的hbase版本太早了，开源社区更新太快，导致hbase有很多特性在ots里面不支持。阿里云现在也上了hbase，和DataStore是强竞争关系。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/03/17/aliyun/tableStore%A2%DA+_/" data-id="cj3o8nb5l0005dxi90eu0sj87" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/aliyun/">aliyun</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          阿里云EDAS介绍
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">分布式一致性算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/08/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

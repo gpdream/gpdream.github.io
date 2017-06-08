@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>gp参数详解 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="官方文档：http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html">
+<meta name="keywords" content="greenplum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gp参数详解">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="官方文档：http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html">
+<meta property="og:updated_time" content="2017-01-04T05:49:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="gp参数详解">
+<meta name="twitter:description" content="官方文档：http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      gp参数详解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 官方文档：<a href="http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html" target="_blank" rel="external">http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html</a></p>
+<a id="more"></a>
+<h2 id="连接和权限认证参数"><a href="#连接和权限认证参数" class="headerlink" title="连接和权限认证参数"></a>连接和权限认证参数</h2><p>   这些参数控制客户端连接和权限认证。</p>
+<ul>
+<li><h3 id="连接参数"><a href="#连接参数" class="headerlink" title="连接参数"></a>连接参数</h3></li>
+<li>gp_vmem_idle_resource_timeout</li>
+<li>listen_addresses</li>
+<li>max_connections</li>
+<li>max_prepared_transactions</li>
+<li>superuser_reserved_connectionstcp_keepalives_count</li>
+<li>tcp_keepalives_idle</li>
+<li>tcp_keepalives_interval</li>
+<li>unix_socket_directory</li>
+<li>unix_socket_group</li>
+<li>unix_socket_permissions</li>
+</ul>
+<ul>
+<li>gp_vmem_idle_resource_timeout：默认18s，当连接空闲时间超过该值时，服务端回释放掉其资源，但不断开连接</li>
+<li>listen_addresses：服务器监听端口号，默认为*，如果该值为空则只允许UNIX-domain sockets连接</li>
+<li>max_connections：最大连接数，master上250，segments上750。segment上最大连接数量应该是master上的5-10倍，当增加这个参数时，也要增加max_prepared_transactions参数。增加这个参数可能到时GP需要更多的共享内存。</li>
+<li>max_prepared_transactions：该值至少要和master的最大连接数相等。设置处于准备好状态的事务数，master和segement的该配置项要相等。默认250.</li>
+<li>superuser_reserved_connections:为超级用户设置的保留连接槽位，例如该值设置为3，总连接数为100，则总是会保留3个连接给超级管理员</li>
+<li>tcp_keepalives_count：tcp的心跳包，丢失若干次则认为断开，默认0.需要TCP_KEEPCNT支持才生效</li>
+<li>tcp_keepalives_idle：与其他空闲连接发送保持连接的秒数。默认0，需要TCP_KEEPIDLE支持才生效</li>
+<li>tcp_keepalives_interval：等待响应的秒数，超过这个时间间隔则重传。默认0，需要TCP_KEEPINTVL支持才生效</li>
+<li>unix_socket_directory：</li>
+<li>unix_socket_group：</li>
+<li><p>unix_socket_permissions：</p>
+<h3 id="权限认证参数"><a href="#权限认证参数" class="headerlink" title="权限认证参数"></a>权限认证参数</h3></li>
+<li>authentication_timeout</li>
+<li>db_user_namespace</li>
+<li>krb_caseins_users</li>
+<li>krb_server_keyfilekrb_srvname</li>
+<li>password_encryption</li>
+<li>ssl</li>
+<li>ssl_ciphers</li>
+</ul>
+<ul>
+<li>authentication_timeout：客户端连接超时时间，默认1分钟。修改后重启生效。防止因为客户端挂起而无限占用连接。</li>
+<li>db_user_namespace：默认关闭，打开的话，创建的用户会自动在后面加上@dbname，如果创建全局用户的话，就要username@</li>
+<li>krb_caseins_users：对kerberos用户是否大小写不敏感，默认是大小写敏感的(off)</li>
+<li>krb_server_keyfile：</li>
+<li>krb_srvname：</li>
+<li>password_encryption：密码加密，默认开启</li>
+<li>ssl：启用ssl连接，默认关闭。</li>
+<li>ssl_ciphers：指定可用的ssl算法，默认all.</li>
+</ul>
+<h2 id="系统资源消耗参数"><a href="#系统资源消耗参数" class="headerlink" title="系统资源消耗参数"></a>系统资源消耗参数</h2><h3 id="内存消耗参数"><a href="#内存消耗参数" class="headerlink" title="内存消耗参数"></a>内存消耗参数</h3><p>   这些参数控制系统的内存使用，可以通过调整gp_vmem_protect_limit来避免segment hosts在查询过程中内存耗尽。</p>
+<ul>
+<li>gp_vmem_idle_resource_timeout</li>
+<li>gp_vmem_protect_limit</li>
+<li>gp_vmem_protect_segworker_cache_limit</li>
+<li>gp_workfile_limit_files_per_query</li>
+<li>gp_workfile_limit_per_query</li>
+<li>gp_workfile_limit_per_segment</li>
+<li>max_appendonly_tables</li>
+<li>max_prepared_transactionsmax_stack_depth</li>
+<li>shared_buffers</li>
+<li><p>temp_buffers</p>
+</li>
+<li><p>gp_vmem_idle_resource_timeout：默认18s，当连接空闲时间超过该值时，服务端回释放掉其资源，但不断开连接</p>
+</li>
+<li>gp_vmem_protect_limit：默认8192，内存资源限制。计算公式为（x<em>单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。(1</em>126)/16=7.875GB.7.875*1024=7971MB，则该值设置为7971。  当查询需要的内存达到这个上限，内存不能够再分配，将导致查询失败。</li>
+<li>gp_vmem_protect_segworker_cache_limit：??? cache限制，当查询执行器消耗的内存超过这个上限，这个过程不会缓存下来，不会为后续的查询提供缓存。默认500MB。如果系统有大量的连接或者是空闲的进程，可以减小这个上限来释放内存。</li>
+<li>gp_workfile_limit_files_per_query：每个查询最大可使用的tmp spill file数目，当超过上限时查询终止。默认100000，设置为0为不限制。（在执行查询时，当需要的内存大于给分配的内存时就会在硬盘上产生spill files）</li>
+<li>gp_workfile_limit_per_query：每个查询允许的最大的tmp spill file占用的磁盘空间，默认0，不限制。</li>
+<li>gp_workfile_limit_per_segment：每个segment上所有tmp spill files能够占用的最大磁盘空间，默认0不限制。</li>
+<li>max_appendonly_tables：默认10000 ，append-optimized表能够并发读写的最大数目，计算数目时分区表和子分区表视为单独的表</li>
+<li>max_prepared_transactions：该值至少要和master的最大连接数相等。设置处于准备好状态的事务数，master和segement的该配置项要相等。默认250.</li>
+<li>max_stack_depth：声明服务器的执行栈的最大安全深度。该值不要超过ulimit -s得出来的值，最好比ulimit -s小于1024。默认2MB。</li>
+<li>shared_buffers:默认128MB，共享缓冲区。至少是128KB并且至少是max_connections的16K倍。</li>
+<li>temp_buffers：临时缓冲区，用户缓存临时表，默认1024</li>
+<li><h3 id="FreeSpaceMap参数"><a href="#FreeSpaceMap参数" class="headerlink" title="FreeSpaceMap参数"></a>FreeSpaceMap参数</h3></li>
+<li>这些参数控制free space map的大小，free space map里记录失效的行数据。通过使用VACUUM回收free space map的磁盘空间。</li>
+<li>max_fsm_pages</li>
+<li>max_fsm_relations</li>
+<li>max_fsm_pages：设置在共享的自由空间映射表里自由空间会跟踪的最大数目的磁盘页面数。每个页面槽位需要消耗六个字节的共享内存，默认200000，该值必须要大于16 *max_fsm_relations.</li>
+<li><p>max_fsm_relations:设置自由空间将在共享地自由空间映射里跟踪的最大数目的关系（表和索引）。该值需要设置成大于所有的表数量+索引数+系统表数量，每一个大概会消耗60bytes内存。默认1000。</p>
+<h3 id="Cost-Based-Vacuum-延迟参数"><a href="#Cost-Based-Vacuum-延迟参数" class="headerlink" title="Cost-Based Vacuum 延迟参数"></a>Cost-Based Vacuum 延迟参数</h3><p>可以通过配置VACUUM和ANALYZE的执行消耗来减少在并发场景下的I/O影响。当I/O操作累加消耗达到阈值时，暂停VACUUM和ANALYZE的执行一会儿，然后累加清零，继续执行。<br>（Warning: GP不建议Cost-Based Vacuum 延迟，因为这个延迟在各个segment实例上是异步执行的。累加消耗和延迟在segment级别，而没有考虑到整个segment集群的运行情况。）如何理解?</p>
+</li>
+<li>vacuum_cost_delay</li>
+<li><p>vacuum_cost_limit</p>
+</li>
+<li><p>vacuum_cost_page_dirtyvacuum_cost_page_hit</p>
+</li>
+<li>vacuum _cost_page_miss</li>
+</ul>
+<ul>
+<li>vacuum_cost_delay:？？？当执行vacuum或analyze时累计的磁盘I/O消耗带到上限时，睡眠时间毫秒数。0禁止cost-based vacuum delay. 默认0.</li>
+<li>vacuum_cost_limit：？？？当执行vacuum累计的磁盘I/O消耗带到上限时，vacuum会睡眠。默认200.</li>
+<li>vacuum_cost_page_dirty：？？？修改一个数据块的代价，主要是将脏数据块写到磁盘上需要的I/O</li>
+<li>vacuum_cost_page_hit：修改共享缓存区buffer的代价</li>
+<li>vacuum_cost_page_miss：从磁盘上读入内存的代价</li>
+<li>vacuum_freeze_min_age：？？？在表扫描的时候，它之前更旧的XID将被替换为FrozenXID. FrozenXID不遵循与普通XID比较的规则，它被认为总是比任何普通的XID旧的。</li>
+</ul>
+<h3 id="Transaction-ID管理参数参数"><a href="#Transaction-ID管理参数参数" class="headerlink" title="Transaction ID管理参数参数"></a>Transaction ID管理参数参数</h3><ul>
+<li>xid_stop_limit</li>
+<li><p>xid_warn_limit</p>
+</li>
+<li><p>xid_stop_limit：设置事务ID号，到达此ID号上限时停止创建新事务，会产生fatal error，以避免因为事务ID号循环造成的数据丢失。当达到上限值时GP无法响应，需要一些步骤恢复，详见GP Admin文档。取值范围在1千万到二十亿，默认为10亿。</p>
+</li>
+<li>xid_warn_limit：设置事务ID号，到达此ID号时发出warning提醒执行vacuum，以避免因为事务ID号循环造成的数据丢失。取值范围在1千万到二十亿，默认为5亿。</li>
+</ul>
+<h2 id="查询调优参数"><a href="#查询调优参数" class="headerlink" title="查询调优参数"></a>查询调优参数</h2><h3 id="查询计划功能控制参数"><a href="#查询计划功能控制参数" class="headerlink" title="查询计划功能控制参数"></a>查询计划功能控制参数</h3><p>   这些参数控制查询规划器采用哪种运算。打开或关闭某种运算能够强制查询规划器选择另一个不同的查询计划。这在使用不同的查询计划测试、比较查询性能时很有用。</p>
+<ul>
+<li>enable_bitmapscan</li>
+<li>enable_groupagg</li>
+<li>enable_hashagg</li>
+<li>enable_hashjoin</li>
+<li>enable_indexscan</li>
+<li>enable_mergejoin</li>
+<li>enable_nestloop</li>
+<li>enable_seqscan</li>
+<li>enable_sort</li>
+<li>enable_tidscan</li>
+<li>gp_enable_adaptive_nestloop</li>
+<li>gp_enable_agg_distinctgp_enable_agg_distinct_pruning</li>
+<li>gp_enable_direct_dispatch</li>
+<li>gp_enable_fallback_plan</li>
+<li>gp_enable_fast_sri</li>
+<li>gp_enable_groupext_distinct_gather</li>
+<li>gp_enable_groupext_distinct_pruning</li>
+<li>gp_enable_multiphase_agg</li>
+<li>gp_enable_predicate_propagation</li>
+<li>gp_enable_preunique</li>
+<li>gp_enable_sequential_window_plans</li>
+<li>gp_enable_sort_distinct</li>
+<li>gp_enable_sort_limit</li>
+</ul>
+<ul>
+<li>enable_bitmapscan：默认打开， 允许查询计划使用bitmap-scan。与Bitmap Index Scan不同。</li>
+<li>enable_groupagg：默认打开，允许查询计划使用groupAggregate，GroupAggregate会对group by后面字段所有的数据做全扫描排序。</li>
+<li>enable_hashagg：默认打开，允许查询计划启动hashAggregate，group by后的字段会做次hash</li>
+<li>enable_hashjoin:默认打开，允许查询计划使用hash join</li>
+<li>enable_indexscan：默认打开</li>
+<li>enable_mergejoin：默认关闭，和hash join的差别在于，merge join在Join的时候做的是排序而不是hash.</li>
+<li>enable_nestloop:默认关闭，执行计划时使用嵌套join</li>
+<li>enable_seqscan:默认打开</li>
+<li>enable_sort：默认打开</li>
+<li>enable_tidscan：默认打开，TID(tuple identifer)</li>
+<li>gp_enable_adaptive_nestloop：查询计划能使用adaptive_nestloop做join，当外层数据行数大于阈值时，查询规划器偏向于选择hash join, 而不是nestloop join</li>
+<li>gp_enable_agg_distinct：默认打开</li>
+<li>gp_enable_agg_distinct_pruning：默认打开</li>
+<li>gp_enable_direct_dispatch：默认打开。是否允许将查询计划直接发送到单个segment上，当查询的数据都在同一个segment上时，直接给该segment发送查询计划相比于对所有segment都发送查询计划要快，主要是节省了响应时间，不过相应的master上会多一些cpu消耗。</li>
+<li>gp_enable_fallback_plan：默认打开</li>
+<li>gp_enable_fast_sri：默认打开， 对于单行插入，直接将查询计划发送到对应的segement实例上。</li>
+<li>gp_enable_groupext_distinct_gather：默认打开</li>
+<li>gp_enable_groupext_distinct_pruning：默认打开</li>
+<li>gp_enable_multiphase_agg：默认打开，是否2或3阶段并行聚合，如果这个功能关闭那么gp_enable_agg_distinct和gp_enable_agg_distinct_pruning功能也将关闭</li>
+<li>gp_enable_predicate_propagation：默认打开，当表在分布键上join时，允许查询规划器预测。join时，两表都先过滤，会更高效。</li>
+<li>gp_enable_preunique：默认打开，当打开时，对于select distinct查询，会在数据motion前添加额外的sort distinct操作，从而减少记录的行数。额外的sort distinct操作，相比于数据通过interconnect传输要高效得多。</li>
+<li>gp_enable_sequential_window_plans：默认打开，打开时对包含窗口函数调用的使用非并行(串行)的查询计划。关闭则并行使用相应的窗口函数，并对结果集rejoin。（window function是什么？串行，并行的查询计划？）</li>
+<li>gp_enable_sort_distinct：默认打开</li>
+<li>gp_enable_sort_limit：默认打开</li>
+</ul>
+<h3 id="查询计划开销预估参数"><a href="#查询计划开销预估参数" class="headerlink" title="查询计划开销预估参数"></a>查询计划开销预估参数</h3><p>   （Warning: GP建议不要调整这些开销预估参数。这些参数用来反映GP硬件配置和典型的工作负载。这些参数是相关的，只调整期中一个可能会对性能造成不利影响。）</p>
+<ul>
+<li>cpu_index_tuple_cost</li>
+<li>cpu_operator_cost</li>
+<li>cpu_tuple_cost</li>
+<li>cursor_tuple_fraction</li>
+<li>effective_cache_sizegp_motion_cost_per_row</li>
+<li>gp_segments_for_planner</li>
+<li>random_page_cost</li>
+<li>seq_page_cost</li>
+</ul>
+<ul>
+<li>cpu_index_tuple_cost：默认0.005，设置计划程序对索引扫描期间处理每个索引条目的开销的估算。</li>
+<li>cpu_operator_cost：默认0.0025，设置执行计划估算where条件每个运算符的开销</li>
+<li>cpu_tuple_cost：默认0.01,执行计划估算每行数据需要的开销</li>
+<li>cursor_tuple_fraction：执行计划估算一次查询可能fetch的行数占比，默认值为1，意味所有的行数都需要fetch。</li>
+<li>effective_cache_size：默认512MB，查询计划对磁盘缓存的预估值。较大的值使得查询规划器更偏向于选择index scan, 小一点的值使得查询规划器更偏向于选择sequential scan.</li>
+<li>gp_motion_cost_per_row：设置查询计划语句从一个segment上传输一行数据的开销，默认为0，0为cpu_tuple_cost两倍的开销。</li>
+<li>gp_segments_for_planner：假设segment instances所需要的开销，如果设置为0，则该值等于主segment数。这个参数影响查询规划器对motion操作收/发数据量的估计。</li>
+<li>random_page_cost：执行计划预估随机读每页的开销，默认100，该值越高，走索引的概率越小。</li>
+<li>seq_page_cost：执行顺序读，每页磁盘的预估开销。</li>
+</ul>
+<h3 id="数据统计采样参数（ANALYZE参数）"><a href="#数据统计采样参数（ANALYZE参数）" class="headerlink" title="数据统计采样参数（ANALYZE参数）"></a>数据统计采样参数（ANALYZE参数）</h3><p>  这些参数调整ANALYZE采样的数据量。可以对某一个表或者某一列使用ALTER TABLESET STATISTICS语句来配置统计数据集。</p>
+<ul>
+<li>default_statistics_target</li>
+<li>gp_analyze_relative_error</li>
+</ul>
+<ul>
+<li>default_statistics_target：设置默认统计数据目标，默认值25. 数值大analyze统计需要的时间越多，但可能提高查询规划器预估的质量。</li>
+<li>gp_analyze_relative_error:收集信息时候评估可接受的错误差，默认0.25（25%）</li>
+</ul>
+<h3 id="排序参数"><a href="#排序参数" class="headerlink" title="排序参数"></a>排序参数</h3><ul>
+<li>gp_enable_sort_distinct</li>
+<li>gp_enable_sort_limit</li>
+</ul>
+<ul>
+<li>gp_enable_sort_distinct：默认打开</li>
+<li><p>gp_enable_sort_limit：默认打开</p>
+<h3 id="聚合函数参数"><a href="#聚合函数参数" class="headerlink" title="聚合函数参数"></a>聚合函数参数</h3></li>
+<li>gp_enable_agg_distinct</li>
+<li>gp_enable_agg_distinct_pruning</li>
+<li>gp_enable_multiphase_agg</li>
+<li>gp_enable_preuniquegp_enable_groupext_distinct_gather</li>
+<li>gp_enable_groupext_distinct_pruning</li>
+<li>gp_workfile_compress_algorithm</li>
+</ul>
+<ul>
+<li>gp_enable_agg_distinct：默认打开</li>
+<li>gp_enable_agg_distinct_pruning：默认打开</li>
+<li>gp_enable_multiphase_agg：默认打开，是否2或3阶段并行聚合，如果这个功能关闭那么gp_enable_agg_distinct和gp_enable_agg_distinct_pruning功能也将关闭</li>
+<li>gp_enable_preunique：默认打开，当打开时，对于select distinct查询，会在数据motion前添加额外的sort distinct操作，从而减少记录的行数。额外的sort distinct操作，相比于数据通过interconnect传输要高效得多。</li>
+<li>gp_enable_groupext_distinct_gather：默认打开</li>
+<li>gp_enable_groupext_distinct_pruning：默认打开</li>
+<li>gp_workfile_compress_algorithm:默认为None，如果是sata盘，设置为zlib，可以缓解磁盘io的瓶颈。</li>
+</ul>
+<h3 id="join参数"><a href="#join参数" class="headerlink" title="join参数"></a>join参数</h3><ul>
+<li>join_collapse_limit</li>
+<li>gp_adjust_selectivity_for_outerjoins</li>
+<li>gp_hashjoin_tuples_per_bucketgp_statistics_use_fkeys</li>
+<li>gp_workfile_compress_algorithm</li>
+</ul>
+<ul>
+<li>join_collapse_limit：？？？允许inner join的表数，设置为1时则禁止inner join, 默认20</li>
+<li>gp_adjust_selectivity_for_outerjoins：默认打开，outer joins中允许null</li>
+<li>gp_hashjoin_tuples_per_bucket：默认5，设置hash join的密度，越小的值会产生越大的hash表，会影响join的性能。</li>
+<li>gp_statistics_use_fkeys：默认关闭，如果打开，，当主键和外键做join查询时，允许优化器使用外键信息。</li>
+<li><p>gp_workfile_compress_algorithm:默认为None，如果是sata盘，设置为zlib，可以缓解磁盘io的瓶颈。</p>
+<h3 id="其他查询计划参数"><a href="#其他查询计划参数" class="headerlink" title="其他查询计划参数"></a>其他查询计划参数</h3></li>
+<li>from_collapse_limit</li>
+<li>gp_enable_predicate_propagation</li>
+<li>gp_max_plan_size</li>
+<li>gp_statistics_pullup_from_child_partition</li>
+</ul>
+<ul>
+<li>from_collapse_limit：？？？默认20，当子查询小于该值的时候就不压缩子查询</li>
+<li>gp_enable_predicate_propagation：默认打开，当表在分布键上join时，允许查询规划器预测。join时，两表都先过滤，会更高效。</li>
+<li>gp_max_plan_size:查询计划的大小，默认是0，不管该值大小。当指定数值时，如果查询计划超过该值，则查询直接取消并报错。</li>
+<li>gp_statistics_pullup_from_child_partition：默认打开，当查询父表时，会使用子表的统计数据</li>
+</ul>
+<h2 id="错误报告和记录参数"><a href="#错误报告和记录参数" class="headerlink" title="错误报告和记录参数"></a>错误报告和记录参数</h2><h3 id="日志参数"><a href="#日志参数" class="headerlink" title="日志参数"></a>日志参数</h3><ul>
+<li>Log Rotation</li>
+<li>log_rotation_age</li>
+<li>log_rotation_sizelog_truncate_on_rotation</li>
+</ul>
+<ul>
+<li>log_rotation_age：每间隔多久创建一个新的日志文件，默认1天。</li>
+<li>log_rotation_size：日志文件的最大不超过这个上限，否则创建一个新的日志。单位为KB，0则不限制日志文件大小，最大取值为INT_MAX/1024。默认为0.</li>
+<li><p>log_truncate_on_rotation：打开，则会按时重写同名日志文件。关闭，则以追加的方式写。</p>
+<h3 id="When-to-log"><a href="#When-to-log" class="headerlink" title="When to log"></a>When to log</h3></li>
+<li>client_min_messages</li>
+<li>log_error_verbosity</li>
+<li>log_min_duration_statementlog_min_error_statement</li>
+<li>log_min_messages</li>
+</ul>
+<ul>
+<li>client_min_messages：返回给客户端的信息级别，默认为notice，有debug,error等多种级别。</li>
+<li>log_error_verbosity：控制服务器日志记录的详简程度。默认default，还有terse和verbose两种级别。</li>
+<li>log_min_duration_statement: 当SQL语句执行时间超过这个值将被日志记录。0将记录所有的SQL及其执行时间，-1不记录任何SQL。默认为-1.</li>
+<li>log_min_error_statement：日志级别，记录SQL语句导致的错误。有多种级别。</li>
+<li><p>log_min_messages：服务器日志级别</p>
+<h3 id="What-to-log"><a href="#What-to-log" class="headerlink" title="What to log"></a>What to log</h3></li>
+<li>debug_pretty_print</li>
+<li>debug_print_parse</li>
+<li>debug_print_plan</li>
+<li>debug_print_prelim_plan</li>
+<li>debug_print_rewritten</li>
+<li>debug_print_slice_table</li>
+<li>log_autostats</li>
+<li>log_connections</li>
+<li>log_disconnections</li>
+<li>log_dispatch_stats</li>
+<li>log_durationlog_executor_stats</li>
+<li>log_hostname</li>
+<li>log_parser_stats</li>
+<li>log_planner_stats</li>
+<li>log_statement</li>
+<li>log_statement_stats</li>
+<li>log_timezone</li>
+<li>gp_debug_linger</li>
+<li>gp_log_format</li>
+<li>gp_max_csv_line_length</li>
+<li>gp_reraise_signal</li>
+</ul>
+<ul>
+<li>debug_pretty_print：让debug日志更可读，必须把输出级别设置为debug1或更低才生效，默认关闭。</li>
+<li>debug_print_parse：默认关闭，每个执行的语句，打印出语法树，必须把输出级别设置为debug1或更低才生效。</li>
+<li>debug_print_plan：默认关闭，打印出执行计划，必须把输出级别设置为debug1或更低才生效。</li>
+<li>debug_print_prelim_plan：默认关闭，打印出准备计划，必须把输出级别设置为debug1或更低才生效。</li>
+<li>debug_print_rewritten：默认关闭，打印出查询语句的查询重写（query rewrite output,oracle OBC优化器的内容，具体待查看）。</li>
+<li>debug_print_slice_table：默认关闭，打印查询计划分片</li>
+<li>log_autostats：自动analyze的日志，默认关闭</li>
+<li>log_connections:连接成功的日志，默认关闭</li>
+<li>log_disconnections：连接断开的日志，默认关闭</li>
+<li>log_dispatch_stats：默认关闭，打开后记录查询分派</li>
+<li>log_duration：默认关闭，记录查询执行时间log_executor_stats：默认关闭，打开将记录查询执行器的性能统计数据。不应该与log_statement_stats一起打开。</li>
+<li>log_hostname：默认关闭</li>
+<li>log_parser_stats：默认关闭</li>
+<li>log_planner_stats：默认关闭</li>
+<li>log_statement：控制记录那些SQL语句。参数取值DDL，记录DDL语句，MDO记录DDL和insert，update, delete, truncate 以及 copy from。prepare和expalin analyze也能被记录。默认为ALL。</li>
+<li>log_statement_stats：默认关闭。记录查询解析、计划、执行的所有性能统计数据。</li>
+<li>log_timezone：默认unknown，使用操作系统指定的时区</li>
+<li>gp_debug_linger：当遇到一个内部错误时逗留多少秒，默认0.</li>
+<li>gp_log_format：greenplum 的log格式，csv或text</li>
+<li>gp_max_csv_line_length：默认1MB (1048576 bytes)导入到gp中的csv文件，一行数据最大多少长度。</li>
+<li>gp_reraise_signal：？？？if enabled, will attempt to dump core if a fatal server error occurs.</li>
+</ul>
+<h2 id="系统监控参数"><a href="#系统监控参数" class="headerlink" title="系统监控参数"></a>系统监控参数</h2><h3 id="SNMP告警"><a href="#SNMP告警" class="headerlink" title="SNMP告警"></a>SNMP告警</h3><p>  这些参数当事件发生时发送SNMP通知。</p>
+<ul>
+<li>gp_snmp_community</li>
+<li>gp_snmp_monitor_addressgp_snmp_use_inform_or_trap</li>
+<li>gp_snmp_community：设置smnp community name</li>
+</ul>
+<ul>
+<li>gp_snmp_monitor_address:设置snmp地址，值为ip:port</li>
+<li><p>gp_snmp_use_inform_or_trap：设置为trap，monitor不会答复收到的SNMP消息，使得网络负载小一些。设置为inform，monitor需要回复收到的SNMP消息。默认为trap</p>
+<h3 id="邮件告警"><a href="#邮件告警" class="headerlink" title="邮件告警"></a>邮件告警</h3><p>这些参数让系统在发生fatal error时发送邮件，例如segment挂了或服务器崩溃重启。</p>
+</li>
+<li>gp_email_from</li>
+<li>gp_email_smtp_password</li>
+<li>gp_email_smtp_servergp_email_smtp_userid</li>
+<li>gp_email_to</li>
+</ul>
+<ul>
+<li>gp_email_from：用来发送报警邮件的邮箱地址</li>
+<li>gp_email_smtp_password：邮箱密码</li>
+<li>gp_email_smtp_server：smtp服务器地址端口</li>
+<li>gp_email_smtp_userid：userid</li>
+<li>gp_email_to：收报警邮件的邮箱地址</li>
+<li><h3 id="GCC告警（Greenplum-Command-Center-Agent）"><a href="#GCC告警（Greenplum-Command-Center-Agent）" class="headerlink" title="GCC告警（Greenplum Command Center Agent）"></a>GCC告警（Greenplum Command Center Agent）</h3>这些参数为GCC配置数据收集。</li>
+<li>gp_enable_gpperfmon</li>
+<li>gp_gpperfmon_send_intervalgpperfmon_log_alert_level</li>
+<li>gpperfmon_port</li>
+</ul>
+<ul>
+<li>gp_enable_gpperfmon：是否使用gcc的data collection agents</li>
+<li>gp_gpperfmon_send_interval：？？？服务器给data collection agent发送查询执行更新的时间间隔。在这个间隔内执行的查询通过UDP发送到segment上的mornitor agent。如果在耗时长的复杂查询中发现有大量UDP丢包，可以考虑将这个间隔时间调大。默认1s</li>
+<li>gpperfmon_log_alert_level：控制什么级别的日志写到gpperfmon数据库中，默认None.</li>
+<li>gpperfmon_port:gpperfmon使用的端口，默认8888.</li>
+</ul>
+<h2 id="运行时统计数据收集（收集正在执行的语句，占用的行等）"><a href="#运行时统计数据收集（收集正在执行的语句，占用的行等）" class="headerlink" title="运行时统计数据收集（收集正在执行的语句，占用的行等）"></a>运行时统计数据收集（收集正在执行的语句，占用的行等）</h2><p>   这些参数控制服务器统计数据的收集，当打开统计数据收集，可以通过pg_stot和pg_statio访问统计数据。</p>
+<ul>
+<li>stats_queue_level</li>
+<li>track_activitiestrack_counts</li>
+<li>update_process_title</li>
+</ul>
+<ul>
+<li>stats_queue_level：???收集资源队列的统计数据</li>
+<li>track_activities：默认开启，开启后会记录session里执行的命令以及开始执行的时间，这些信息只对supperuser和session所有者可见。这些信息能使用pg_stat_activity看到</li>
+<li>track_counts： 默认关闭。开启后收集一些row和block有关的统计信息，这些信息可以使用pg_stat 和pg_statio看到</li>
+<li>update_process_title:默认开启，开启后服务器没收到一个SQL命令会更新进程名。可以通过PS命令看进程名。</li>
+</ul>
+<h2 id="自动analyze参数"><a href="#自动analyze参数" class="headerlink" title="自动analyze参数"></a>自动analyze参数</h2><p>   当自动统计数据收集功能打开后，当同一个事务里insert, update, delete, copy 或者 create table… as select语句影响的行数达到阈值时(on_change)，或者新生成的表还没有统计数据时(on_no_stats)，analyze会自动运行。为了打开自动统计数据收集的功能，需要在master的postgresql.conf里配置，并重启。</p>
+<ul>
+<li>gp_autostats_mode</li>
+<li>log_autostats</li>
+</ul>
+<ul>
+<li>gp_autostats_mode：默认on<em>no</em> stats，有none, on<em>no</em> stats, on_change三个配置项。当设置为none的时候，则不会自动收集，当设置为on_change的时候，则一行dml语句（create table as select ,update ,delete,insert ,copy）影响数据量超过了gp_autostats_on_change_threshold配置的时候会收集，on_no_stats，当执行完一行dml语句后，发现该表没有统计过数据，就自动统计。对于分区表来说，如果数据是插入的是父表是不会触发自动收集的，只有插入叶子表才会触发自动收集，并且只收集叶子表里的数据。</li>
+<li><p>log_autostats：自动analyze的日志，默认关闭</p>
+<h2 id="客户端连接默认参数"><a href="#客户端连接默认参数" class="headerlink" title="客户端连接默认参数"></a>客户端连接默认参数</h2><h3 id="Statement-Behavior参数"><a href="#Statement-Behavior参数" class="headerlink" title="Statement Behavior参数"></a>Statement Behavior参数</h3></li>
+<li>check_function_bodies</li>
+<li>default_tablespace</li>
+<li>default_transaction_isolation</li>
+<li>default_transaction_read_onlysearch_path</li>
+<li>statement_timeout</li>
+<li>vacuum_freeze_min_age</li>
+</ul>
+<ul>
+<li>check_function_bodies：默认开启，在 CREATE FUNCTION 期间检查函数体。</li>
+<li>default_statistics_target：设置默认统计数据目标，默认值25</li>
+<li>default_tablespace：默认表空间，默认不设置</li>
+<li>default_transaction_isolation：默认事务级别，默认级别read commit，四种隔离级别分别是read uncommitted, read committed, repeated read, serializable</li>
+<li>default_transaction_read_only：默认关闭，设置每个新的事务状态为read_only.一个只读的事务不能够修改非临时表（何用暂不清楚）</li>
+<li>search_path：？？？对象名一般写为schema.object, 当对象名没有指定schema时，从search path里的schema找，当这些schema中有多个相同的对象名时，使用第一个找到的。创建对象时，如果没有指定schema，默认在search path里的第一个schema上创建。</li>
+<li>statement_timeout：一行指令的超时时间，默认0，不限制。</li>
+<li><p>vacuum_freeze_min_age：？？？在表扫描的时候，它之前更旧的XID将被替换为FrozenXID. FrozenXID不遵循与普通XID比较的规则，它被认为总是比任何普通的XID旧的。</p>
+<h3 id="Locale-and-Formatting参数"><a href="#Locale-and-Formatting参数" class="headerlink" title="Locale and Formatting参数"></a>Locale and Formatting参数</h3></li>
+<li>client_encoding</li>
+<li>DateStyle</li>
+<li>extra_float_digits</li>
+<li>IntervalStyle</li>
+<li>lc_collate</li>
+<li>lc_ctypelc_messages</li>
+<li>lc_monetary</li>
+<li>lc_numeric</li>
+<li>lc_time</li>
+<li>TimeZone</li>
+</ul>
+<ul>
+<li>client_encoding:默认utf8，每次会话可以设置自己的client_encoding。</li>
+<li>DateStyle：输入输出时间格式，默认的是ISO（format）和MDY。</li>
+<li>extra_float_digits：默认0，float类型显示的位数</li>
+<li>IntervalStyle：？？？时间显示的格式</li>
+<li>lc_collate：只读参数</li>
+<li>lc_ctype：只读参数</li>
+<li>lc_messages：language messages，设置显示message语言</li>
+<li>lc_monetary：本地货币格式，可设置哪些值，可以通过系统的locale -a来查看</li>
+<li>lc_numeric：数字格式</li>
+<li>lc_time：时间格式</li>
+<li><p>TimeZone：设置时区</p>
+<h3 id="其他默认参数"><a href="#其他默认参数" class="headerlink" title="其他默认参数"></a>其他默认参数</h3></li>
+<li>dynamic_library_path</li>
+<li>explain_pretty_printlocal_preload_libraries</li>
+</ul>
+<ul>
+<li>dynamic_library_path：默认$libdir,如果查询需要用到一些文件，例如udf需要访问某个目录，可将该目录的绝对路径填进去</li>
+<li>explain_pretty_print：默认打开，让执行计划更可读</li>
+<li>local_preload_libraries：？？逗号隔开的shared library files，每次客户端session打开时都会preload</li>
+</ul>
+<h2 id="锁管理参数"><a href="#锁管理参数" class="headerlink" title="锁管理参数"></a>锁管理参数</h2><ul>
+<li>deadlock_timeout</li>
+<li>max_locks_per_transaction</li>
+</ul>
+<ul>
+<li>deadlock_timeout:检查是否死锁之前，等待的时间，默认1s。这个时间应该要比一般的事务长，以保证在检查死锁前，正常的锁都释放了。</li>
+<li>max_locks_per_transaction：每个事务最多能占用多少个锁，默认128. 如果在一个事务中需要很多不同的表，可以考虑提高该值。</li>
+</ul>
+<h2 id="WorkLoad管理参数"><a href="#WorkLoad管理参数" class="headerlink" title="WorkLoad管理参数"></a>WorkLoad管理参数</h2><p>   下列参数配置GP的workload管理(resource queues)，查询优先级，内存使用和并发控制。</p>
+<ul>
+<li>gp_resqueue_priority</li>
+<li>gp_resqueue_priority_cpucores_per_segment</li>
+<li>gp_resqueue_priority_sweeper_interval</li>
+<li>gp_vmem_idle_resource_timeout</li>
+<li>gp_vmem_protect_limit</li>
+<li>gp_vmem_protect_segworker_cache_limitmax_resource_queues</li>
+<li>max_resource_portals_per_transaction</li>
+<li>resource_cleanup_gangs_on_wait</li>
+<li>resource_select_only</li>
+<li>stats_queue_level</li>
+</ul>
+<ul>
+<li>gp_resqueue_priority：默认打开</li>
+<li>gp_resqueue_priority_cpucores_per_segment：默认值4，每个segment占用的cpu数</li>
+<li>gp_resqueue_priority_sweeper_interval：？？？默认1000ms</li>
+<li>gp_vmem_idle_resource_timeout：默认18s，当连接空闲时间超过该值时，服务端回释放掉其资源，但不断开连接</li>
+<li>gp_vmem_protect_limit：默认8192，内存资源限制。计算公式为（x<em>单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。(1</em>126)/16=7.875GB.7.875*1024=7971MB，则该值设置为7971。  当查询需要的内存达到这个上限，内存不能够再分配，将导致查询失败。</li>
+<li>gp_vmem_protect_segworker_cache_limit：??? cache限制，当查询执行器消耗的内存超过这个上限，这个过程不会缓存下来，不会为后续的查询提供缓存。默认500MB。如果系统有大量的连接或者是空闲的进程，可以减小这个上限来释放内存。</li>
+<li>max_resource_queues：资源队列数目，默认9.</li>
+<li>max_resource_portals_per_transaction：一个事务最大可同时打开的游标数，默认64. 打开的游标将会在资源队列中占用一个槽。</li>
+<li>resource_cleanup_gangs_on_wait:???默认打开。当有SQL提交到资源队列，在获得锁之前，所有空闲的查询执行将被清理掉。</li>
+<li>resource_select_only:只对查询语句进行资源管理队列，如果设置成off，则对insert ,update ,delete也生效，默认off。</li>
+<li>stats_queue_level：???收集资源队列统计数据</li>
+</ul>
+<h2 id="外部表参数"><a href="#外部表参数" class="headerlink" title="外部表参数"></a>外部表参数</h2><ul>
+<li>gp_external_enable_exec</li>
+<li>gp_external_grant_privileges</li>
+<li>gp_external_max_segsgp_initial_bad_row_limit</li>
+<li>gp_reject_percent_threshold</li>
+<li>readable_external_table_timeout</li>
+</ul>
+<ul>
+<li>gp_external_enable_exec:允许使用外部表。如果要使用GCC或者MapReduce，必须打开。</li>
+<li>gp_external_grant_privileges：是否允许授权创建外部表。默认关闭，只有superuser才能狗创建外部表。</li>
+<li>gp_external_max_segs：默认64，只对gpfdist的外部表生效，最多允许多少个segment来扫描该表</li>
+<li>gp_initial_bad_row_limit：默认1000，当在执行copy命令的时候或者从外部表加载数据时，当前多少行数据失败时，停止。</li>
+<li>gp_reject_percent_threshold：？？？</li>
+<li>readable_external_table_timeout：读外部表的超时时间，默认0，不超时。</li>
+</ul>
+<h2 id="append-only-表参数"><a href="#append-only-表参数" class="headerlink" title="append-only 表参数"></a>append-only 表参数</h2><ul>
+<li>max_appendonly_tables</li>
+<li>gp_appendonly_compaction</li>
+</ul>
+<ul>
+<li>max_appendonly_tables：默认10000 ，append-optimized表能够并发读写的最大数目，计算数目时分区表和子分区表视为单独的表</li>
+<li><p>gp_appendonly_compaction：默认开，如果关闭，那vacuum命令只会执行清空segment下标记为EOF的文件。在I/O负载高或者磁盘空间少的情况下，可以考虑关闭。</p>
+<h2 id="库和表空间-文件空间参数"><a href="#库和表空间-文件空间参数" class="headerlink" title="库和表空间/文件空间参数"></a>库和表空间/文件空间参数</h2><p>这些参数配置系统允许的库、表空间、文件空间的最大大小。</p>
+</li>
+<li>gp_max_tablespaces</li>
+<li>gp_max_filespaces</li>
+<li>gp_max_databases</li>
+</ul>
+<ul>
+<li>gp_max_tablespaces：设置最大的表空间数量，默认16</li>
+<li>gp_max_filespaces:默认8，最多允许多少个filespaces</li>
+<li>gp_max_databases：默认16，最多允许多少个databases。</li>
+</ul>
+<h2 id="PostgreSQL历史版本兼容参数"><a href="#PostgreSQL历史版本兼容参数" class="headerlink" title="PostgreSQL历史版本兼容参数"></a>PostgreSQL历史版本兼容参数</h2><p>   这些参数提供了与PostgreSQL历史版本的兼容信息，在GP中不需要去修改。</p>
+<ul>
+<li>add_missing_from</li>
+<li>array_nulls</li>
+<li>backslash_quote</li>
+<li>escape_string_warningregex_flavor</li>
+<li>standard_conforming_strings</li>
+<li>transform_null_equals</li>
+</ul>
+<h2 id="GP-Array-配置参数"><a href="#GP-Array-配置参数" class="headerlink" title="GP Array 配置参数"></a>GP Array 配置参数</h2><p>   这部分的参数控制GP array 及其组件：segment, master, distribution transaction manager, master mirror, interconnect.</p>
+<h3 id="interconnect配置参数"><a href="#interconnect配置参数" class="headerlink" title="interconnect配置参数"></a>interconnect配置参数</h3><ul>
+<li>gp_interconnect_fc_method</li>
+<li>gp_interconnect_hash_multiplier</li>
+<li>gp_interconnect_queue_depth</li>
+<li>gp_interconnect_snd_queue_depthgp_interconnect_setup_timeout</li>
+<li>gp_interconnect_type</li>
+<li>gp_max_packet_size</li>
+</ul>
+<ul>
+<li>gp_interconnect_fc_method：UDP的流量控制方式，当gp_interconnect_fc_method是UDPIFC时有效。有两种流量控制方式，capacity和loss。capacity方式，发送方根据接受方的窗口来发送，当接收方窗口为0时暂停发送。loss方式，则是根据丢包情况来控制发送速度。默认loss.</li>
+<li>gp_interconnect_hash_multiplier：设置UDP interconnect 用于track connection的hash表大小。取值范围在2-25，默认2，这个值将乘以segment数目来决定hash表有多少个槽。对于复杂、slice多的查询，提高这个值可以改善interconnect的性能。</li>
+<li>gp_interconnect_queue_depth：设置接受端UDP接收窗口大小。当数据到达接收方，但是接受窗口没位置的时候，就会丢弃这个数据，需要重新传输。因此，增加该值虽然需要更多的内存，但是能够改善性能。默认为4. 设置为1-10较为合理。</li>
+<li>gp_interconnect_setup_timeout：在此时间内interconnect setup, 否则超时。当gp_interconnect_type设置为UDP时生效。默认2小时。</li>
+<li>gp_interconnect_snd_queue_depth：设置发送方的发送窗口大小，增加该值会占用更多内存，设置为1-4较为合理。默认为2. 该值只有当gp_interconnect_type为UDPIFC时生效。</li>
+<li>gp_interconnect_type：设置interconnect的通信协议。有三种方式TCP/UDP/UDPIFC。对于复杂、slice多的查询，TCP最多能够支持1000个segment实例。UDP能够支持更多的segment实例，且GP采用经过校验、检查的UDP，和TCP一样可靠。UDPIFC是UDP的流量控制版本，通过gp_interconnect_fc_method来选择流控方式。</li>
+<li>gp_max_packet_size：一个包最大多大，默认8192。TCP包和UDP包都设置了编号。</li>
+</ul>
+<h3 id="dispatch配置参数"><a href="#dispatch配置参数" class="headerlink" title="dispatch配置参数"></a>dispatch配置参数</h3><ul>
+<li>gp_cached_segworkers_threshold</li>
+<li>gp_connections_per_thread</li>
+<li>gp_enable_direct_dispatchgp_segment_connect_timeout</li>
+<li>gp_set_proc_affinity</li>
+</ul>
+<ul>
+<li>gp_cached_segworkers_threshold：？？？默认5. gangs 是在不同segment上执行同一个slice的work processes, 当这些gangs完成任务后将会destroyed，除非有缓存。该参数值低则较节省系统资源，增加该值能够改善行上 的复杂查询。（因为有缓存？）</li>
+<li>gp_connections_per_thread：？？？分派查询计划分片时的线程数，默认64，通常情况下该值不需要修改，除非在吞吐量上有已知的性能问题。</li>
+<li>gp_enable_direct_dispatch：默认打开。是否允许将查询计划直接发送到单个segment上，当查询的数据都在同一个segment上时，直接给该segment发送查询计划相比于对所有segment都发送查询计划要快，主要是节省了响应时间，不过相应的master上会多一些cpu消耗。</li>
+<li>gp_segment_connect_timeout：设置超时时间，作用于master 和segment，primary和mirror。</li>
+<li>gp_set_proc_affinity：默认off,如果打开，则postmaster在启动的时候会绑定一个cpu</li>
+</ul>
+<h3 id="Fault-Operation参数"><a href="#Fault-Operation参数" class="headerlink" title="Fault Operation参数"></a>Fault Operation参数</h3><ul>
+<li>gp_set_read_only</li>
+<li>gp_fts_probe_intervalgp_fts_probe_threadcount</li>
+</ul>
+<ul>
+<li>gp_set_read_only:使database disable writes。默认关闭</li>
+<li>gp_fts_probe_interval：默认1分钟，该值大于等于10，错误进程检测，ftsprobe会定期检测segment是否失败。（ftsprobe用来检测集群是否存在故障）</li>
+<li><p>gp_fts_probe_threadcount：默认16，该值需要大于等于每个Hosts上的segment数。ftsprobe使用多少个线程。</p>
+<h3 id="distribution-transaction-manager参数"><a href="#distribution-transaction-manager参数" class="headerlink" title="distribution transaction manager参数"></a>distribution transaction manager参数</h3></li>
+<li>gp_max_local_distributed_cache</li>
+<li><p>gp_max_local_distributed_cache:默认1024，设置分布式事务缓存数，较高的值可能影响性能。</p>
+<h3 id="只读参数"><a href="#只读参数" class="headerlink" title="只读参数"></a>只读参数</h3></li>
+<li>gp_command_count</li>
+<li>gp_content</li>
+<li>gp_dbid</li>
+<li>gp_num_contents_in_cluster</li>
+<li>gp_role</li>
+<li><p>gp_session_id</p>
+</li>
+<li><p>gp_command_count：默认值1，只读参数。表示master从client接收到的命令数目，一个sql命令实际上可能涉及到多个命令，因此对于一条sql命令计数值可能大于1.</p>
+</li>
+<li>gp_content：只读参数。segment的id</li>
+<li>gp_dbid：只读参数。segment的dbid</li>
+<li>gp_num_contents_in_cluster：只读参数。GP集群系统中primary segment的数量。</li>
+<li>gp_role：只读参数，有dispatch,execute,utility三种。master是dispatch，segment是execute.</li>
+<li>gp_session_id:只读参数。客户端id号，master启动时从1开始计数</li>
+</ul>
+<h2 id="master-mirroring参数"><a href="#master-mirroring参数" class="headerlink" title="master mirroring参数"></a>master mirroring参数</h2><p>  这些参数配置主备master之间的复制。主备同步的过程是：首先使用主master的事务快照部署到备master上，完成部署后，主备一致，后续更新使用walsender和walreciver进程完成主备间的同步，同步的是write-ahead log(WAL，所有的操作在提交前都要写入log文件中)。walsender时主master上的进程，walreciver是备master上的进程，两进程采用wal-based streamin同步。</p>
+<ul>
+<li>keep_wal_segments</li>
+<li>repl_catchup_within_range</li>
+<li>replication_timeout</li>
+<li>wal_receiver_status_interval</li>
+</ul>
+<ul>
+<li>keep_wal_segments：？？？WAL segment file数目，默认5。WAL将日志记录在segment file中（这里的segment和GP中的segment不是一个概念），这些WAL segment file将在checkpoint时写到磁盘上。</li>
+<li>repl_catchup_within_range：？？？默认1（？？？如果WAL segment file的编号超过了walsender正在发送的file编号，GP更新当前master，否则GP阻塞walsender发送，当所有WAL segment处理完，当前master可更新）</li>
+<li>replication_timeout：在master和standerby传输时，walsernder进程和walreceiver进程复制的超时时间，默认60000ms</li>
+<li>wal_receiver_status_interval：设置walreceive向master发送消息的时间间隔。在高负载的场景下，该值应该长一点。默认10s. replication_timeout 用来控制walsender进程等待walreciever消息的时间。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" data-id="cj3o8nb5w000edxi93yp8f9wp" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          greenplum OOM的难问题定位
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/greenplum/greenplum%C1-worlkoad%A4ۢ%D4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">greenplum的worlkoad详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/test/">test</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/08/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
