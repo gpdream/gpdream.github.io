@@ -68,9 +68,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-greenplum/%F0+%A6+-++-%A6%D4%C1+%CD-gp%E3%B6»-%BA%A6_" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/04/greenplum/%F0+%A6+-++-%A6%D4%C1+%CD-gp%E3%B6»-%BA%A6_/" class="article-date">
+    <a href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" class="article-date">
   <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
 </a>
     
@@ -82,7 +82,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/%F0+%A6+-++-%A6%D4%C1+%CD-gp%E3%B6»-%BA%A6_/">信号量问题导致gp启动失败</a>
+      <a class="article-title" href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/">gp参数详解</a>
     </h1>
   
 
@@ -90,21 +90,60 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>[toc]</p>
-<h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:</p>
-<blockquote>
-<p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–</p>
-<p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…<br>.. </p>
-<p>20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.<br>
+        <p> 官方文档：<a href="http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html" target="_blank" rel="external">http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html</a></p>
         
           <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/%F0+%A6+-++-%A6%D4%C1+%CD-gp%E3%B6»-%BA%A6_/#more">Read More</a>
+            <a href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/%F0+%A6+-++-%A6%D4%C1+%CD-gp%E3%B6»-%BA%A6_/" data-id="cj3o8wkd60004gfi9lbowltdn" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" data-id="cj3o8yz6f0008h0i9hexu8onn" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-greenplum/GP recoverseg-%BA%A6_" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/GP recoverseg-%BA%A6_/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/GP recoverseg-%BA%A6_/">由于gpstop -M immediate导致gp reciverseg失败</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。</p>
+<h3 id="现象-1"><a href="#现象-1" class="headerlink" title="现象"></a>现象</h3><p>gpstart -a 集群启动成功，但带告警<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1</div><div class="line">20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active</div><div class="line">20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)</div></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/GP recoverseg-%BA%A6_/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg-%BA%A6_/" data-id="cj3o8yz6c0005h0i92zkqtxyr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -149,53 +188,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/" data-id="cj3o8wkdu000lgfi9rfsjrrvd" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/" data-id="cj3o8yz6x000mh0i9cvckqynz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/">gp参数详解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> 官方文档：<a href="http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html" target="_blank" rel="external">http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html</a></p>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP%A6+-%B2%A4ۢ%D4%FA%BF%A6%A6%A6%AA-_%FA%AE/" data-id="cj3o8wkdc0008gfi9org7rsa4" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
 
     </footer>
   </div>
@@ -236,7 +232,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/" data-id="cj3o8wkdd0009gfi9jrqd44zt" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM+-%A6%D4%C0%CD+%F7/" data-id="cj3o8yz6g0009h0i9x6b005mg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -285,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/greenplum%C1-motion+%B7%CD%E3/" data-id="cj3o8wkdg000cgfi9s70ufps0" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/greenplum%C1-motion+%B7%CD%E3/" data-id="cj3o8yz6k000ch0i9mn48p76i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -335,7 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/greenplum%C1-worlkoad%A4ۢ%D4/" data-id="cj3o8wkdn000ggfi9tj1cuvcg" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/greenplum%C1-worlkoad%A4ۢ%D4/" data-id="cj3o8yz6r000ih0i9r5lu99oi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
