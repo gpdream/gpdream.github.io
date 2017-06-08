@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pattern和Matcher.find源码解读 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Pattern和Matcher.find做的动作，以及Matcher.find可能带来的指数级性能下降原因分析.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pattern和Matcher.find源码解读">
+<meta property="og:url" content="https://gpdream.github.io/2017/06/08/Pattern和Matcher-find源码解读/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="Pattern和Matcher.find做的动作，以及Matcher.find可能带来的指数级性能下降原因分析.">
+<meta property="og:updated_time" content="2017-06-08T09:52:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pattern和Matcher.find源码解读">
+<meta name="twitter:description" content="Pattern和Matcher.find做的动作，以及Matcher.find可能带来的指数级性能下降原因分析.">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Pattern和Matcher-find源码解读" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/08/Pattern和Matcher-find源码解读/" class="article-date">
+  <time datetime="2017-06-08T09:49:10.000Z" itemprop="datePublished">2017-06-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Pattern和Matcher.find源码解读
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Pattern和Matcher.find做的动作，以及Matcher.find可能带来的指数级性能下降原因分析.<a id="more"></a></p>
+<h2 id="Pattern-compile做的动作"><a href="#Pattern-compile做的动作" class="headerlink" title="Pattern compile做的动作"></a>Pattern compile做的动作</h2><p>Matcher对象需要Pattern，Pattern对象是由Pattern.compile创建出来。先看Pattern.compile。Pattern.compile(String regex)-&gt; new Pattern(String regex) -&gt; Pattern.compile(),核心代码在compile里，代码较多，上注释。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * Copies regular expression to an int array and invokes the parsing</div><div class="line">     * of the expression which will create the object tree.</div><div class="line">     */</div><div class="line">    private void compile()</div></pre></td></tr></table></figure></p>
+<p>compile方法会生成出一个对象树，是根据正则表达式生成出来的若干个的Node<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">String regexStr = &quot;((\\d|\\w|_)*wht_pboc\\.\\w+(_\\w+)*)&quot;;</div><div class="line">//(?:\\d|\\w|_)(funcCode\\.\w+(_\w+)*)</div><div class="line">Pattern pattern = Pattern.compile(regexStr);</div><div class="line">Matcher matcher = pattern.matcher(content);</div></pre></td></tr></table></figure></p>
+<p>以上面这段代码为例，生成出来的树就可能是GroupHead Node-&gt;Loop Node-&gt;MatchLast Node。<br>事实上生出出来的树要比这个复杂的多，大概是Start Node-&gt;GroupHead Node-&gt;ProLog Node-&gt;Loop Node-&gt;Group Head Node-&gt;Branch 巴拉巴拉……。<br>如果正则有分支的话，比如正则为<code>((\\d|\\w|_)*wht_pboc\\.\\w+(_\\w+)*)|((\\d|\\w|_)*jiayu\\.\\w+(_\\w+)*)</code>这样，那Pattern就会有一个atom数组，这其实是一个Node数组，atom数组长度对应分支情况。</p>
+<p>此时atom的数组长度就为2.事实上在第一个GroupHead Node里，因为有\d,\w,_这三种情况，GroupHead Node的atom长度就为3了。字符串match失败要所有的atom都不匹配才能满足。而当前节点match成功，则会调用node.next.match继续匹配，直到树走到尽头为止。</p>
+<h2 id="matcher-find方法是如何找到匹配字符串的"><a href="#matcher-find方法是如何找到匹配字符串的" class="headerlink" title="matcher.find方法是如何找到匹配字符串的"></a>matcher.find方法是如何找到匹配字符串的</h2><p>还是以这个字符串和文本为例，假设运行代码如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">//demo代码</div><div class="line">    String regexStr = &quot;((\\d|\\w|_)*wht_pboc\\.\\w+(_\\w+)*)|((\\d|\\w|_)*jiayu\\.\\w+(_\\w+)*)&quot;;</div><div class="line">    String context = &quot;import java.lang.*;\n&quot; +</div><div class="line">                &quot;\n&quot; +</div><div class="line">                &quot;pboc_crdt_otln_dlq_cnt\n&quot; +</div><div class="line">                &quot;def xbeta = (-1.90408137652954)+wht_pboc.cc_y5dlq_mon12_pct*(0.73909217042419)+wht_pboc&quot; +</div><div class="line">                &quot;+aaaa.jiayu*(0.10435815782414)+jiayu.cc_amt_use_pct*(0.92517485373273)+aaa&quot; +</div><div class="line">                &quot;.aaa*(-0.0313185144899745)+wht_pssssboc.dddd*(-0.00111017949189794);\n&quot; +</div><div class="line">                &quot;\n&quot; +</div><div class="line">                &quot;def tgtscr=Math.exp(xbeta)/(1+Math.exp(xbeta))&quot; </div><div class="line">    Pattern pattern = Pattern.compile(regexStr);</div><div class="line">    Matcher matcher = pattern.matcher(content);</div><div class="line">    </div><div class="line">    while(matcher.find()) &#123;</div><div class="line">        System.out.println(matcher.group())</div><div class="line">    &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>matcher.find()方法会调用matcher.search(int from)方法.from的值是matcher的全局变量nextSearchIndex，该值默认为0，find到之后会把值改变为find成功后的位置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">boolean search(int from) &#123;</div><div class="line">        this.hitEnd = false;</div><div class="line">        this.requireEnd = false;</div><div class="line">        from        = from &lt; 0 ? 0 : from;</div><div class="line">        this.first  = from;</div><div class="line">        this.oldLast = oldLast &lt; 0 ? from : oldLast;</div><div class="line">        for (int i = 0; i &lt; groups.length; i++)</div><div class="line">            groups[i] = -1;</div><div class="line">        acceptMode = NOANCHOR;</div><div class="line">        boolean result = parentPattern.root.match(this, from, text);</div><div class="line">        if (!result)</div><div class="line">            this.first = -1;</div><div class="line">        this.oldLast = this.last;</div><div class="line">        return result;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，处理逻辑的方法是parentPattern.root.match(this, from, text);<br><code>parentPattern.root</code>是Pattern的初始节点。刚才Pattern.compile生出出来的树，是有两个分支，两个分支的树基本一样，都是Start -&gt; GroupHead -&gt;Loop ……。<br>让我们先看看Start.match()方法.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">boolean match(Matcher matcher, int i, CharSequence seq) &#123;</div><div class="line">            if (i &gt; matcher.to - minLength) &#123;</div><div class="line">                matcher.hitEnd = true;</div><div class="line">                return false;</div><div class="line">            &#125;</div><div class="line">            int guard = matcher.to - minLength;</div><div class="line">            for (; i &lt;= guard; i++) &#123;</div><div class="line">                if (next.match(matcher, i, seq)) &#123;</div><div class="line">                    matcher.first = i;</div><div class="line">                    matcher.groups[0] = matcher.first;</div><div class="line">                    matcher.groups[1] = matcher.last;</div><div class="line">                    return true;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            matcher.hitEnd = true;</div><div class="line">            return false;</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>matcher 里的i就是matcher.search(int from)里的值，matcher.to是整个匹配的字符串长度，minLength是该node可能的最小长度，像刚刚的GroupHead的最小长度为1.因此该段代码就是相当于从from开始循环到结尾尝试找到匹配字符串，找到了就立即返回。</p>
+<p>这里的next是一个Group Head。我们再去看GroupHead的代码。<br>先看GroupHead的注释,大概是说存储能find到的group的头是从哪个位置开始的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">     * The GroupHead saves the location where the group begins in the locals</div><div class="line">     * and restores them when the match is done.</div><div class="line">     *</div><div class="line">     * The matchRef is used when a reference to this group is accessed later</div><div class="line">     * in the expression. The locals will have a negative value in them to</div><div class="line">     * indicate that we do not want to unset the group if the reference</div><div class="line">     * doesn&apos;t match.</div><div class="line">     */</div><div class="line">    static final class GroupHead extends Node</div></pre></td></tr></table></figure></p>
+<p>Group Head的matcher方法,直接就调用了next.match<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">boolean match(Matcher matcher, int i, CharSequence seq) &#123;</div><div class="line">            int save = matcher.locals[localIndex];</div><div class="line">            matcher.locals[localIndex] = i;</div><div class="line">            boolean ret = next.match(matcher, i, seq);</div><div class="line">            matcher.locals[localIndex] = save;</div><div class="line">            return ret;</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>在当前这个demo里，此时的next是一个Loop Node，再去看Loop Node的match.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">boolean match(Matcher matcher, int i, CharSequence seq) &#123;</div><div class="line">            // Avoid infinite loop in zero-length case.</div><div class="line">            if (i &gt; matcher.locals[beginIndex]) &#123;</div><div class="line">                int count = matcher.locals[countIndex];</div><div class="line"></div><div class="line">                // This block is for before we reach the minimum</div><div class="line">                // iterations required for the loop to match</div><div class="line">                if (count &lt; cmin) &#123;</div><div class="line">                    matcher.locals[countIndex] = count + 1;</div><div class="line">                    boolean b = body.match(matcher, i, seq);</div><div class="line">                    // If match failed we must backtrack, so</div><div class="line">                    // the loop count should NOT be incremented</div><div class="line">                    if (!b)</div><div class="line">                        matcher.locals[countIndex] = count;</div><div class="line">                    // Return success or failure since we are under</div><div class="line">                    // minimum</div><div class="line">                    return b;</div><div class="line">                &#125;</div><div class="line">                // This block is for after we have the minimum</div><div class="line">                // iterations required for the loop to match</div><div class="line">                if (count &lt; cmax) &#123;</div><div class="line">                    matcher.locals[countIndex] = count + 1;</div><div class="line">                    boolean b = body.match(matcher, i, seq);</div><div class="line">                    // If match failed we must backtrack, so</div><div class="line">                    // the loop count should NOT be incremented</div><div class="line">                    if (!b)</div><div class="line">                        matcher.locals[countIndex] = count;</div><div class="line">                    else</div><div class="line">                        return true;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            return next.match(matcher, i, seq);</div><div class="line">        &#125;</div></pre></td></tr></table></figure></p>
+<p>正常情况下count<cmax，因此代码会走到body.mach(macher,i,seq)方法中，这里的body是个slicenode.对应的方法 <figure="" class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">boolean match(Matcher matcher, int i, CharSequence seq) &#123;</div><div class="line">            int[] buf = buffer;</div><div class="line">            int len = buf.length;</div><div class="line">            for (int j=0; j&lt;len; j++) &#123;</div><div class="line">                if ((i+j) &gt;= matcher.to) &#123;</div><div class="line">                    matcher.hitEnd = true;</div><div class="line">                    return false;</div><div class="line">                &#125;</div><div class="line">                if (buf[j] != seq.charAt(i+j))</div><div class="line">                    return false;</div><div class="line">            &#125;</div><div class="line">            return next.match(matcher, i+len, seq);</div><div class="line">        &#125;</div></pre></td></tr></table></cmax，因此代码会走到body.mach(macher,i,seq)方法中，这里的body是个slicenode.对应的方法></p>
+<p>Slice类的matcher中有个buffer，这个buffer是根据正则表达式生成的，假设我们的正则表达式是<code>String regexStr = &quot;((\\d|\\w|_)*wht_pboc\\.\\w+(_\\w+)*)</code>那Pattern生成这个buffer的值就为<code>wht_pboc</code>.代码会尝试循环查找文本i之后的buf.length和buffer是否匹配,如果匹配则认为GroupHead是符合规则的，返回true继续下一步match。</p>
+<p>在我们这个demo中，如果返回false，也不能排除是不符合规则的，因为head是任意长度的\w或者_,需要继续往下一个位置循环，直到出现明确不匹配字符、匹配成功或者文本末尾才能确定。如果分支树很多，且不能立即确定是否符合，则会有指数级的循环增长。</p>
+<p>假设文本是 0123456789wht_pboc.这样，那需要循环的次数就是 分支数<em>10</em>3*n,(3是因为当前正则里，GroupHead自己有3个分支，ßßn为后面字符串和wht_pboc.前面相同的长度).如此多的循环完成之后才能确定GroupHead的match是否为true.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/06/08/Pattern和Matcher-find源码解读/" data-id="cj3o8uu5t0000fni9bsebtod9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">阿里云tableStore介绍</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/java/" style="font-size: 10px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS%A2%DA+_/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/14/mycat/mycatȦ-%D9-%C1%C3-+/">mycat源码解读1-登录mycat</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
