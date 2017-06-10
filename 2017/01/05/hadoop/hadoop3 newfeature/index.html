@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>hadoop 3.0特性 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="hadoop当前版本是3.0.0-alpha1，3.0release版本预计是2016年年底出，在这几个月期间指不定还会出一些什么幺蛾子。这里主要介绍下目前为止hadoop3.0的新特性。">
+<meta name="keywords" content="hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hadoop 3.0特性">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/05/hadoop/hadoop3 newfeature/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="hadoop当前版本是3.0.0-alpha1，3.0release版本预计是2016年年底出，在这几个月期间指不定还会出一些什么幺蛾子。这里主要介绍下目前为止hadoop3.0的新特性。">
+<meta property="og:updated_time" content="2017-01-05T01:39:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hadoop 3.0特性">
+<meta name="twitter:description" content="hadoop当前版本是3.0.0-alpha1，3.0release版本预计是2016年年底出，在这几个月期间指不定还会出一些什么幺蛾子。这里主要介绍下目前为止hadoop3.0的新特性。">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-hadoop/hadoop3 newfeature" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/05/hadoop/hadoop3 newfeature/" class="article-date">
+  <time datetime="2017-01-05T01:22:49.000Z" itemprop="datePublished">2017-01-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      hadoop 3.0特性
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>hadoop当前版本是3.0.0-alpha1，3.0release版本预计是2016年年底出，在这几个月期间指不定还会出一些什么幺蛾子。这里主要介绍下目前为止hadoop3.0的新特性。</p>
+<a id="more"></a>
+<h2 id="基础包和基础命令"><a href="#基础包和基础命令" class="headerlink" title="基础包和基础命令"></a>基础包和基础命令</h2><p>1。jar包：<br>底层包进行了大量的修改，特别是common包，删除掉了过期的api和实现。原先一大堆看上去差不多的类，方法，和接口可以去调用，明明差不多的类一不小心就会写错，并提示对该方法已过期，对编码及其不友好，总算把那些东西给删掉了。<br>2.部分默认组件替换成更高效的实现：<br>FileOutputCommit组件替换成了更高效的实现方式。MapReduce程序在运行过程中会产生临时目录，待reduce结束后把结果文件移动到指定目录。这块move结果集文件的实现由原先的单线程改成了多线程，性能有所提升。但MR的开销，主要的开销是在计算和shuffle那些地方，这里的性能提升估计比较有限。<br>3.classpath隔离：<br>这里可以有效的防止jar包版本冲突，例如hadoop classpath下原生就带了guava,protbuf等包，而自己的MR程序也引用了这些包，在hadoop2.x里很容易出现程序代码里的包和原classpath下的包冲突的情况。<br>4.hadoop shell改进:<br>hadoop2.x里有大量的shell的bug，运行的时候指不定就有什么灵异事件踩到坑。hadoop3.0虽说修复了大量的shell的bug，但以他们一贯的尿性，我想新加开发的shell也很有可能有其他bug。shell增加了支持动态命令分布式版本的hadoop shell，一行命令可以在多台机器上运行，应该是类似于pssh之类的工具。</p>
+<h2 id="hdfs新特性"><a href="#hdfs新特性" class="headerlink" title="hdfs新特性"></a>hdfs新特性</h2><p>1.引入hdfs纠删码:<br>可在不降低可靠性的前提下，节省一半存储空间。原理为对数据分块，计算产生冗余的校验块，当部分数据丢失时，通过剩余数据块和校验块计算出丢失的数据库。<br>实现方式1.：引入新的服务对数据编码和恢复，facebook开源的hdfs-raid（该组件已不更新）。阿里的pangu嵌入了该模块<br>实现方式2.: 微软主导的直接加载hdfs 中的实现（3.0准备用这种方法）</p>
+<p>这应该是一个相当亮点的功能，原先hdfs 3备份的存储会占用掉3份的存储空间，而现在采用纠删码的话在3备份的HA不变的情况下只占用掉1.4倍的存储空间。<br>但这种方式也有一个很明显的缺点，在读的时候遇到了一部分数据挂掉，需要通过纠删码重算数据，会有大量的开销，消耗较多时间，而且纠删码的方式，不再让MR能像原先版本那样不停的分发到不同机器上，会降低掉MR的开销。但这不妨碍这个功能是一个很实用的功能，真实业务中会经常拿来做计算的数据往往只有一部分，更多的是冷数据，冷数据用这种方式存储再合适不过，就算有MR性能也不会有很明显的下降，而存储空间只要原先的一半不到。</p>
+<p>2.hdfs可以采用条形布局<br>也是一个亮点功能，可以更好的管理小文件，不再是64M一个文件块，而是1M一个文件块.如何管理小文件一直都是hdfs很头疼的一个地方，很多人想拿hdfs的高可靠和高吞吐量做图片服务器，但一个图片要占据掉hdfs的默认块64MB或者更多的128MB显然是不合理的，大量的小文件也给namenode带来太大的压力。有了这个条形布局后，小文件管理或许不再是问题。</p>
+<p>3.hdfs namenode高可用<br>当前HA为一个active namenode，一个standby namenode，3.0中hdfs可以使用多个standby namenode。这个功能很重要么？或许吧，active namenode和standby namenode如果能更好的自动切换或者多个active namenode能同时工作的话就太棒了，但估计3.0第一个版本不会做到这一步。</p>
+<h2 id="yarn新特性"><a href="#yarn新特性" class="headerlink" title="yarn新特性"></a>yarn新特性</h2><ol>
+<li>更细的资源粒度隔离<br>yarn当前的资源隔离有几种方式，目前基本上都是使用cgroup来做隔离。<br>a.进程隔离:只隔离内存，不隔离cpu<br>b.cgroup隔离:隔离cpu和内存，但在隔离内存时候有问题，问题的表现为mr在运行的时候可能会出现内存翻倍的问题，如果让crgoup来隔离内存，这会导致mr作业被cgroup杀掉，yarn的解决方法是会有个线程去监控内存是否会出现内存持续超出的情况，如果只是突然间的内存翻倍，并不会杀掉进程，真是丑陋的实现。<br>3.docker隔离:bug较多，不知道有哪家企业在生产线上用了。</li>
+</ol>
+<p>3.0的资源隔离<br>cgroup隔离：又一个亮点功能，能实现隔离cpu,内存，硬盘io。非常棒的新特性，如果能很好的解决掉原先的内存问题，再加上磁盘IO的隔离，那实在是太赞了，要是把网络IO也顺便做掉的话就更赞了。</p>
+<ol>
+<li>container的资源可动态调整<br>一个蛮实用的功能，调整正在运行的服务的资源，例如hbase一直在跑，可以增加或减少hbase占据的资源。由yarn的resourceManger下的AMS组件操作。</li>
+</ol>
+<p>Timeline Server2<br>Timeline Server是hadoop2.0推出的组件，保存应用程序正在运行的信息和历史信息（MR记录，tez记录等），应用程序信息存储和检索，是个很实用的东西，但一直都是单点运行的，而Timeline Server2主要的改进就是做了ha，做了些易用性相关的改进。</p>
+<h2 id="MapReduce的改进"><a href="#MapReduce的改进" class="headerlink" title="MapReduce的改进"></a>MapReduce的改进</h2><p>曾几何时MR是hadoop生态圈中最核心的组件，而今MR已经渐渐没落，在很多地方都被spark,impala等产品替代,但瘦死骆驼比马大，MR还在hadoop中占据着很重要的地位。<br>问：MR已过时？<br>答：hive是hadoop使用最广泛的组件之一，使用hive的基本都在执行hive mr。虽然现在有spark on hive,但更多的hive还是在跑MR。<br>MR对spark的优势：<br>a.spark对hive的支持不够，<br>b.spark在shuffle，需要排序的情况下，要比MR慢。<br>c.spark稳定性不够，比MR更容易出现内存问题<br>终上，虽然hadoop越来越火，MR越来越弱势，但MR要再活个两三年应该没什么问题。</p>
+<p>1.引入native task。<br>听说是国人用C开发的一个组件，如果是原先写好的MR的作业，能通过调整配置直接用该实现来运行。把很多工作本地化掉，如果是shuflle密集型的作业，会有大量的shuffle的需求，那最高能有30%的性能提升。<br>我对这个功能的实用性持保留态度，native task对原先作业的兼容度从未得到验证，在shuffle不多的情况下又不会有明显的性能提升，而这块需求也可以通过原先的combiner接口解决掉很多事情。</p>
+<p>2.内存自动推断。<br>在hadoop2.x里，内存设置参数有好几个，要设置map.mb,reduce.mb,map.java.opts,reduce.java.opts等。而这几个参数又是有相关性的，如果设置错了，那就会出现抛OOM异常或者导致内存利用率太低。之前在hive里跑sql的时候被这几个参数坑过很多次。<br>在hadoop3.0里，这些内存会自动推断，只需要设置map.java.opts和reduce.java.opts还有heap.memory-mb.ratio(默认0.8,使用heap的80%内存)这三个参数，便会推断出需要使用的内存。<br>原先要设置map.mb,reduce.mb,map.java.opts,reduce.java.opts。要是设置错了，可能会抛OOM错误或者导致内存利用率太低</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/05/hadoop/hadoop3 newfeature/" data-id="cj3qq77me000i4pi9htf27ssr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/">hadoop</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/14/mycat/mycat-code-1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          mycat源码解读3-请求数据库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">由于缓存文件存在导致gpinitsystem失败</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 10px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/08/java/maven详解/">maven详解</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/Consistency Algorithms/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

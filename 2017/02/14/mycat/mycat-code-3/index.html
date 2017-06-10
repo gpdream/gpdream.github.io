@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>mycat源码解读2-sql处理 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本章解读mycat接收到一条sql命令后使如何处理的">
+<meta name="keywords" content="mycat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mycat源码解读2-sql处理">
+<meta property="og:url" content="https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="本章解读mycat接收到一条sql命令后使如何处理的">
+<meta property="og:updated_time" content="2017-02-14T06:38:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mycat源码解读2-sql处理">
+<meta name="twitter:description" content="本章解读mycat接收到一条sql命令后使如何处理的">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-mycat/mycat-code-3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/14/mycat/mycat-code-3/" class="article-date">
+  <time datetime="2017-02-14T05:28:51.000Z" itemprop="datePublished">2017-02-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      mycat源码解读2-sql处理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本章解读mycat接收到一条sql命令后使如何处理的<br><a id="more"></a><br>本部分紧接mycat 登录部分的代码阅读.</p>
+<p> 接下来就是具体的sql指令处理。<br>从该段代码中可以看到连接成功后，handler指向了FrontendCommandHandler，这里的source是FronendConnection，也就是我们的连接。</p>
+<ul>
+<li><p>登录成功之后的请求均由FrontendCommandHandler处理，再看FrontendCommandHandler的handler方法.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">public void handle(byte[] data)</div><div class="line">    &#123;</div><div class="line">        if(source.getLoadDataInfileHandler()!=null&amp;&amp;source.getLoadDataInfileHandler().isStartLoadData())</div><div class="line">        &#123;</div><div class="line">            MySQLMessage mm = new MySQLMessage(data);</div><div class="line">            int  packetLength = mm.readUB3();</div><div class="line">            if(packetLength+4==data.length)</div><div class="line">            &#123;</div><div class="line">                source.loadDataInfileData(data);</div><div class="line">            &#125;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        switch (data[4])</div><div class="line">        &#123;</div><div class="line">            case MySQLPacket.COM_INIT_DB:</div><div class="line">                commands.doInitDB();</div><div class="line">                source.initDB(data);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_QUERY:</div><div class="line">                commands.doQuery();</div><div class="line">                source.query(data);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_PING:</div><div class="line">                commands.doPing();</div><div class="line">                source.ping();</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_QUIT:</div><div class="line">                commands.doQuit();</div><div class="line">                source.close(&quot;quit cmd&quot;);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_PROCESS_KILL:</div><div class="line">                commands.doKill();</div><div class="line">                source.kill(data);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_STMT_PREPARE:</div><div class="line">                commands.doStmtPrepare();</div><div class="line">                source.stmtPrepare(data);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_STMT_SEND_LONG_DATA:</div><div class="line">            	commands.doStmtSendLongData();</div><div class="line">            	source.stmtSendLongData(data);</div><div class="line">            	break;</div><div class="line">            case MySQLPacket.COM_STMT_RESET:</div><div class="line">            	commands.doStmtReset();</div><div class="line">            	source.stmtReset(data);</div><div class="line">            	break;</div><div class="line">            case MySQLPacket.COM_STMT_EXECUTE:</div><div class="line">                commands.doStmtExecute();</div><div class="line">                source.stmtExecute(data);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_STMT_CLOSE:</div><div class="line">                commands.doStmtClose();</div><div class="line">                source.stmtClose(data);</div><div class="line">                break;</div><div class="line">            case MySQLPacket.COM_HEARTBEAT:</div><div class="line">                commands.doHeartbeat();</div><div class="line">                source.heartbeat(data);</div><div class="line">                break;</div><div class="line">            default:</div><div class="line">                     commands.doOther();</div><div class="line">                     source.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR,</div><div class="line">                             &quot;Unknown command&quot;);</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>此步骤根据不同的包头解析请求，我们以一次查询为例继续往下看。查询的部分走的代码是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">case MySQLPacket.COM_QUERY:</div><div class="line">                commands.doQuery();</div><div class="line">                source.query(data);</div><div class="line">                break;</div></pre></td></tr></table></figure>
+</li>
+<li><p>其中commands.doQuery()只是做了一次计数器上的变化，告知查询次数+1，无其他动作，看`source.query(data);</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">public void query(String sql) &#123;</div><div class="line">		</div><div class="line">		//一大堆的校验啊，安全啊什么的代码</div><div class="line">		...</div><div class="line">		...</div><div class="line">		</div><div class="line">		// 执行查询</div><div class="line">		if (queryHandler != null) &#123;			</div><div class="line">			queryHandler.setReadOnly(privileges.isReadOnly(user));</div><div class="line">			queryHandler.query(sql);</div><div class="line">			</div><div class="line">		&#125; else &#123;</div><div class="line">			writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, &quot;Query unsupported!&quot;);</div><div class="line">		&#125;		</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>此处的queryHandler为ServerQueryHandler.query.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">public void query(String sql) &#123;</div><div class="line">		</div><div class="line">		ServerConnection c = this.source;</div><div class="line">		if (LOGGER.isDebugEnabled()) &#123;</div><div class="line">			LOGGER.debug(new StringBuilder().append(c).append(sql).toString());</div><div class="line">		&#125;</div><div class="line">		//</div><div class="line">		int rs = ServerParse.parse(sql);</div><div class="line">		int sqlType = rs &amp; 0xff;</div><div class="line">		</div><div class="line">		switch (sqlType) &#123;</div><div class="line">		//一大堆的case分支，我们的查询直接走到default部分</div><div class="line">		</div><div class="line">		//explain sql</div><div class="line">		default:</div><div class="line">			if(readOnly)&#123;</div><div class="line">				LOGGER.warn(new StringBuilder().append(&quot;User readonly:&quot;).append(sql).toString());</div><div class="line">				c.writeErrMessage(ErrorCode.ER_USER_READ_ONLY, &quot;User readonly&quot;);</div><div class="line">				break;</div><div class="line">			&#125;</div><div class="line">			c.execute(sql, rs &amp; 0xff);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>sql交给ServerConecction来execute<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">public void execute(String sql, int type) &#123;</div><div class="line">    ...</div><div class="line">    ...</div><div class="line">    //前面是一大堆的状态检查之类的东西，直接看最关键的一句</div><div class="line"></div><div class="line">	routeEndExecuteSQL(sql, type, schema);</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><code>routeEndExecuteSQL(sql, type, schema);</code></p>
+<ul>
+<li><p>这个方法会根据当前session和sql语句来得出路由信息，RouteResultset rrs 。ServerConnection会根据路由计算结果来执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">    public void execute(RouteResultset rrs, int type) &#123;</div><div class="line"></div><div class="line">        // clear prev execute resources</div><div class="line">        clearHandlesResources();</div><div class="line">        if (LOGGER.isDebugEnabled()) &#123;</div><div class="line">            StringBuilder s = new StringBuilder();</div><div class="line">            LOGGER.debug(s.append(source).append(rrs).toString() + &quot; rrs &quot;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // 检查路由结果是否为空</div><div class="line">        RouteResultsetNode[] nodes = rrs.getNodes();</div><div class="line">        if (nodes == null || nodes.length == 0 || nodes[0].getName() == null || nodes[0].getName().equals(&quot;&quot;)) &#123;</div><div class="line">            source.writeErrMessage(ErrorCode.ER_NO_DB_ERROR,</div><div class="line">                    &quot;No dataNode found ,please check tables defined in schema:&quot; + source.getSchema());</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">        boolean autocommit = source.isAutocommit();</div><div class="line">        final int initCount = target.size();</div><div class="line">        if (nodes.length == 1) &#123;</div><div class="line">            singleNodeHandler = new SingleNodeHandler(rrs, this);</div><div class="line">            if (this.isPrepared()) &#123;</div><div class="line">                singleNodeHandler.setPrepared(true);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            try &#123;</div><div class="line">                if(initCount &gt; 1)&#123;</div><div class="line">                    checkDistriTransaxAndExecute(rrs,1,autocommit);</div><div class="line">                &#125;else&#123;</div><div class="line">                    singleNodeHandler.execute();</div><div class="line">                &#125;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                LOGGER.warn(new StringBuilder().append(source).append(rrs).toString(), e);</div><div class="line">                source.writeErrMessage(ErrorCode.ERR_HANDLE_DATA, e.toString());</div><div class="line">            &#125;</div><div class="line"></div><div class="line">        &#125; else &#123;</div><div class="line"></div><div class="line">            multiNodeHandler = new MultiNodeQueryHandler(type, rrs, autocommit, this);</div><div class="line">            if (this.isPrepared()) &#123;</div><div class="line">                multiNodeHandler.setPrepared(true);</div><div class="line">            &#125;</div><div class="line">            try &#123;</div><div class="line">                if(((type == ServerParse.DELETE || type == ServerParse.INSERT || type == ServerParse.UPDATE) &amp;&amp; !rrs.isGlobalTable() &amp;&amp; nodes.length &gt; 1)||initCount &gt; 1) &#123;</div><div class="line">                    checkDistriTransaxAndExecute(rrs,2,autocommit);</div><div class="line">                &#125; else &#123;</div><div class="line">                    multiNodeHandler.execute();</div><div class="line">                &#125;</div><div class="line">            &#125; catch (Exception e) &#123;</div><div class="line">                LOGGER.warn(new StringBuilder().append(source).append(rrs).toString(), e);</div><div class="line">                source.writeErrMessage(ErrorCode.ERR_HANDLE_DATA, e.toString());</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        if (this.isPrepared()) &#123;</div><div class="line">            this.setPrepared(false);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>这里有两个分支,singleNodeHandler和MultiNodeQueryHandler。根据路由计算结果需要多少node决定走哪个分支。singleNodeHandler和mulitNoderHandler都继承phsyicNodeHandler，我们现在的sql只对应1个mysql实例，走向了singleNodeHandler，看看他的execute方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public void execute() throws Exception &#123;</div><div class="line">		startTime=System.currentTimeMillis();</div><div class="line">		ServerConnection sc = session.getSource();</div><div class="line">		this.isRunning = true;</div><div class="line">		this.packetId = 0;</div><div class="line">		final BackendConnection conn = session.getTarget(node);</div><div class="line">		LOGGER.debug(&quot;rrs.getRunOnSlave() &quot; + rrs.getRunOnSlave());</div><div class="line">		node.setRunOnSlave(rrs.getRunOnSlave());	// 实现 master/slave注解</div><div class="line">		LOGGER.debug(&quot;node.getRunOnSlave() &quot; + node.getRunOnSlave());</div><div class="line">		 </div><div class="line">		if (session.tryExistsCon(conn, node)) &#123;</div><div class="line">			_execute(conn);</div><div class="line">		&#125; else &#123;</div><div class="line">			// create new connection</div><div class="line"></div><div class="line">			MycatConfig conf = MycatServer.getInstance().getConfig();</div><div class="line">						</div><div class="line">			LOGGER.debug(&quot;node.getRunOnSlave() &quot; + node.getRunOnSlave());</div><div class="line">			node.setRunOnSlave(rrs.getRunOnSlave());	// 实现 master/slave注解</div><div class="line">			LOGGER.debug(&quot;node.getRunOnSlave() &quot; + node.getRunOnSlave());</div><div class="line">			 		</div><div class="line">			PhysicalDBNode dn = conf.getDataNodes().get(node.getName());</div><div class="line">			dn.getConnection(dn.getDatabase(), sc.isAutocommit(), node, this, node);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>final BackendConnection conn = session.getTarget(node);</code>这行代码能根据node数获取到对应的BackendConnection，也就是一个mysqlConnection，这个connection相当于一个mysqlClient，具体的执行singleNodeHandler会通过这个conn来执行。</p>
+<p><em>下一篇讲mysqlConnection是如何被获取并执行的</em></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/" data-id="cj3qq77mw000v4pi93u1q0ipx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/14/mycat/mycat-code-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          mycat源码解读1-登录mycat
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/14/mycat/mycat-code-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">mycat源码解读3-请求数据库</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 10px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/08/java/maven详解/">maven详解</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/Consistency Algorithms/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

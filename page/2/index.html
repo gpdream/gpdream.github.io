@@ -68,9 +68,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-greenplum/gpinitsystem faild by cache file" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-greenplum/gpconfig" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" class="article-date">
+    <a href="/2017/01/04/greenplum/gpconfig/" class="article-date">
   <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
 </a>
     
@@ -82,7 +82,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gpinitsystem faild by cache file/">由于缓存文件存在导致gpinitsystem失败</a>
+      <a class="article-title" href="/2017/01/04/greenplum/gpconfig/">gp参数详解</a>
     </h1>
   
 
@@ -90,21 +90,64 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>GP集群：master, segment1, segment2</p>
-<p>问题描述：<br>segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。</p>
-<p>在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。<br>
+        <p> 官方文档：<a href="http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html" target="_blank" rel="external">http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html</a></p>
         
           <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/#more">Read More</a>
+            <a href="/2017/01/04/greenplum/gpconfig/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/" data-id="cj3qq2at6000938i9i7vxxl96" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/" data-id="cj3qq77m100094pi91vv1j6xx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-java/jvm oom beacuse of system vm config" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/java/jvm oom beacuse of system vm config/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/java/jvm oom beacuse of system vm config/">机器有大量剩余内存时但java进程还是报OOM错误</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。<br>但在运行<code>java -version</code>的时候出错，提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 tmp]# Error occurred during initialization of VM</div><div class="line">Could not reserve enough space for object heap</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div></pre></td></tr></table></figure></p>
+<p>通过<code>free -h</code>查看发现机器有很大的空余内存，但还是报内存不够初始化jvm。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 ~]# free -h</div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:            94G        1.4G         90G        2.2G        2.5G         90G</div><div class="line">Swap:          4.0G          0B        4.0G</div></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/java/jvm oom beacuse of system vm config/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/" data-id="cj3qq77mi000l4pi94rj4i7mv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -151,96 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp workload/" data-id="cj3qq2at4000838i9fwsnatld" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-java/gp OOM+-%A6%D4%C0%CD+%F7" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/">机器有大量剩余内存时但java进程还是报OOM错误</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。<br>但在运行<code>java -version</code>的时候出错，提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 tmp]# Error occurred during initialization of VM</div><div class="line">Could not reserve enough space for object heap</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div></pre></td></tr></table></figure></p>
-<p>通过<code>free -h</code>查看发现机器有很大的空余内存，但还是报内存不够初始化jvm。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 ~]# free -h</div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:            94G        1.4G         90G        2.2G        2.5G         90G</div><div class="line">Swap:          4.0G          0B        4.0G</div></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/" data-id="cj3qq2atr000n38i9qwtyob6a" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-greenplum/gp OOM" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gp OOM/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gp OOM/">greenplum OOM的难问题定位</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。</p>
-<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="用户的最大进程数导致segment失效"><a href="#用户的最大进程数导致segment失效" class="headerlink" title="用户的最大进程数导致segment失效"></a>用户的最大进程数导致segment失效</h3><p>查询pg_log日志，发现如下信息<code>could not fork new process for connection: Resource temporarily unavailable。</code><br>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gp OOM/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM/" data-id="cj3qq2at0000538i9af4yyx8t" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp workload/" data-id="cj3qq77lz00084pi962i8jtzu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -289,7 +243,51 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp motion/" data-id="cj3qq2asy000438i9oxd6sla5" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp motion/" data-id="cj3qq77lx00054pi9la9a7ari" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-greenplum/gp OOM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gp OOM/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/gp OOM/">greenplum OOM的难问题定位</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="用户的最大进程数导致segment失效"><a href="#用户的最大进程数导致segment失效" class="headerlink" title="用户的最大进程数导致segment失效"></a>用户的最大进程数导致segment失效</h3><p>查询pg_log日志，发现如下信息<code>could not fork new process for connection: Resource temporarily unavailable。</code><br>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/gp OOM/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM/" data-id="cj3qq77lv00044pi9qy1mkizn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -333,7 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/" data-id="cj3qq2asx000338i913fqi7zc" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/" data-id="cj3qq77lu00034pi9y2mj0j87" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -381,7 +379,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/" data-id="cj3qq2atb000d38i9walc2j67" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/" data-id="cj3qq77m9000d4pi92z18cpp4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -449,15 +447,15 @@
           </li>
         
           <li>
+            <a href="/2017/03/17/aliyun/tableStore/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
             <a href="/2017/03/17/aliyun/aliyunEDAS/">阿里云EDAS介绍</a>
           </li>
         
           <li>
-            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+            <a href="/2017/02/23/hadoop/Consistency Algorithms/">分布式一致性算法</a>
           </li>
         
       </ul>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>机器有大量剩余内存时但java进程还是报OOM错误 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="现象当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。但在运行java -version的时候出错，提示1234[root@m1 tmp]# Error occurred during initialization of VMCould not">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器有大量剩余内存时但java进程还是报OOM错误">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="现象当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。但在运行java -version的时候出错，提示1234[root@m1 tmp]# Error occurred during initialization of VMCould not">
+<meta property="og:updated_time" content="2017-01-04T07:05:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器有大量剩余内存时但java进程还是报OOM错误">
+<meta name="twitter:description" content="现象当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。但在运行java -version的时候出错，提示1234[root@m1 tmp]# Error occurred during initialization of VMCould not">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-java/jvm oom beacuse of system vm config" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/java/jvm oom beacuse of system vm config/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      机器有大量剩余内存时但java进程还是报OOM错误
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。<br>但在运行<code>java -version</code>的时候出错，提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 tmp]# Error occurred during initialization of VM</div><div class="line">Could not reserve enough space for object heap</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div></pre></td></tr></table></figure></p>
+<p>通过<code>free -h</code>查看发现机器有很大的空余内存，但还是报内存不够初始化jvm。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 ~]# free -h</div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:            94G        1.4G         90G        2.2G        2.5G         90G</div><div class="line">Swap:          4.0G          0B        4.0G</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><h3 id="jvm参数的影响"><a href="#jvm参数的影响" class="headerlink" title="jvm参数的影响"></a>jvm参数的影响</h3><p>首先看看jvm进程内存的分配，jvm进程内存结构由如下部分组成</p>
+<ul>
+<li><p>计数器</p>
+<p> 大小忽略不计</p>
+</li>
+<li><p>Java虚拟机栈</p>
+<p> 虚拟机栈是归属于线程的，每个线程对应的这个参数为VMThreadStackSize 默认1mb，也就是每有一个线程会去申请1mb，该值不受堆内存影响，在没有太多线程的情况下也不会占用掉特别多的内存</p>
+</li>
+<li><p>本地方法栈<br>和虚拟机栈差不多，在此次问题定位中占用的空间大小可忽略</p>
+</li>
+<li><p>Java堆<br>默认最大值为系统内存的1/4，在当前环境下是23.5g。对应参数<code>-XX:MaxHeapSize</code> </p>
+</li>
+<li><p>方法区</p>
+<p> 方法去又叫Non-Heap（对应参数非堆），对应参数<code>-XX:MaxPermSize</code>。默认值166m，用于存储已被虚拟机加载的类型信息、常量、静态变量、即时编译后的代码等信息。<br>常量池：占用的非堆的内存<br>直接内存：0</p>
+</li>
+</ul>
+<p>综上当前环境下，真正影响jvm内存最大的两个参数分别是堆大小<code>-XX:MaxHeapSize</code> 和非堆大小<code>-XX:MaxPermSize</code>。<br>在测试的时候停止掉系统的ambari-server和tomcat，只留下zookeeper，zk配置了-Xmx 1024m<br>依次运行命令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">[root@m1 ~]# java -Xmx44g -version</div><div class="line">java version &quot;1.7.0_91&quot;</div><div class="line">OpenJDK Runtime Environment (rhel-2.6.2.3.el7-x86_64 u91-b00)</div><div class="line">OpenJDK 64-Bit Server VM (build 24.91-b01, mixed mode)</div><div class="line"></div><div class="line">[root@m1 ~]# java -Xmx45g -version</div><div class="line">Error occurred during initialization of VM</div><div class="line">Unable to allocate 1479872KB bitmaps for parallel garbage collection for the requested 47355904KB heap.</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div><div class="line"></div><div class="line">[root@m1 ~]# java -Xmx43g -XX:MaxPermSize=1g -version</div><div class="line">java version &quot;1.7.0_91&quot;</div><div class="line">OpenJDK Runtime Environment (rhel-2.6.2.3.el7-x86_64 u91-b00)</div><div class="line">OpenJDK 64-Bit Server VM (build 24.91-b01, mixed mode)</div><div class="line">You have mail in /var/spool/mail/root</div><div class="line"></div><div class="line">[root@m1 ~]# java -Xmx43g -XX:MaxPermSize=2g -version</div><div class="line">Error occurred during initialization of VM</div><div class="line">Unable to allocate 1474560KB bitmaps for parallel garbage collection for the requested 47185920KB heap.</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div></pre></td></tr></table></figure></p>
+<p>可以看到当堆和非堆大小为44g时候可运行，而超过45g的时候就不能运行。此时jvm去向系统申请的内存会略大于44g。但不足以起到决定性的影响。系统明明有94g的总内存和90g的空闲内存，为何只能申请到44g的内存呢？</p>
+<h3 id="系统参数的影响"><a href="#系统参数的影响" class="headerlink" title="系统参数的影响"></a>系统参数的影响</h3><p>当前环境设置了一些内核参数，其中有<code>vm.overcommit_memory = 2
+vm.overcommit_ratio = 50</code>这两个参数。其中<code>vm.overcommit_ratio = 50</code>和系统默认值相同，系统的会分配的内存为总内存<em>该值百分比，也就是94</em>50%=47G。<br>其中zk已经申请了1g多一点点的内存，还剩下45+G的内存。由此可见系统剩余的可分配内存为45G左右。此时当jvm的参数<code>-Xmx43g -XX:MaxPermSize=1g</code>为44g的时候，可以正常运行，但当达到45g的时候就会报错。</p>
+<p>那为什么在启动tomcat后再启动<code>java -version</code>就会报错呢？这是因为-Xmx的默认值是系统总内存的1/4，当前环境下是23.5g，<code>java -version</code>也同样是默认23.5g，加起来的时候已经超过了系统允许分配的最大内存。因此<code>java -version</code>运行出错。</p>
+<p>还剩下最后一个问题，其他的机器上同样没有设置-Xmx，那-Xmx理论上也是设置为系统的1/4，为何可以运行多个jvm程序呢？这是因为这个集群中的系统都设置了<code>vm.overcommit_memory = 2</code>这个参数。<br>该值有3个配置项分别为1,2,3对应作用如下:</p>
+<ul>
+<li>0:系统在为应用进程分配虚拟地址空间时，会判断当前申请的虚拟地址空间大小是否超过剩余内存大小，如果超过，则虚拟地址空间分配失败。因此，也就是如果进程本身占用的虚拟地址空间比较大或者剩余内存比较小时，fork、malloc等调用可能会失败。 </li>
+<li>1:系统在为应用进程分配虚拟地址空间时，完全不进行限制，这种情况下，避免了fork可能产生的失败，但由于malloc是先分配虚拟地址空间，而后通过异常陷入内核分配真正的物理内存，在内存不足的情况下，这相当于完全屏蔽了应用进程对系统内存状态的感知，即malloc总是能成功,除非出现OOM，进程才会被杀掉</li>
+<li>2:根据系统内存状态确定了虚拟地址空间的上限，由于很多情况下，进程的虚拟地址空间占用远大小其实际占用的物理内存，这样一旦内存使用量上去以后，对于一些动态产生的进程(需要复制父进程地址空间)则很容易创建失败</li>
+</ul>
+<p>该值的系统默认值为0，也就是只有当系统剩余内存不足以为虚拟机申请的时候才会失败。而其他环境中java进程不会立即达到-Xmx的内存值，故可以运行多个。<br>在当前环境中设置成了2，虽然系统空闲内存还有，但虚拟地址空间上限已经变化了，故在运行第二个jvm进程的时候便申请失败。</p>
+<h2 id="结论和解决办法"><a href="#结论和解决办法" class="headerlink" title="结论和解决办法"></a>结论和解决办法</h2><p>综上，是因为<code>vm.overcommit_memory = 2
+vm.overcommit_ratio = 50</code>这两个系统参数影响了操作系统的可分配vm内存，而且有两个java进程没有设置Xmx大小。</p>
+<p><code>java -version</code>启动失败，是因为当前环境下tomcat没有设置堆内存大小，申请掉了系统1/4的内存，使剩余可分配内存变为了1/4.而<code>java -version</code>同样没有设置-Xmx，启动jvm的时候想要再去申请系统1/4的时候已资源不足，毕竟总共可分配内存为系统的1/2.</p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>老老实实在java启动时候带上-Xmx参数，当前环境的tomcat用不了多少资源，有2g就差不多够了。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/" data-id="cj3qq77mi000l4pi94rj4i7mv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/04/greenplum/gpconfig/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          gp参数详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/greenplum/gp workload/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">greenplum的worlkoad详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 10px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/08/java/maven详解/">maven详解</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/Consistency Algorithms/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
