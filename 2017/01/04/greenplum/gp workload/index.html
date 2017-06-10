@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>greenplum的worlkoad详解 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="默认8192，内存资源限制。计算公式为（x单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1126)/16=7.875GB.则该值设置为7875.gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被stat">
+<meta name="keywords" content="greenplum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="greenplum的worlkoad详解">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/04/greenplum/gp workload/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="默认8192，内存资源限制。计算公式为（x单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1126)/16=7.875GB.则该值设置为7875.gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被stat">
+<meta property="og:image" content="http://gpdb.docs.pivotal.io/4380/graphics/gp_query_priority1.png">
+<meta property="og:image" content="http://gpdb.docs.pivotal.io/4380/graphics/gp_query_priority2.png">
+<meta property="og:updated_time" content="2017-01-04T06:19:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="greenplum的worlkoad详解">
+<meta name="twitter:description" content="默认8192，内存资源限制。计算公式为（x单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1126)/16=7.875GB.则该值设置为7875.gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被stat">
+<meta name="twitter:image" content="http://gpdb.docs.pivotal.io/4380/graphics/gp_query_priority1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-greenplum/gp workload" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gp workload/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      greenplum的worlkoad详解
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>默认8192，内存资源限制。计算公式为（x<em>单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1</em>126)/16=7.875GB.则该值设置为7875.<br>gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被statement_mem和resource queue memory limits所限，设置为none,当设置为None，memory management与4.1版本GP相同。当设置为eager_free时，将会最大程度的使用内存，但不超过max_statement_mem和resourece queue的内存限制。</p>
+<h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p>主要起控制查询队列和防止系统过载的作用。<br>当用户提交一个查询的时候，这个查询会被评估是否超过了资源队列的限制。如果这个查询没有超过资源限制，则会被立即执行。如果该查询超过了资源队列的限制，则查询必须等到资源队列里前面的查询执行结束有空闲才会进行。查询请求默认先进先出。如果启用了查询优先级的设置，超级管理员的。<br>使Workload生效需要如下几步：</p>
+<ul>
+<li>配置workload Managermnat的配置项（可使用默认配置）</li>
+<li>创建资源队列，并设置资源队列的limit值</li>
+<li>将用户添加到资源队列中</li>
+<li>检查/监控资源队列状态</li>
+</ul>
+<a id="more"></a>
+<h1 id="WorkLoad配置项"><a href="#WorkLoad配置项" class="headerlink" title="WorkLoad配置项"></a>WorkLoad配置项</h1><h2 id="资源队列通用配置项"><a href="#资源队列通用配置项" class="headerlink" title="资源队列通用配置项"></a>资源队列通用配置项</h2><ul>
+<li>max_resource_queues ：最多有多少个资源队列</li>
+<li>max_resource_portals_per_transaction：每个事务最多能打开多少游标，每个打开的游标都会在其中资源队列中占用一个活动的查询槽。</li>
+<li>resource_select_only ：设置该值为on，则资源队列只对会触发select的语句有效，insert,alert等不生效</li>
+<li>resource_cleanup_gangs_on_wait :在占用资源对列中一个槽位前，先清理掉空闲的工作进程</li>
+<li>stats_queue_level ：收集资源队列的状态信息<h2 id="内存相关设置"><a href="#内存相关设置" class="headerlink" title="内存相关设置"></a>内存相关设置</h2></li>
+<li>gp_resqueue_memory_policy ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被statement_mem和resource queue memory limits所限，设置为none,当设置为None，memory management与4.1版本GP相同。当设置为eager_free时，将会最大程度的使用内存，但不超过max_statement_mem和resourece queue的内存限制。</li>
+<li>statement_mem 和 max_statement_mem ：指令占用的内存和指令占用的最大内存</li>
+<li>gp_vmem_protect_limit ：默认8192，内存资源限制。计算公式为（x<em>单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1</em>126)/16=7.875GB.则该值设置为7875.当查询小号的内存大于该值的时候，查询语句会被取消。</li>
+<li>gp_vmem_idle_resource_timeout 和gp_vmem_protect_segworker_cache_limit：当连接超过该值时，服务器会释放掉其占用的资源，当cache超过limit时,内容不会被cache，而是在使用完后释放掉。</li>
+<li>shared_buffers ：共享缓冲区<br>##workload优先级相关配置项</li>
+<li>gp_resqueue_priority ：使优先级生效，默认生效。</li>
+<li>gp_resqueue_priority_sweeper_interval：默认值1000ms，每隔这么久去竞争一次cpu</li>
+<li>gp_resqueue_priority_cpucores_per_segment ：每个segment使用的资源</li>
+</ul>
+<h1 id="Workload是如何防止过载的"><a href="#Workload是如何防止过载的" class="headerlink" title="Workload是如何防止过载的"></a>Workload是如何防止过载的</h1><h2 id="内存限制的工作方式"><a href="#内存限制的工作方式" class="headerlink" title="内存限制的工作方式"></a>内存限制的工作方式</h2><p>资源队列有自己的memory_limit，如果该资源队列最大内存限制为2000MB，而activity_statment为10，则该资源队列下的statement默认的占用内存为200MB.设置了statement_mem，可以覆盖默认的占用内存。用户可以通过statement_mem参数设置自己资源队列里的statement_mem，但该值受小于max_statement_mem和memory_limit，max_statement_mem只能由超级管理员设置。如果MEMORY_LIMIT 的资源被耗尽了，那么新进来的请求（哪怕activty_statement没满），请求也只能等待着。<br>例如tpc语句中，队列数量为2，队列memroy_limit为1000MB,设置statement_mem为999MB，则在查询语句运行的时候，先后运行3行语句，在查询的时候会出现1行sql语句正在执行，其他语句正在等待。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 查看队列里语句执行状态</div><div class="line">SELECT * FROM gp_toolkit.gp_locks_on_resqueue;</div></pre></td></tr></table></figure></p>
+<table>
+<thead>
+<tr>
+<th>lorusename</th>
+<th>lorrsqname</th>
+<th>lorlocktype</th>
+<th>lorobjid</th>
+<th>lortransaction</th>
+<th>lorpid</th>
+<th>lormode</th>
+<th>lorgranted</th>
+<th>lorwaiting </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> sj</td>
+<td>myqueue</td>
+<td>resource queue</td>
+<td>132213</td>
+<td>14918</td>
+<td>122473</td>
+<td>ExclusiveLock</td>
+<td>f</td>
+<td>t</td>
+</tr>
+<tr>
+<td> sj</td>
+<td>myqueue</td>
+<td>resource queue</td>
+<td>132213</td>
+<td>14917</td>
+<td>122427</td>
+<td>ExclusiveLock</td>
+<td>f</td>
+<td>t</td>
+</tr>
+<tr>
+<td> sj</td>
+<td>myqueue</td>
+<td>resource queue</td>
+<td>132213</td>
+<td>14916</td>
+<td>122381</td>
+<td>ExclusiveLock</td>
+<td>t</td>
+<td>f</td>
+</tr>
+</tbody>
+</table>
+<h2 id="优先级的工作方式"><a href="#优先级的工作方式" class="headerlink" title="优先级的工作方式"></a>优先级的工作方式</h2><p>优先级的设置，是用于抢占cpu而存在的，假设有若干个队列，优先级都不同。当队列里面进来新的查询时候，cpu资源会被重新分配，高优先级资源队列的请求会抢占掉低优先级资源队列里的cpu资源。假设现在有如下3个资源队列：</p>
+<ul>
+<li>adhoc 优先级低</li>
+<li>reporting 优先级中</li>
+<li>executive 优先级最高<br>那么当reporting中有两个查询时，两个查询占用的cpu资源可能是如下图左这样的，因为这两个sql的优先级相同。此时adhoc进来一个查询语句，会占用掉一部分的cpu资源，因为其优先级较低，故其占用cpu资源如下图右所示<br><img src="http://gpdb.docs.pivotal.io/4380/graphics/gp_query_priority1.png" alt="image"><br>此时如果再executive队列里进来一行sql语句，因为该队列占据最高优先级，则其将抢占走大量的cpu资源!<br><img src="http://gpdb.docs.pivotal.io/4380/graphics/gp_query_priority2.png" alt="image"></li>
+</ul>
+<h1 id="资源队列resource-queue"><a href="#资源队列resource-queue" class="headerlink" title="资源队列resource queue"></a>资源队列resource queue</h1><p>资源队列只能由超级管理员来创建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">CREATE RESOURCE QUEUE name WITH (queue_attribute=value [, ... ])</div><div class="line">--队列属性有</div><div class="line">ACTIVE_STATEMENTS=integer</div><div class="line">        [ MAX_COST=float [COST_OVERCOMMIT=&#123;TRUE|FALSE&#125;] ]</div><div class="line">        [ MIN_COST=float ]</div><div class="line">        [ PRIORITY=&#123;MIN|LOW|MEDIUM|HIGH|MAX&#125; ]</div><div class="line">        [ MEMORY_LIMIT=&apos;memory_units&apos; ]</div><div class="line">        </div><div class="line">        | MAX_COST=float [ COST_OVERCOMMIT=&#123;TRUE|FALSE&#125; </div><div class="line">        [ ACTIVE_STATEMENTS=integer ]</div><div class="line">        [ MIN_COST=float ]</div><div class="line">        [ PRIORITY=&#123;MIN|LOW|MEDIUM|HIGH|MAX&#125; ]</div><div class="line">        [ MEMORY_LIMIT=&apos;memory_units&apos; ]</div></pre></td></tr></table></figure></p>
+<p>资源队列必须有属性active_statments或max_cost的一个或多个属性</p>
+<h2 id="资源对列各配置项参数含义"><a href="#资源对列各配置项参数含义" class="headerlink" title="资源对列各配置项参数含义"></a>资源对列各配置项参数含义</h2><ul>
+<li>name:资源队列的名字</li>
+<li>ACTIVE_STATEMENTS:同时运行的最大的指令数</li>
+<li>MAX_COST：指令预估的开销，如果超过该开销，且COST_OVERCOMMIT=FALSE，则不允许执行该指令</li>
+<li>MIN_COST：指令最小的开销，如果低于该值，则指令不计算在active_statements中，例如active_statements=2,而指令select * from table limit 1的开销为1，min_cost值为100，则该指令可直接运行不记录在ACTIVE_STATEMENTS中</li>
+<li>PRIORITY：需要打开优先级设置，设置队列的优先级</li>
+<li>MEMORY_LIMIT：队列能使用的总内存大小，建议为segment的90%以下。</li>
+<li>COST_OVERCOMMIT：cost超过最大值时是否还能允许指令运行。<br>-</li>
+</ul>
+<h2 id="用户和资源队列"><a href="#用户和资源队列" class="headerlink" title="用户和资源队列"></a>用户和资源队列</h2><p>用户提交的指令会出现在对应的资源队列中<br>创建用户时候不指定资源队列，会把用户指向默认的资源队列。创建用户命令如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">CREATE ROLE name [[WITH] option [ ... ]]</div><div class="line"># 例句</div><div class="line">CREATE RESOURCE QUEUE executive WITH (ACTIVE_STATEMENTS=3, PRIORITY=MAX);</div><div class="line">option属性</div><div class="line"> SUPERUSER | NOSUPERUSER</div><div class="line">    | CREATEDB | NOCREATEDB</div><div class="line">    | CREATEROLE | NOCREATEROLE</div><div class="line">    | CREATEEXTTABLE | NOCREATEEXTTABLE </div><div class="line">      [ ( attribute=&apos;value&apos;[, ...] ) ]</div><div class="line">           where attributes and value are:</div><div class="line">           type=&apos;readable&apos;|&apos;writable&apos;</div><div class="line">           protocol=&apos;gpfdist&apos;|&apos;http&apos;</div><div class="line">    | INHERIT | NOINHERIT</div><div class="line">    | LOGIN | NOLOGIN</div><div class="line">    | CONNECTION LIMIT connlimit</div><div class="line">    | [ ENCRYPTED | UNENCRYPTED ] PASSWORD &apos;password&apos;</div><div class="line">    | VALID UNTIL &apos;timestamp&apos; </div><div class="line">    | IN ROLE rolename [, ...]</div><div class="line">    | ROLE rolename [, ...]</div><div class="line">    | ADMIN rolename [, ...]</div><div class="line">    | RESOURCE QUEUE queue_name</div><div class="line">    | [ DENY deny_point ]</div><div class="line">    | [ DENY BETWEEN deny_point AND deny_point]</div></pre></td></tr></table></figure></p>
+<p>可以通过修改用户的资源队列来让用户使用其他资源队列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ALTER ROLE name RESOURCE QUEUE &#123;queue_name | NONE&#125;</div></pre></td></tr></table></figure>
+<h2 id="相关语法"><a href="#相关语法" class="headerlink" title="相关语法"></a>相关语法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># 创建资源队列</div><div class="line">CREATE RESOURCE QUEUE myqueue WITH (ACTIVE_STATEMENTS=20, </div><div class="line">MEMORY_LIMIT=&apos;2000MB&apos;);</div><div class="line"># 设置资源队列优先级</div><div class="line">ALTER RESOURCE QUEUE adhoc WITH (PRIORITY=LOW);</div><div class="line"># 添加用于到资源队列中，</div><div class="line">ALTER ROLE name RESOURCE QUEUE queue_name;</div><div class="line"># 创建用户时指定资源队列，未指定的将加入default_queue</div><div class="line">CREATE ROLE name WITH LOGIN RESOURCE QUEUE queue_name;</div><div class="line"># 将用户移出资源队列</div><div class="line">ALTER ROLE role_name RESOURCE QUEUE none;</div><div class="line"># 删除资源队列</div><div class="line">DROP RESOURCE QUEUE name;</div></pre></td></tr></table></figure>
+<h1 id="资源队列监控"><a href="#资源队列监控" class="headerlink" title="资源队列监控"></a>资源队列监控</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"># 查看资源队列状态</div><div class="line"> SELECT * FROM gp_toolkit.gp_resqueue_status;</div><div class="line"># 视图查看资源队列的统计信息，可以在系统视图pg_stat_resqueues 中看到</div><div class="line">stats_queue_level = on</div><div class="line"># 查看角色和资源队列关系</div><div class="line"> SELECT rolname, rsqname FROM pg_roles, </div><div class="line">          gp_toolkit.gp_resqueue_status </div><div class="line">   WHERE pg_roles.rolresqueue=gp_toolkit.gp_resqueue_status.queueid;</div><div class="line"># 查看处于等待状态的指令</div><div class="line">SELECT * FROM gp_toolkit.gp_locks_on_resqueue WHERE lorwaiting=&apos;true&apos;;</div><div class="line"># 清除掉处于等待状态的statement,先查出对应的pid，再运行pg_cancel_backend取消其运行</div><div class="line">SELECT rolname, rsqname, pid, granted,</div><div class="line">          current_query, datname </div><div class="line">   FROM pg_roles, gp_toolkit.gp_resqueue_status, pg_locks,</div><div class="line">        pg_stat_activity </div><div class="line">   WHERE pg_roles.rolresqueue=pg_locks.objid </div><div class="line">   AND pg_locks.objid=gp_toolkit.gp_resqueue_status.queueid</div><div class="line">   AND pg_stat_activity.procpid=pg_locks.pid;</div><div class="line">   AND pg_stat_activity.usename=pg_roles.rolname;</div><div class="line">   </div><div class="line"> pg_cancel_backend(pid)</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp workload/" data-id="cj3qq2at4000838i9fwsnatld" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          由于缓存文件存在导致gpinitsystem失败
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/java/gp OOM+-%A6%D4%C0%CD+%F7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">机器有大量剩余内存时但java进程还是报OOM错误</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 10px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/08/java/maven详解/">maven详解</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>由于缓存文件存在导致gpinitsystem失败 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="GP集群：master, segment1, segment2 问题描述：segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。 在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些se">
+<meta name="keywords" content="greenplum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由于缓存文件存在导致gpinitsystem失败">
+<meta property="og:url" content="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="GP集群：master, segment1, segment2 问题描述：segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。 在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些se">
+<meta property="og:image" content="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/attachment/segment_result.png">
+<meta property="og:updated_time" content="2017-01-04T06:15:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="由于缓存文件存在导致gpinitsystem失败">
+<meta name="twitter:description" content="GP集群：master, segment1, segment2 问题描述：segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。 在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些se">
+<meta name="twitter:image" content="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/attachment/segment_result.png">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-greenplum/gpinitsystem faild by cache file" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      由于缓存文件存在导致gpinitsystem失败
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>GP集群：master, segment1, segment2</p>
+<p>问题描述：<br>segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。</p>
+<p>在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。<br><a id="more"></a><br>初步分析：<br>通过查日志发现，在gpstart启动集群时，总是从segment1上去找所有segment实例的DBID，然而有一半的segment实例是在segment2上的，segment1上当然是找不到这些segment实例，另一方面segment1上的mirror segment是segment2上primary segment的镜像，这些mirror segment因为找不到primary也无法启动，只有segment1上的primary能够启动。由于gpinitsystem过程中不能将所有segment拉起，集群初始化失败。</p>
+<p>以下是问题定位及解决步骤：<br>1、阅读gpdb/gpMgmt/bin/gpstart.py</p>
+<blockquote>
+<p>在函数_prepare_segment_start()中确定要启动的segment,是通过gparray.get_valid_segdbs()来获得的</p>
+</blockquote>
+<p>2、阅读gpdb/gpMgmt/bin/gppylib/gparray.py</p>
+<blockquote>
+<p>gparray执行initFromCatalog()初始化，是通执行SQL语句，根据pg_catalog中查询得到的信进行息初始化的，segment相关信息通过执行如下SQL查询：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT dbid, content, role, preferred_role, mode, status, </div><div class="line">hostname, address, port, replication_port, fs.oid, fselocation</div><div class="line">FROM pg_catalog.gp_segment_configuration</div><div class="line">JOIN pg_catalog.pg_filespace_entry on (dbid = fsedbid)</div><div class="line">JOIN pg_catalog.pg_filespace fs on (fsefsoid = fs.oid)</div><div class="line">ORDER BY content, preferred_role DESC, fs.oid</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>于是，gpstart启动集群（只有1/4的segment实例能启动,即segment1上的primary能启动），psql template1，执行上述SQL，得到下图结果：<br><img src="attachment/segment_result.png" alt=""><br>果然，所有segment的hostname都为segment1,从而导致gpstart启动时都从segment1上找segment实例。于是想到，通过修改该表能否修复问题。</p>
+<p>3、修改pg_catalog.gp_segment_configuration （该方法无法解决问题）</p>
+<blockquote>
+<p>由于pg_catalog是系统表，是在集群初始化过程中生成的，并在运行过程中由系统自动维护，因此不能够直接修改，需要进入维护模式才能修改。具体步骤如下：</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"># 停止数据库</div><div class="line">gpstop</div><div class="line"></div><div class="line"># 以维护模式启动</div><div class="line">gpstart -m</div><div class="line"></div><div class="line"># 使用utility模式连接数据库</div><div class="line">PGOPTIONS=&apos;-c gp_session_role=utility&apos; psql template1</div><div class="line"></div><div class="line"># 在psql中执行修改语句</div><div class="line">update pg_catalog.gp_segment_configuration set hostname=&apos;segment2&apos; where dbid=2 or ...</div><div class="line"></div><div class="line"># 退出psql</div><div class="line"></div><div class="line"># 停止维护模式</div><div class="line">gpstop -m</div><div class="line"></div><div class="line"># 启动生成模式</div><div class="line">gpstart</div></pre></td></tr></table></figure>
+<p>通过上述步骤后，启动过程中提示hostname没有segment2,该方法无法有效解决问题。</p>
+<p>4、阅读gpdb/gpMgmt/bin/gpinitsystem</p>
+<blockquote>
+<p>由于pg_catalog表最初是在集群初始化过程中生成的，于是阅读了一下gpinitsystem的源码，是shell脚本，脚本中使用函数HOST_LOOKUP()查找hostname，该函数将hostaddress作为输入，调用gphostcache.py</p>
+</blockquote>
+<p>5、阅读gpdb/gpMgmt/bin/gppylib/gphostcache.py</p>
+<blockquote>
+<p>该脚本将interface与hostname的映射记录在~/.gphostcache文件中，如果有新的interface加进来会更新.gphostcache，具体代码逻辑没仔细看，对该文件的更新策略不是很清楚，也还没弄明白除了gpinitsystem、gpstart外，哪些操作过程需要查该文件。</p>
+</blockquote>
+<p>6、修改.gphostcache</p>
+<blockquote>
+<p>打开.gphostcache(存放在/home/gpadmin/目录下)，内容如下：<br>master:master<br>segment1:segment1</p>
+<p>确实缺少segment2的映射，修改该文件，添加segment2:segment2，然后删除原有集群并重新gpinitsystem初始化集群，初始化成功。至此，初始化问题解决。</p>
+</blockquote>
+<p>导致该问题的原因估计是第一次初始化集群时，主机名配置有误，而.gphostcache文件没有被重写可能是更新策略导致（更新策略待研究）。总的来说，为了避免安装、初始化中出现各种怪异问题，主要还是得按步骤配置好系统及各项参数，例如主机名、网络规划、host、ssh、硬盘挂载、参数设置等。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/" data-id="cj3qq2at6000938i9i7vxxl96" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/04/greenplum/gpconfig/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          gp参数详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/04/greenplum/gp workload/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">greenplum的worlkoad详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 10px;">aliyun</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
+          </li>
+        
+          <li>
+            <a href="/2017/05/08/java/maven详解/">maven详解</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/aliyunEDAS/">阿里云EDAS介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/17/aliyun/tableStore%A2%DA+_/">阿里云tableStore介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/hadoop/%C0ͦ+-%A2%CA+%CD-%F0%C8-%D2%C0%BF/">分布式一致性算法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
