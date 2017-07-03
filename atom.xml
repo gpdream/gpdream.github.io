@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://gpdream.github.io/"/>
-  <updated>2017-06-08T09:55:17.000Z</updated>
+  <updated>2017-07-03T08:47:24.000Z</updated>
   <id>https://gpdream.github.io/</id>
   
   <author>
@@ -14,6 +14,24 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>influxdb术语</title>
+    <link href="https://gpdream.github.io/2017/07/03/influxdb/influxdb-term/"/>
+    <id>https://gpdream.github.io/2017/07/03/influxdb/influxdb-term/</id>
+    <published>2017-07-03T08:42:02.000Z</published>
+    <updated>2017-07-03T08:47:24.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;以翻译官网的术语文档为主，顺带着介绍一点概念&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="influxdb" scheme="https://gpdream.github.io/tags/influxdb/"/>
+    
+  </entry>
   
   <entry>
     <title>Pattern和Matcher.find源码解读</title>
@@ -54,6 +72,27 @@
   </entry>
   
   <entry>
+    <title>阿里云EDAS介绍</title>
+    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/"/>
+    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/</id>
+    <published>2017-03-17T05:28:51.000Z</published>
+    <updated>2017-03-17T05:46:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
+    
+  </entry>
+  
+  <entry>
     <title>阿里云tableStore介绍</title>
     <link href="https://gpdream.github.io/2017/03/17/aliyun/tableStore/"/>
     <id>https://gpdream.github.io/2017/03/17/aliyun/tableStore/</id>
@@ -69,27 +108,6 @@
 &lt;li&gt;表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提供非常高的服务可用性。&lt;/li&gt;
 &lt;li&gt;表格存储管理的数据全部存储在 SSD 中并具有多个备份，提供了快速的访问性能和极高的数据可靠性。&lt;/li&gt;
 &lt;li&gt;用户在使用表格存储服务时，只需要按照预留和使用的资源进行付费，无需关心数据库的软硬件升级维护、集群缩容扩容等复杂问题。
-    
-    </summary>
-    
-    
-      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>阿里云EDAS介绍</title>
-    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/"/>
-    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/</id>
-    <published>2017-03-17T05:28:51.000Z</published>
-    <updated>2017-03-17T05:46:50.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
-&lt;/blockquote&gt;
     
     </summary>
     
@@ -117,24 +135,6 @@
   </entry>
   
   <entry>
-    <title>mycat源码解读1-登录mycat</title>
-    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/"/>
-    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/</id>
-    <published>2017-02-14T05:28:51.000Z</published>
-    <updated>2017-02-14T06:35:10.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
-    
-  </entry>
-  
-  <entry>
     <title>mycat源码解读2-sql处理</title>
     <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/"/>
     <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/</id>
@@ -144,6 +144,24 @@
     <summary type="html">
     
       &lt;p&gt;本章解读mycat接收到一条sql命令后使如何处理的&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mycat源码解读1-登录mycat</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/</id>
+    <published>2017-02-14T05:28:51.000Z</published>
+    <updated>2017-02-14T06:35:10.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
     
     </summary>
     
@@ -189,35 +207,20 @@
   </entry>
   
   <entry>
-    <title>由于缓存文件存在导致gpinitsystem失败</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/</id>
+    <title>信号量问题导致gp启动失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpstart%20failed%20beause%20semp/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/</id>
     <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:15:38.000Z</updated>
+    <updated>2017-01-04T06:05:16.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;GP集群：master, segment1, segment2&lt;/p&gt;
-&lt;p&gt;问题描述：&lt;br&gt;segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。&lt;/p&gt;
-&lt;p&gt;在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>gp参数详解</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/gpconfig/</id>
-    <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T05:49:18.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt; 官方文档：&lt;a href=&quot;http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;[toc]&lt;/p&gt;
+&lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;p&gt;在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;/p&gt;
+&lt;p&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…&lt;br&gt;.. &lt;/p&gt;
+&lt;p&gt;20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.&lt;br&gt;
     
     </summary>
     
@@ -247,6 +250,24 @@
   </entry>
   
   <entry>
+    <title>gp参数详解</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gpconfig/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T05:49:18.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt; 官方文档：&lt;a href=&quot;http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html&lt;/a&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
     <title>greenplum的worlkoad详解</title>
     <link href="https://gpdream.github.io/2017/01/04/greenplum/gp%20workload/"/>
     <id>https://gpdream.github.io/2017/01/04/greenplum/gp workload/</id>
@@ -263,6 +284,26 @@
 &lt;li&gt;将用户添加到资源队列中&lt;/li&gt;
 &lt;li&gt;检查/监控资源队列状态&lt;/li&gt;
 &lt;/ul&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>由于缓存文件存在导致gpinitsystem失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:15:38.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;GP集群：master, segment1, segment2&lt;/p&gt;
+&lt;p&gt;问题描述：&lt;br&gt;segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。&lt;/p&gt;
+&lt;p&gt;在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。&lt;br&gt;
     
     </summary>
     
@@ -325,29 +366,6 @@
     
       &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;h3 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h3&gt;&lt;p&gt;有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。&lt;/p&gt;
 &lt;h3 id=&quot;现象-1&quot;&gt;&lt;a href=&quot;#现象-1&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h3&gt;&lt;p&gt;gpstart -a 集群启动成功，但带告警&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>信号量问题导致gp启动失败</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpstart%20failed%20beause%20semp/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/</id>
-    <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:05:16.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;[toc]&lt;/p&gt;
-&lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;p&gt;在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;/p&gt;
-&lt;p&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–&lt;br&gt;20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…&lt;br&gt;.. &lt;/p&gt;
-&lt;p&gt;20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.&lt;br&gt;
     
     </summary>
     
