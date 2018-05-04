@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>lucene源码阅读2-core部分-创建索引 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="主要介绍lucene创建索引的源码部分">
+<meta name="keywords" content="es">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lucene源码阅读2-core部分-创建索引">
+<meta property="og:url" content="https://gpdream.github.io/2018/05/04/es/lucene-2-core/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="主要介绍lucene创建索引的源码部分">
+<meta property="og:updated_time" content="2018-05-04T08:33:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lucene源码阅读2-core部分-创建索引">
+<meta name="twitter:description" content="主要介绍lucene创建索引的源码部分">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="title-es/lucene-2-core" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/04/es/lucene-2-core/" class="article-date">
+  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      lucene源码阅读2-core部分-创建索引
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主要介绍lucene创建索引的源码部分<br><a id="more"></a></p>
+<h2 id="core主要包功能"><a href="#core主要包功能" class="headerlink" title="core主要包功能"></a>core主要包功能</h2><ul>
+<li>analysis: 分析器，带分词器过滤器之类的</li>
+<li>codes: 编码器</li>
+<li>document: lucene的document,包含filed,type之类的封装</li>
+<li>geo: geo地理位置信息</li>
+<li>index: IndexWriter和IndexReader之类写索引读索引的东西</li>
+<li>search: Query的数据结构,TermQuery,rangeQuery之类的</li>
+<li>store: 各种存储相关的，RamDirectory,FSDirectory之类的。</li>
+<li>util: 工具包</li>
+</ul>
+<h2 id="生成索引部分代码阅读"><a href="#生成索引部分代码阅读" class="headerlink" title="生成索引部分代码阅读"></a>生成索引部分代码阅读</h2><p>简单粗暴直接Debug运行单测TestIndexWriter.testDocCount()。首先看类<code>org.apache.lucene.index.IndexWriter</code>类。</p>
+<h3 id="IndexWriter初始化索引"><a href="#IndexWriter初始化索引" class="headerlink" title="IndexWriter初始化索引"></a>IndexWriter初始化索引</h3><p>IndexWriter类，主要是提供了一些对索引的操作，比如对索引的close(),flush(),merge(),addDoc(),deleteAll()等索引的写操作。IndexWriter中主要有如下组件:</p>
+<ul>
+<li>analyzer: 预发分析器，带分词器和过滤器等</li>
+<li>codec: 编码器</li>
+<li>commitLock: 提交所</li>
+<li>deleter: IndexFileDeleter,用于删除segment文件，回滚commit的内容以及deleteAll()</li>
+<li>docWriter: DocumentsWriter，用于update,add,delete document等写操作</li>
+<li>eventQueue: Queue<event> ,是docWriter的events队列，里面有<code>ApplyDeletesEvent</code>,<code>DeleteNewFielsEvent</code>,<code>FlushFailedEvent</code>,<code>ForcesPurgeEvent</code>,<code>ResolveUpdatesEvent</code>等事件.</event></li>
+<li>segmentInfos: segment集合的信息</li>
+</ul>
+<p>除了初始化这些东西外,创建writer的时候还会CREATE_OR_APPEND指定的IndexWriter目录。</p>
+<h3 id="IndexWriter写入文档"><a href="#IndexWriter写入文档" class="headerlink" title="IndexWriter写入文档"></a>IndexWriter写入文档</h3><p>写入文档的接口为<code>IndexWriter.addDocument(Iterable&lt;? extends IndexableField&gt; doc)</code>.这个方法其实就是调用<code>DocumentWriter.updateDocument(final Iterable&lt;? extends IndexableField&gt; doc, final Analyzer analyzer,final DocumentsWriterDeleteQueue.Node&lt;?&gt; delNode)</code>方法，最后真正执行写入的是<code>DocumentsWriterPerThread.updateDocument(Iterable&lt;? extends IndexableField&gt; doc, Analyzer analyzer, DocumentsWriterDeleteQueue.Node&lt;?&gt; deleteNode)</code>.上源码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">public long updateDocument(Iterable&lt;? extends IndexableField&gt; doc, Analyzer analyzer, DocumentsWriterDeleteQueue.Node&lt;?&gt; deleteNode) throws IOException &#123;</div><div class="line">    try &#123;</div><div class="line">      assert hasHitAbortingException() == false: &quot;DWPT has hit aborting exception but is still indexing&quot;;</div><div class="line">      testPoint(&quot;DocumentsWriterPerThread addDocument start&quot;);</div><div class="line">      assert deleteQueue != null;</div><div class="line">      reserveOneDoc();</div><div class="line">      </div><div class="line">      //初始化docState</div><div class="line">      docState.doc = doc;</div><div class="line">      docState.analyzer = analyzer;</div><div class="line">      docState.docID = numDocsInRAM;</div><div class="line">      if (INFO_VERBOSE &amp;&amp; infoStream.isEnabled(&quot;DWPT&quot;)) &#123;</div><div class="line">        infoStream.message(&quot;DWPT&quot;, Thread.currentThread().getName() + &quot; update delTerm=&quot; + deleteNode + &quot; docID=&quot; + docState.docID + &quot; seg=&quot; + segmentInfo.name);</div><div class="line">      &#125;</div><div class="line">      // Even on exception, the document is still added (but marked</div><div class="line">      // deleted), so we don&apos;t need to un-reserve at that point.</div><div class="line">      // Aborting exceptions will actually &quot;lose&quot; more than one</div><div class="line">      // document, so the counter will be &quot;wrong&quot; in that case, but</div><div class="line">      // it&apos;s very hard to fix (we can&apos;t easily distinguish aborting</div><div class="line">      // vs non-aborting exceptions):</div><div class="line">      boolean success = false;</div><div class="line">      try &#123;</div><div class="line">        try &#123;</div><div class="line">        //由cosumer真正处理掉文档</div><div class="line">          consumer.processDocument();</div><div class="line">        &#125; finally &#123;</div><div class="line">        //处理完清理掉docState,把docState.analyze=null,docState.doc=null</div><div class="line">          docState.clear();</div><div class="line">        &#125;</div><div class="line">        success = true;</div><div class="line">      &#125; finally &#123;</div><div class="line">      //不成功则回滚，删除掉doc</div><div class="line">        if (!success) &#123;</div><div class="line">          // mark document as deleted</div><div class="line">          deleteDocID(docState.docID);</div><div class="line">          numDocsInRAM++;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      return finishDocument(deleteNode);</div><div class="line">    &#125; finally &#123;</div><div class="line">      maybeAbort(&quot;updateDocument&quot;);</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>至此完成了所有的写入文档。但是具体的索引倒排索引创建出来的逻辑还藏在<code>consumer.processDocument()</code>,顺便看看这里的逻辑，倒排索引的主要创建逻辑再<code>processField()</code>里。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"> public void processDocument() throws IOException &#123;</div><div class="line"></div><div class="line">    // How many indexed field names we&apos;ve seen (collapses</div><div class="line">    // multiple field instances by the same name):</div><div class="line">    int fieldCount = 0;</div><div class="line"></div><div class="line">    long fieldGen = nextFieldGen++;</div><div class="line"></div><div class="line">    // NOTE: we need two passes here, in case there are</div><div class="line">    // multi-valued fields, because we must process all</div><div class="line">    // instances of a given field at once, since the</div><div class="line">    // analyzer is free to reuse TokenStream across fields</div><div class="line">    // (i.e., we cannot have more than one TokenStream</div><div class="line">    // running &quot;at once&quot;):</div><div class="line">    </div><div class="line">    termsHash.startDocument();</div><div class="line"></div><div class="line">    startStoredFields(docState.docID);</div><div class="line">    try &#123;</div><div class="line">    //把field拿出来一个个处理,field包含字段名，字段值,字段类型,是否存储，过滤器等等</div><div class="line">      for (IndexableField field : docState.doc) &#123;</div><div class="line">        fieldCount = processField(field, fieldGen, fieldCount);</div><div class="line">      &#125;</div><div class="line">    &#125; finally &#123;</div><div class="line">      if (docWriter.hasHitAbortingException() == false) &#123;</div><div class="line">        // Finish each indexed field name seen in the document:</div><div class="line">        for (int i=0;i&lt;fieldCount;i++) &#123;</div><div class="line">          fields[i].finish();</div><div class="line">        &#125;</div><div class="line">        finishStoredFields();</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    try &#123;</div><div class="line">      termsHash.finishDocument();</div><div class="line">    &#125; catch (Throwable th) &#123;</div><div class="line">      // Must abort, on the possibility that on-disk term</div><div class="line">      // vectors are now corrupt:</div><div class="line">      docWriter.onAbortingException(th);</div><div class="line">      throw th;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">```  </div><div class="line"></div><div class="line">看看processField()的源码</div></pre></td></tr></table></figure>
+<p> private int processField(IndexableField field, long fieldGen, int fieldCount) throws IOException {<br>    String fieldName = field.name();<br>    IndexableFieldType fieldType = field.fieldType();</p>
+<pre><code>PerField fp = null;
+
+if (fieldType.indexOptions() == null) {
+  throw new NullPointerException(&quot;IndexOptions must not be null (field: \&quot;&quot; + field.name() + &quot;\&quot;)&quot;);
+}
+
+//给字段建立倒排索引
+// Invert indexed fields:
+if (fieldType.indexOptions() != IndexOptions.NONE) {
+//看字段是否存在
+  fp = getOrAddField(fieldName, fieldType, true);
+  boolean first = fp.fieldGen != fieldGen;
+  //给这个建立对应的倒排索引，具体怎么建立倒排索引的下集讲
+  fp.invert(field, first);
+
+  if (first) {
+    fields[fieldCount++] = fp;
+    fp.fieldGen = fieldGen;
+  }
+} else {
+  verifyUnIndexedFieldType(fieldName, fieldType);
+}
+
+// Add stored fields:
+if (fieldType.stored()) {
+  if (fp == null) {
+    fp = getOrAddField(fieldName, fieldType, false);
+  }
+  if (fieldType.stored()) {
+    String value = field.stringValue();
+    if (value != null &amp;&amp; value.length() &gt; IndexWriter.MAX_STORED_STRING_LENGTH) {
+      throw new IllegalArgumentException(&quot;stored field \&quot;&quot; + field.name() + &quot;\&quot; is too large (&quot; + value.length() + &quot; characters) to store&quot;);
+    }
+    try {
+      storedFieldsConsumer.writeField(fp.fieldInfo, field);
+    } catch (Throwable th) {
+      docWriter.onAbortingException(th);
+      throw th;
+    }
+  }
+}
+
+DocValuesType dvType = fieldType.docValuesType();
+if (dvType == null) {
+  throw new NullPointerException(&quot;docValuesType must not be null (field: \&quot;&quot; + fieldName + &quot;\&quot;)&quot;);
+}
+if (dvType != DocValuesType.NONE) {
+  if (fp == null) {
+    fp = getOrAddField(fieldName, fieldType, false);
+  }
+  indexDocValue(fp, dvType, field);
+}
+if (fieldType.pointDimensionCount() != 0) {
+  if (fp == null) {
+    fp = getOrAddField(fieldName, fieldType, false);
+  }
+  indexPoint(fp, field);
+}
+
+return fieldCount;
+</code></pre><p>  }<br>  ```</p>
+<p>  注意，上述的修改，都是在内存中建立的，并没有真正的刷新到内存中。IndexWriter会定期把内存中的数据(add,delete的数据)flush到内存中。当然，addIndex,forceMerge,deleteAll等动作也会强制触发flush,或者commit动作也会触发flush动作。</p>
+<p>  下集将flush，以后讲倒排索引是怎么建立起来的</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-2-core/" data-id="cjgrpf5ai0008oti9uhhnelvl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/04/es/lucene-1-dir/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          luene源码目录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/02/09/es/es-intro/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">elasticsearch介绍</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/">es</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 12.5px;">aliyun</a> <a href="/tags/es/" style="font-size: 17.5px;">es</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 12.5px;">hadoop</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/05/04/es/lucene-3-flush/">lucene源码阅读3-flush</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/04/es/lucene-1-dir/">luene源码目录</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/09/es/es-intro/">elasticsearch介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/03/influxdb/influxdb-term/">influxdb术语</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

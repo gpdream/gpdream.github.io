@@ -3,19 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>信号量问题导致gp启动失败 | 甲鱼的大数据之旅</title>
+  <title>甲鱼的大数据之旅</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="[toc] 现象在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:  20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content:">
-<meta name="keywords" content="greenplum">
-<meta property="og:type" content="article">
-<meta property="og:title" content="信号量问题导致gp启动失败">
-<meta property="og:url" content="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/index.html">
+  <meta name="description" content="有空就写没空就不写，懒癌晚期也不写">
+<meta property="og:type" content="website">
+<meta property="og:title" content="甲鱼的大数据之旅">
+<meta property="og:url" content="https://gpdream.github.io/page/3/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
-<meta property="og:description" content="[toc] 现象在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:  20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content:">
-<meta property="og:updated_time" content="2017-01-04T06:05:16.000Z">
+<meta property="og:description" content="有空就写没空就不写，懒癌晚期也不写">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="信号量问题导致gp启动失败">
-<meta name="twitter:description" content="[toc] 现象在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:  20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content:">
+<meta name="twitter:title" content="甲鱼的大数据之旅">
+<meta name="twitter:description" content="有空就写没空就不写，懒癌晚期也不写">
   
     <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
   
@@ -68,7 +66,9 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-greenplum/gpstart failed beause semp" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main">
+  
+    <article id="post-greenplum/gpstart failed beause semp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/01/04/greenplum/gpstart failed beause semp/" class="article-date">
   <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
@@ -81,8 +81,8 @@
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      信号量问题导致gp启动失败
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/gpstart failed beause semp/">信号量问题导致gp启动失败</a>
     </h1>
   
 
@@ -95,24 +95,12 @@
 <blockquote>
 <p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–</p>
 <p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…<br>.. </p>
-<p>20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.<br><a id="more"></a></p>
-<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><p>按日志提示，initsystem应该已经成功了，只是在做init之后的start 操作失败了。于是我们运行<code>gpstart -m</code>只启动master，再运行<code>gpstop -a -M fast</code>来保证所有的segment都停止运行。再通过命令<code>gpstart -a -v</code>重新启动gp集群，-v参数会打印出详细日志。<br>结果肯定是和刚才一样肯定失败的。但是我们获取到详细失败日志，是由于该启动的segment未启动成功，导致gp认为启动失败，并停止掉了整个集群。日志内容如下<br>20160910:21:58:07:013425 gpsegstart.py_lin:gpadmin:lin:gpadmin-[DEBUG]:-[worker2] got cmd: env GPSESSID=0000000000 GPERA=a0ceea5600521f9c_160910215805 $GPHOME/bin/pg_ctl -D /gpadmin/data/mirror/gpseg2 -l /gpadmin/data/mirror/gpseg2/pg_log/startup.log -w -t 600 -o “ -p 50000 -b 8 -z 4 –silent-mode=true -i -M quiescent -C 2 “ start 2&gt;&amp;1<br>20160910:21:58:07:013425 gpsegstart.py_lin:gpadmin:lin:gpadmin-[DEBUG]:-[worker3] got cmd: env GPSESSID=0000000000 GPERA=a0ceea5600521f9c_160910215805 $GPHOME/bin/pg_ctl -D /gpadmin/data/mirror/gpseg3 -l /gpadmin/data/mirror/gpseg3/pg_log/startup.log -w -t 600 -o “ -p 50001 -b 9 -z 4 –silent-mode=true -i -M quiescent -C 3 “ start 2&gt;&amp;1<br>20160910:21:58:09:013425 gpsegstart.py_lin:gpadmin:lin:gpadmin-[DEBUG]:-[worker1] finished cmd: Starting seg at dir /gpadmin/data/primary/gpseg1 cmdStr=’env GPSESSID=0000000000 GPERA=a0ceea5600521f9c_160910215805 $GPHOME/bin/pg_ctl -D /gpadmin/data/primary/gpseg1 -l /gpadmin/data/primary/gpseg1/pg_log/startup.log -w -t 600 -o “ -p 40001 -b 3 -z 4 –silent-mode=true -i -M quiescent -C 1 “ start 2&gt;&amp;1’  had result: cmd had rc=1 completed=True halted=False<br>  stdout=’waiting for server to start……pg_ctl: PID file “/gpadmin/data/primary/gpseg1/postmaster.pid” does not exist<br> stopped waiting<br>pg_ctl: could not start server<br>Examine the log output.<br>‘<br>  stderr=’’<br>20160910:21:58:09:013425 gpsegstart.py_lin:gpadmin:lin:gpadmin-[DEBUG]:-[worker0] finished cmd: Starting seg at dir /gpadmin/data/primary/gpseg0 cmdStr=’env GPSESSID=0000000000 GPERA=a0ceea5600521f9c_160910215805 $GPHOME/bin/pg_ctl -D /gpadmin/data/primary/gpseg0 -l /gpadmin/data/primary/gpseg0/pg_log/startup.log -w -t 600 -o “ -p 40000 -b 2 -z 4 –silent-mode=true -i -M quiescent -C 0 “ start 2&gt;&amp;1’  had result: cmd had rc=1 completed=True halted=False<br>  stdout=’waiting for server to start……pg_ctl: PID file “/gpadmin/data/primary/gpseg0/postmaster.pid” does not exist<br> stopped waiting<br>pg_ctl: could not start server</p>
-</blockquote>
-<p>其中<code>$GPHOME/bin/pg_ctl -D /gpadmin/data/mirror/gpseg2 -l /gpadmin/data/mirror/gpseg2/pg_log/startup.log -w -t 600 -o &quot; -p 50000 -b 8 -z 4 --silent-mode=true -i -M quiescent -C 2 &quot; start 2&gt;&amp;1</code>这个命令是下发到gp segment机器上启动segment的命令。</p>
-<p>现在我们通手工启动segment的方式查看是否有异常<br>先通过gpstart -m，单独启动master，再登录到对应机器上手动启动对应的segment。gpadmin用户先初始化环境变量<code>source  /usr/local/gpdb/greenplum_path.sh</code>，<br>再运行命令启动第一个segment<code>$GPHOME/bin/pg_ctl -D /gpadmin/data/primary/gpseg0 -l /gpadmin/data/primary/gpseg0/pg_log/startup.log -w -t 600 -o &quot; -p 40000 -b 2 -z 4 --silent-mode=true -i -M quiescent -C 0 &quot; start 2&gt;&amp;1</code>，启动成功;<br>继续运行该机器上的第二个segment<code>$GPHOME/bin/pg_ctl -D /gpadmin/data/primary/gpseg1 -l /gpadmin/data/primary/gpseg1/pg_log/startup.log -w -t 600 -o &quot; -p 40001 -b 3 -z 4 --silent-mode=true -i -M quiescent -C 1 &quot; start 2&gt;&amp;1</code>，又成功了;<br>运行命令启动第三个segment <code>$GPHOME/bin/pg_ctl -D /gpadmin/data/mirror/gpseg3 -l /gpadmin/data/mirror/gpseg3/pg_log/startup.log -w -t 600 -o &quot; -p 50001 -b 9 -z 4 --silent-mode=true -i -M quiescent -C 3 &quot; start 2&gt;&amp;1</code>。这次失败了，终端输出日志如下:</p>
-<blockquote>
-<p>waiting for server to start……pg_ctl: PID file “/gpadmin/data/mirror/gpseg3/postmaster.pid” does not exist<br> stopped waiting<br>pg_ctl: could not start server<br>Examine the log output.</p>
-</blockquote>
-<p>报postmaster.pid不存在，启动失败自然就不会有pid文件，都会报这个，去看该segment启动失败的具体错误，进入日志目录<code>cd /gpadmin/data/mirror/gpseg3/pg_log</code>。查看最新的日志<code>vi startup.log</code>。有日志内容如下</p>
-<blockquote>
-<p>2016-09-10 21:58:07.917398 CST,,,p13456,th-1458132928,,,,0,,,seg-1,,,,,”FATAL”,”XX000”,”could not create semaphores: No space left on device (pg_sema.c:129)”,”Failed system call was semget(50001017, 17, 03600).”,”This error does <em>not</em> mean that you have run out of disk space.<br>It occurs when either the system limit for the maximum number of semaphore sets (SEMMNI), or the system wide maximum number of semaphores (SEMMNS), would be exceeded.  You need to raise the respective kernel parameter.  Alternatively, reduce PostgreSQL’s consumption of semaphores by reducing its max_connections parameter (currently 753).</p>
-</blockquote>
-<p>这段日志提示的内容很明显，超过了系统参数设置。建议调大该值SEMMNI或SEMMNS。</p>
-<h2 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h2><p>semaphores是信号量的意思，信号量能起到一个进程间锁和通信的作用(具体作用和用法需要另查资料)，此处理解gp segment启动时，会申请一定的信号量，当申请到第三个的时候，便超过限制了。它包含四个内核参数值:<br>semmsl,semmns,semopm,semmni。对应的意思分别为:<br>semmsl:最大的信号数量<br>semmns：系统调用允许的最大信号量个数，至少100，或者等于semmsl。<br>semmni:系统信号量set最大个数，也就是日志中的semaphore sets超出的个数.<br>semmsl：每个semaphore set中最多包含的信号个数。<br>按着刚才的日志，建议调大semmni或semmns。<br>通过命令行<code>sysctl -a|grep sem</code>查看信号量配置,sem即semaphores的缩写,得到结果对应的分别为semmsl,semns,semopm,semmni。</p>
-<blockquote>
-<p>kernel.sem = 250    32000    32    128<br>而按照官网该值的推荐设置，该值为<br>kernel.sem = 250 512000 100 2048<br>在initsystem之前，未修改过该值。现在按照官网配置修改掉系统内核参数，并重启机器。待机器重启完成后，运行<code>gpstart -a</code>，集群启动成功。</p>
-</blockquote>
-
+<p>20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/gpstart failed beause semp/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -124,29 +112,60 @@
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2017/01/04/greenplum/gp motion/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          greenplum的motion机制
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">由于缓存文件存在导致gpinitsystem失败</div>
-    </a>
-  
-</nav>
+</article>
 
+
+  
+    <article id="post-greenplum/gpinitsystem faild by cache file" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/gpinitsystem faild by cache file/">由于缓存文件存在导致gpinitsystem失败</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>GP集群：master, segment1, segment2</p>
+<p>问题描述：<br>segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。</p>
+<p>在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。<br>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/" data-id="cjgrpf5aq000joti9qsbg0rm1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
   
 </article>
 
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/page/2/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+  </nav>
 </section>
         
           <aside id="sidebar">
