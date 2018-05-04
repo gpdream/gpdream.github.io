@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
 <meta property="og:description" content="跟着debug走读flush全流程代码">
-<meta property="og:updated_time" content="2018-05-04T08:35:00.000Z">
+<meta property="og:updated_time" content="2018-05-04T08:43:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="lucene源码阅读3-flush">
 <meta name="twitter:description" content="跟着debug走读flush全流程代码">
@@ -91,7 +91,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>跟着debug走读flush全流程代码<br><a id="more"></a></p>
-<p>lucene在一些数据的写动作的时候，比如insert/update/delete等动作，并不会直接写入到磁盘，而是在内存中生效。然后再由某些条件去触发flush动作，这些动作有addIndexs,forceMerge,forceMergeDeletes,shutdown。还有在Insert和delete之类的动作，超过了LiveIndexWriterConfig.maxBufferedDocs和LiveIndexWriterConfig.ramBufferSizeMB之类的时候都会触发flush动作。当然也可以直接掉flush接口。</p>
+<p>lucene在一些数据的写动作的时候，比如insert/update/delete等动作，并不会直接写入到磁盘，而是在内存中生效。然后再由某些条件去触发flush动作，这些动作有addIndexs,forceMerge,forceMergeDeletes,shutdown。还有在Insert和delete之类的动作，超过了LiveIndexWriterConfig.maxBufferedDocs和LiveIndexWriterConfig.ramBufferSizeMB之类的时候都会触发flush动作。当然也可以直接调用flush接口。</p>
 <p>索引的flush入口在IndexWriter.flush。或者是上述的一些动作触发。<code>IndexWriter.flush</code>-&gt;<code>IndexWriter.doFLush()</code>.我们就从<code>doFlush()</code>方法开始看.代码看着比较多，但真正做flush动作的内容其实就是<code>docWriter.flushAllThreads();;</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">private boolean doFlush(boolean applyAllDeletes) throws IOException &#123;</div><div class="line">   if (tragedy.get() != null) &#123;</div><div class="line">     throw new IllegalStateException(&quot;this writer hit an unrecoverable error; cannot flush&quot;, tragedy.get());</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   doBeforeFlush();</div><div class="line">   testPoint(&quot;startDoFlush&quot;);</div><div class="line">   boolean success = false;</div><div class="line">   try &#123;</div><div class="line"></div><div class="line">     if (infoStream.isEnabled(&quot;IW&quot;)) &#123;</div><div class="line">       infoStream.message(&quot;IW&quot;, &quot;  start flush: applyAllDeletes=&quot; + applyAllDeletes);</div><div class="line">       infoStream.message(&quot;IW&quot;, &quot;  index before flush &quot; + segString());</div><div class="line">     &#125;</div><div class="line">     boolean anyChanges = false;</div><div class="line">     </div><div class="line">     synchronized (fullFlushLock) &#123;</div><div class="line">       boolean flushSuccess = false;</div><div class="line">       try &#123;</div><div class="line">       //调用docWriter的flushALlThreads做flush动作</div><div class="line">         long seqNo = docWriter.flushAllThreads();</div><div class="line">         if (seqNo &lt; 0) &#123;</div><div class="line">           seqNo = -seqNo;</div><div class="line">           anyChanges = true;</div><div class="line">         &#125; else &#123;</div><div class="line">           anyChanges = false;</div><div class="line">         &#125;</div><div class="line">         if (!anyChanges) &#123;</div><div class="line">           // flushCount is incremented in flushAllThreads</div><div class="line">           flushCount.incrementAndGet();</div><div class="line">         &#125;</div><div class="line">         flushSuccess = true;</div><div class="line">       &#125; finally &#123;</div><div class="line">         docWriter.finishFullFlush(this, flushSuccess);</div><div class="line">         processEvents(false);</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     if (applyAllDeletes) &#123;</div><div class="line">       applyAllDeletesAndUpdates();</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     anyChanges |= maybeMerge.getAndSet(false);</div><div class="line">     </div><div class="line">     synchronized(this) &#123;</div><div class="line">       doAfterFlush();</div><div class="line">       success = true;</div><div class="line">       return anyChanges;</div><div class="line">     &#125;</div><div class="line">   &#125; catch (VirtualMachineError tragedy) &#123;</div><div class="line">     tragicEvent(tragedy, &quot;doFlush&quot;);</div><div class="line">     throw tragedy;</div><div class="line">   &#125; finally &#123;</div><div class="line">     if (!success) &#123;</div><div class="line">       if (infoStream.isEnabled(&quot;IW&quot;)) &#123;</div><div class="line">         infoStream.message(&quot;IW&quot;, &quot;hit exception during flush&quot;);</div><div class="line">       &#125;</div><div class="line">       maybeCloseOnTragicEvent();</div><div class="line">     &#125;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
 <p>很显然，直接看<code>DocWriter.flushAllThreads()</code>,这里做的事情，其实就把所有要flush的<code>DocumentsWriterPerThread</code>给拿出来全部轮一遍做<code>doFlush(flushingDWPT)</code>,flushingDWPT是<code>DocumentsWriterPerThread</code>类型，是一个代表索引文档的写线程对象。这个方法里才是做真正的flush。</p>
@@ -204,7 +204,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/" data-id="cjgrpf5ae0003oti9nzovwfvh" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/" data-id="cjgrpqcau0009pqi9ea34y786" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -214,6 +214,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2018/05/04/es/lucene-2-core/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          lucene源码阅读2-core部分-创建索引
+        
+      </div>
+    </a>
   
   
     <a href="/2018/05/04/es/lucene-1-dir/" id="article-nav-older" class="article-nav-link-wrap">
@@ -269,15 +278,15 @@
       <ul>
         
           <li>
+            <a href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
+          </li>
+        
+          <li>
             <a href="/2018/05/04/es/lucene-3-flush/">lucene源码阅读3-flush</a>
           </li>
         
           <li>
             <a href="/2018/05/04/es/lucene-1-dir/">luene源码目录</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
           </li>
         
           <li>
