@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>es 6.3内置sql vs NLPChina elasticsearch-sql | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="es 6.3发布了,内置sql插件xpack-sql。在es内置sql插件之前，一直都是使用的NLPChina的elasicsearch-sql插件。本文重点对比xpack-sql和elasticsearch-sql的差异。从功能，函数，sql兼容度和性能上对比。">
+<meta name="keywords" content="es">
+<meta property="og:type" content="article">
+<meta property="og:title" content="es 6.3内置sql vs NLPChina elasticsearch-sql">
+<meta property="og:url" content="https://gpdream.github.io/2018/06/20/es/xpack-sqlvselasticsearch-sql/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="es 6.3发布了,内置sql插件xpack-sql。在es内置sql插件之前，一直都是使用的NLPChina的elasicsearch-sql插件。本文重点对比xpack-sql和elasticsearch-sql的差异。从功能，函数，sql兼容度和性能上对比。">
+<meta property="og:updated_time" content="2018-06-22T08:40:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="es 6.3内置sql vs NLPChina elasticsearch-sql">
+<meta name="twitter:description" content="es 6.3发布了,内置sql插件xpack-sql。在es内置sql插件之前，一直都是使用的NLPChina的elasicsearch-sql插件。本文重点对比xpack-sql和elasticsearch-sql的差异。从功能，函数，sql兼容度和性能上对比。">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="title-es/xpack-sqlvselasticsearch-sql" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/06/20/es/xpack-sqlvselasticsearch-sql/" class="article-date">
+  <time datetime="2018-06-20T08:33:33.000Z" itemprop="datePublished">2018-06-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      es 6.3内置sql vs NLPChina elasticsearch-sql
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>es 6.3发布了,内置sql插件xpack-sql。在es内置sql插件之前，一直都是使用的NLPChina的elasicsearch-sql插件。本文重点对比xpack-sql和elasticsearch-sql的差异。从功能，函数，sql兼容度和性能上对比。<br><a id="more"></a></p>
+<h2 id="功能对比"><a href="#功能对比" class="headerlink" title="功能对比"></a>功能对比</h2><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>xpack-sql</th>
+<th>elasitcsearch-sql</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>=</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>不等于</td>
+<td>&lt;&gt;,!=,&lt;=&gt;</td>
+<td>&lt;&gt;</td>
+<td>有一个就够了</td>
+</tr>
+<tr>
+<td>比较大小</td>
+<td>&lt;, &lt;=, &gt;, &gt;=</td>
+<td>&lt;, &lt;=, &gt;, &gt;=</td>
+<td>相同</td>
+</tr>
+<tr>
+<td>between and</td>
+<td>支持</td>
+<td>支持</td>
+<td></td>
+</tr>
+<tr>
+<td>是否为空</td>
+<td>is null/is null null</td>
+<td>is missing,is not missing</td>
+<td>写法不同</td>
+</tr>
+<tr>
+<td>逻辑操作</td>
+<td>and / or / not</td>
+<td>and or</td>
+<td>es-sql少个not，不过无所谓</td>
+</tr>
+<tr>
+<td>数学操作</td>
+<td>+ - * / %</td>
+<td>要借助script脚本来支持</td>
+<td>es-sql的写起来明显要更麻烦</td>
+</tr>
+<tr>
+<td>内置数学函数</td>
+<td>abs,sin,log等等</td>
+<td>flow,split,trim,log等等</td>
+<td>数学函数较少,但是有一些其他更实用的函数 ,后面给详细函数对比</td>
+</tr>
+<tr>
+<td>时间函数</td>
+<td>MINUTE_OF_HOUR等多种时间函数</td>
+<td>无</td>
+<td>后面给详细函数对比</td>
+</tr>
+<tr>
+<td>聚合函数</td>
+<td>avg,count,min,max,sum</td>
+<td>相同</td>
+</tr>
+<tr>
+<td>order by</td>
+<td>支持</td>
+<td>支持</td>
+<td>相同</td>
+</tr>
+<tr>
+<td>深度分页</td>
+<td>支持cursor来达到滚动的方式，但并不是真的特别好用</td>
+<td>用hint语法USE_SCROLL 来达成</td>
+<td>一个比一个更不好用系列</td>
+</tr>
+<tr>
+<td>include(fields),exclude(fields)</td>
+<td>不支持</td>
+<td>支持</td>
+<td>比较鸡肋的一个功能，可以少写几个字段名</td>
+</tr>
+<tr>
+<td>IN_TERMS</td>
+<td>不支持,得写sql+dsl</td>
+<td>支持</td>
+<td></td>
+</tr>
+<tr>
+<td>TERM</td>
+<td>不支持，但是会自己解析成term</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>IDS_QUERY</td>
+<td>不支持</td>
+<td>id in还是需要的</td>
+</tr>
+<tr>
+<td>stats(field)</td>
+<td>不支持</td>
+<td>返回min,max,count,sum,avg等结果</td>
+</tr>
+<tr>
+<td>es querystring，类似 q=query(‘address:880 Holmes Lane’)</td>
+<td>不支持，有类似match的说法</td>
+<td>支持</td>
+<td>比较有用的功能，勉强算都有吧</td>
+</tr>
+<tr>
+<td>es script</td>
+<td>不支持，但是可以直接写dsl和sql一起用</td>
+<td>支持</td>
+<td>算是都支持把，但写起来都别扭。尤其xpack-sql的dsl和sql混写，更加别扭</td>
+</tr>
+<tr>
+<td>geo查询</td>
+<td>暂未找到，应该有吧？</td>
+<td>支持</td>
+<td>xpack-sql的没找到，不知道是有还是没有</td>
+</tr>
+<tr>
+<td>高亮</td>
+<td>无</td>
+<td>支持</td>
+<td>有用的功能</td>
+</tr>
+<tr>
+<td>hits</td>
+<td>无</td>
+<td>支持</td>
+<td>很强大很神奇很反人类并排不上用场的功能</td>
+</tr>
+<tr>
+<td>join</td>
+<td>不支持</td>
+<td>支持的很鸡肋</td>
+<td>es-sql的这个支持等于不支持</td>
+</tr>
+<tr>
+<td>nested</td>
+<td>没找到</td>
+<td>支持</td>
+<td>在Json字段查询时候，很有用的一个功能.</td>
+</tr>
+<tr>
+<td>union/minus</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody>
+</table>
+<p>功能上,NPLChina的elasticsearch-sql略胜一筹。</p>
+<h2 id="函数对比"><a href="#函数对比" class="headerlink" title="函数对比"></a>函数对比</h2><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>xpack-sql</th>
+<th>elasticsearch-sql</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ABS绝对值</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>CBRT立方根</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>CEIL/CEILING向上舍入</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>E自然底数,返回2.7182818284590452354</td>
+<td>支持</td>
+<td>不支持</td>
+<td>该函数返回</td>
+</tr>
+<tr>
+<td>round，四舍五入</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>log</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>log10</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>sqrt平方根</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>exp,e的x次方</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>一大堆三角函数</td>
+<td>支持</td>
+<td>不支持</td>
+<td>sin,cos等等十来个</td>
+</tr>
+<tr>
+<td>时间函数</td>
+<td>取年、月、日、分秒</td>
+<td>date_format函数</td>
+<td>这时间函数有点尴尬啊</td>
+</tr>
+<tr>
+<td>substring</td>
+<td>不支持</td>
+<td>支持</td>
+<td>很重要的函数</td>
+</tr>
+<tr>
+<td>concat_ws拼接字符串</td>
+<td>不支持</td>
+<td>支持</td>
+<td>很常用的函数</td>
+</tr>
+<tr>
+<td>split</td>
+<td>不支持</td>
+<td>支持</td>
+<td>split也是常用的</td>
+</tr>
+<tr>
+<td>range，group by时候用</td>
+<td>不支持</td>
+<td>支持</td>
+<td>挺方便的功能</td>
+</tr>
+<tr>
+<td>date_range,作用于时间的range</td>
+<td>不支持，支持</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>date_histogram，group by的时候用</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody>
+</table>
+<p>综上,xpack-sql比elasticsearch-sql多非常多的数学函数以及时间操作函数，但是少了字符串函数和用于group by的函数.</p>
+<h2 id="sql兼容性"><a href="#sql兼容性" class="headerlink" title="sql兼容性"></a>sql兼容性</h2><p>sql兼容性对比是个很尴尬的事情,这两都不是标准sql,不能以sql标准测试集来测。两人的支持又存在较大的差异。</p>
+<table>
+<thead>
+<tr>
+<th>sql</th>
+<th>xpack-sql</th>
+<th>elasticsearch-sql</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多索引查询,select * from index1,index2</td>
+<td>不支持</td>
+<td>支持</td>
+<td>看到这个不支持，心凉了一半</td>
+</tr>
+<tr>
+<td>多字段group by,select count(*) from index 1 group by f1,f2</td>
+<td>不支持</td>
+<td>支持</td>
+<td>心的另一半也凉了</td>
+</tr>
+<tr>
+<td>xpack上面两个不支持其他懒得看了</td>
+</tr>
+</tbody>
+</table>
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>x-pack sql比elasticsearch-sql有明显的性能优势。x-pack sql是把sql直接发到节点下去执行。且会做一些简单的性能优化。举例有个字段如下。那查询author=’a’的时候，会自动推断成author.keyword=’a’。有些类似这样的小优化在这里。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">author: &#123;</div><div class="line">	type: &quot;text&quot;,</div><div class="line">	fields: &#123;</div><div class="line">		keyword: &#123;</div><div class="line">			type: &quot;keyword&quot;,</div><div class="line">			ignore_above: 256</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而elasticsearch的工作方式是,把sql转换成elasticsearch dsl,再提交给elasticsearch去运行。其生成的dsl在很多场景下都比较奇葩，更不要说性能优化了。而且像uinon,minuxs之类的语法会消耗大量的io资源，不过xpack-sql都没有这个功能。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/06/20/es/xpack-sqlvselasticsearch-sql/" data-id="cjipq73ey0005kqi9bgh9rh6s" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/05/04/es/lucene-2-core/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">lucene源码阅读2-core部分-创建索引</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/">es</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 12.5px;">aliyun</a> <a href="/tags/es/" style="font-size: 17.5px;">es</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 12.5px;">hadoop</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/06/20/es/xpack-sqlvselasticsearch-sql/">es 6.3内置sql vs NLPChina elasticsearch-sql</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/04/es/lucene-3-flush/">lucene源码阅读3-flush</a>
+          </li>
+        
+          <li>
+            <a href="/2018/05/04/es/lucene-1-dir/">luene源码目录</a>
+          </li>
+        
+          <li>
+            <a href="/2018/02/09/es/es-intro/">elasticsearch介绍</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
