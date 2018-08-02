@@ -3,17 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: hadoop | 甲鱼的大数据之旅</title>
+  <title>es 6源码debug环境搭建 | 甲鱼的大数据之旅</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="有空就写没空就不写，懒癌晚期也不写">
-<meta property="og:type" content="website">
-<meta property="og:title" content="甲鱼的大数据之旅">
-<meta property="og:url" content="https://gpdream.github.io/tags/hadoop/index.html">
+  <meta name="description" content="es 6.3的源码环境搭建，并使用debug方式运行">
+<meta name="keywords" content="es">
+<meta property="og:type" content="article">
+<meta property="og:title" content="es 6源码debug环境搭建">
+<meta property="og:url" content="https://gpdream.github.io/2018/08/02/es/es-source-env/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
-<meta property="og:description" content="有空就写没空就不写，懒癌晚期也不写">
+<meta property="og:description" content="es 6.3的源码环境搭建，并使用debug方式运行">
+<meta property="og:updated_time" content="2018-08-02T05:59:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="甲鱼的大数据之旅">
-<meta name="twitter:description" content="有空就写没空就不写，懒癌晚期也不写">
+<meta name="twitter:title" content="es 6源码debug环境搭建">
+<meta name="twitter:description" content="es 6.3的源码环境搭建，并使用debug方式运行">
   
     <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
   
@@ -66,58 +68,68 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/02/23/hadoop/Consistency Algorithms/" class="archive-article-date">
-  <time datetime="2017-02-23T05:23:49.000Z" itemprop="datePublished">2月 23</time>
+        <section id="main"><article id="title-es/es-source-env" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/02/es/es-source-env/" class="article-date">
+  <time datetime="2018-08-02T06:33:33.000Z" itemprop="datePublished">2018-08-02</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/23/hadoop/Consistency Algorithms/">分布式一致性算法</a>
+    <h1 class="article-title" itemprop="name">
+      es 6源码debug环境搭建
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/01/05/hadoop/hadoop3 newfeature/" class="archive-article-date">
-  <time datetime="2017-01-05T01:22:49.000Z" itemprop="datePublished">1月 5</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/05/hadoop/hadoop3 newfeature/">hadoop 3.0特性</a>
-    </h1>
-  
+        <p>es 6.3的源码环境搭建，并使用debug方式运行</p>
+<a id="more"></a>
+<h3 id="es-源码环境搭建"><a href="#es-源码环境搭建" class="headerlink" title="es 源码环境搭建"></a>es 源码环境搭建</h3><ol>
+<li>安装java 10，es 6必需</li>
+<li>设置java_home指向java10地址</li>
+<li>下载源码<code>git clone https://github.com/elastic/elasticsearch.git</code></li>
+<li>进入源码目录，运行<code>./gradlew idea</code> 不需要特意安装gradle,gradlew会把这些东西都准备好</li>
+<li>使用idea File-&gt;New Project From Existing Sources指向源码目录，选择Import project from external model-&gt;Gradle，启用 Use auto-import 。 gradle jvm home也要选择java 10的地址。第一次build要较长的时间，等等就好了。</li>
+</ol>
+<h3 id="debug模式启动"><a href="#debug模式启动" class="headerlink" title="debug模式启动"></a>debug模式启动</h3><ol>
+<li>在源码根目录运行<code>./gradlew run --debug-jvm</code>，运行成功后会提示<code>[elasticsearch] Listening for transport dt_socket at address: 8000</code> 这是在等idea来attach 8000端口</li>
+<li>使用Idea attach jvm进程,edit configuration -&gt; add remote, 端口指向8000</li>
+<li>debug启动。可以在org.elasticsearch.bootstrap.Elasticsearch的main方法中打上断点确定是否成功debug运行</li>
+<li>访问localhost:9200,看是否成功。成功会返回es集群信息</li>
+</ol>
 
-    </header>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/08/02/es/es-source-env/" data-id="cjkc5i3sn0000xhi9moxqqrny" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/11/es/es-xpack-sql-optimizer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">x-pack sql做的sql优化</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
