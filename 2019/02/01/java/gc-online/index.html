@@ -3,21 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>luene源码目录 | 甲鱼的大数据之旅</title>
+  <title>java gc生产环境实践 | 甲鱼的大数据之旅</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="luene源码目录概览">
-<meta name="keywords" content="es">
+  <meta name="description" content="基于真实环境的gc配置，得出的gc性能调优配置">
+<meta name="keywords" content="java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="luene源码目录">
-<meta property="og:url" content="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/index.html">
+<meta property="og:title" content="java gc生产环境实践">
+<meta property="og:url" content="https://gpdream.github.io/2019/02/01/java/gc-online/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
-<meta property="og:description" content="luene源码目录概览">
-<meta property="og:image" content="http://olsznr08y.bkt.clouddn.com/lucence%E7%9B%AE%E5%BD%95.png">
-<meta property="og:updated_time" content="2018-05-04T08:30:42.000Z">
+<meta property="og:description" content="基于真实环境的gc配置，得出的gc性能调优配置">
+<meta property="og:updated_time" content="2019-02-01T08:18:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="luene源码目录">
-<meta name="twitter:description" content="luene源码目录概览">
-<meta name="twitter:image" content="http://olsznr08y.bkt.clouddn.com/lucence%E7%9B%AE%E5%BD%95.png">
+<meta name="twitter:title" content="java gc生产环境实践">
+<meta name="twitter:description" content="基于真实环境的gc配置，得出的gc性能调优配置">
   
     <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
   
@@ -70,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="title-es/lucene-1-dir" class="article article-type-title" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-java/gc-online" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/05/04/es/lucene-1-dir/" class="article-date">
-  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
+    <a href="/2019/02/01/java/gc-online/" class="article-date">
+  <time datetime="2019-02-01T08:59:34.000Z" itemprop="datePublished">2019-02-01</time>
 </a>
     
   </div>
@@ -84,7 +82,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      luene源码目录
+      java gc生产环境实践
     </h1>
   
 
@@ -92,52 +90,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>luene源码目录概览<br><a id="more"></a></p>
-<p>在看源码先先简单了解下Lucene的目录结构</p>
-<p><img src="http://olsznr08y.bkt.clouddn.com/lucence%E7%9B%AE%E5%BD%95.png" alt="image"></p>
-<ul>
-<li><p><strong>analysis:</strong> analysis是提供给lucene和solr用的分析器，analysis下有多个不同的module：</p>
-<ol>
-<li><strong>common：</strong> 所有分词器都会用到的共同依赖</li>
-<li><strong>icu：</strong> icu分析器, ICU是International Components for Unicode （unicode组件）</li>
-<li><strong>kuromoji:</strong> 日语分析器</li>
-<li><strong>morfologik:</strong> 波兰语分析器</li>
-<li><strong>OpenNLP:</strong> 自然语言分析器</li>
-<li><strong>phonetic:</strong> 语音特征分析器</li>
-<li><strong>smartcn:</strong> 汉语分析器</li>
-<li><strong>stempel:</strong> 一个包含波兰语的分析器</li>
-<li><strong>uima:</strong> 一个借助apache uima的分析器,apache uima是用于分析非结构化内容(文本，音频视频等)的组件架构。</li>
-</ol>
-</li>
-<li><p><strong>backward-codes:</strong> 老版本的codec，codec是lucene的编码器，这个是拿来兼容老版本用的</p>
-</li>
-<li><strong>benchmark:</strong> lucene基准性能测试</li>
-<li><strong>core:</strong> 内核代码</li>
-<li><strong>demo:</strong> 写了些示例程序</li>
-<li><strong>expressions:</strong> lucene4.6之后引入的运算模块，可以做一些field之间的加减乘除等</li>
-<li><strong>facet:</strong> 计算影响因子,大概是词频之类的，在es中影响因子接口被aggreations接口给包装掉了.</li>
-<li><strong>grouping:</strong> 实现类似于sql中group by的功能</li>
-<li><strong>highligher:</strong> 实现查询结果高亮</li>
-<li><strong>join:</strong> 实现join操作</li>
-<li><strong>memory:</strong> 内存索引，这个module下就一个类文件</li>
-<li><strong>misc:</strong> 提供了多种工具，索引分片/合并、改变规范，查找高频词等</li>
-<li><strong>queries:</strong> lucene core用的查询器</li>
-<li><strong>queryparser:</strong> 查询解析器,有classic,Analyzing,Complex Phrase,Extendable,Flexible,Surround,XML多种解析器</li>
-<li><strong>replicator:</strong> 提供索引的复制功能</li>
-<li><strong>sandbox:</strong> 开放给所有lucene commiter的工作空间,打包时候不会默认打进去，有啥新的idea就可以往这个包上提东西。</li>
-<li><strong>Spatial:</strong> 提供空间搜索功能</li>
-<li><strong>spatial3d:</strong> 人如其名</li>
-<li><strong>spatial-extras:</strong> 包如其名</li>
-<li><strong>suggest:</strong> 关键字推荐功能，给推荐和搜索关键词最接近的词</li>
+        <p>基于真实环境的gc配置，得出的gc性能调优配置<br><a id="more"></a></p>
+<h2 id="java-gc生产环境实践"><a href="#java-gc生产环境实践" class="headerlink" title="java gc生产环境实践"></a>java gc生产环境实践</h2><h3 id="线上命令"><a href="#线上命令" class="headerlink" title="线上命令"></a>线上命令</h3><h4 id="小内存应用命令"><a href="#小内存应用命令" class="headerlink" title="小内存应用命令"></a>小内存应用命令</h4><p>生产环境内存4g.一句话版，打开了gc日志，打开了oom后的堆栈文件，配置了cms并发垃圾回收机制，设置80%阈值时候回收，启动永久带来及回收，元数据最大上线为380m</p>
+<p>java -verbose:gc -Xloggc:gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=java.hprof -XX:ErrorFile=java_error.log -Djava.awt.headless=true -DLOG_HOME=app_log -Dapp.log.dir=/data/program/logs/com.wacai.portal/antifraud-service/app_log -Dserver.tomcat.access-log-enabled=true -Dserver.tomcat.basedir=/data/program/com.wacai.portal/antifraud-service -Dmanagement.port=-1 -Dendpoints.shutdown.enabled=true -Dshell.telnet.enabled=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Xms2g -Xmx2g -XX:MetaspaceSize=38m -XX:MaxMetaspaceSize=380m -Djava.security.egd=file:/dev/./urandom -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=500m -XX:NewSize=600m -XX:MaxNewSize=750m -XX:+UseConcMarkSweepGC -XX:CMSMaxAbortablePrecleanTime=5000 -XX:+CMSClassUnloadingEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly -Dlogging.config=./config/logback.xml -jar app.jar</p>
+<h4 id="大内存应用"><a href="#大内存应用" class="headerlink" title="大内存应用"></a>大内存应用</h4><p>设置大内存为32g。回收阈值从80下调到75，打开AlwaysPreTouch，提前把内存分配给Jvm,让jvm可以顺畅访问内存，DisableExplicitGC禁止代码显示调用gc。</p>
+<p>/java -Xms32g -Xmx32g -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -server -Xss1m -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djna.nosys=true -Djdk.io.permissionsUseCanonicalPath=true -Dio.netty.noUnsafe=true -Dio.netty.noKeySetOptimization=true -Dio.netty.recycler.maxCapacityPerThread=0 -Dlog4j.shutdownHookEnabled=false -Dlog4j2.disable.jmx=true -Dlog4j.skipJansi=true -XX:+HeapDumpOnOutOfMemoryError -Des.path.home=/data/program/data-es/elasticsearch-5.4.1 -cp /data/program/data-es/elasticsearch-5.4.1/lib/* org.elasticsearch.bootstrap.Elasticsearch -d</p>
+<h3 id="配置信息详解"><a href="#配置信息详解" class="headerlink" title="配置信息详解"></a>配置信息详解</h3><ul>
+<li><strong>verbose:gc</strong> 打开gc的详细输出</li>
+<li><strong>-Xloggc:gc.log</strong> 配置gc日志</li>
 </ul>
+<h4 id="XX配置项"><a href="#XX配置项" class="headerlink" title="-XX配置项"></a>-XX配置项</h4><p> -XX 的选项是不稳定、不建议随便使用的,但是线上jdk版本稳定，线上环境有在使用这些参数</p>
+<ul>
+<li><strong>-XX:+PrintGCDetails</strong> 输出gc详细信息 </li>
+<li><strong>-XX:+PrintGCDateStamps</strong> 垃圾回收统计信息  </li>
+<li><strong>-XX:+HeapDumpOnOutOfMemoryError</strong> oom的时候dump heap文件 </li>
+<li><strong>-XX:HeapDumpPath=java.hprof</strong> dump的heap文件</li>
+<li><strong>-XX:ErrorFile=java_error.log</strong> </li>
+<li><strong>-XX:MaxMetaspaceSize=380m</strong> metaspace最大空间</li>
+<li><strong>-XX:+UseGCLogFileRotation</strong> ：打开gc日志循环</li>
+<li><strong>-XX:NumberOfGCLogFiles=20</strong> 设置gc日志文件数量</li>
+<li><strong>-XX:GCLogFileSize=500m</strong> gc日志最大大小</li>
+<li><strong>-XX:NewSize=600m</strong> 设置年轻大初始大小</li>
+<li><strong>-XX:MaxNewSize=750m</strong> 新生代最大可分配内存</li>
+<li><strong>-XX:+UseConcMarkSweepGC</strong> 并发标记清除（CMS）收集器。。CMS收集器通过多线程并发进行垃圾回收，尽量减少垃圾收集造成的停顿。</li>
+<li><strong>-XX:CMSMaxAbortablePrecleanTime=5000</strong> 设置cms preclean这一步的超时时间为5000ms，</li>
+<li><strong>-XX:CMSClassUnloadingEnabled</strong> cms垃圾回收对永久带的class unloading也生效</li>
+<li><strong>XX:CMSInitiatingOccupancyFraction=80</strong> 占比达到80%的时候触发垃圾回收机制</li>
+<li><strong>-XX:+UseCMSInitiatingOccupancyOnly</strong> 关闭动态检查机制，如果不关闭,cms默认会根据历史记录预测老年代需要多久回收一次内存，cms根据自己的预测执行</li>
+</ul>
+<h3 id="G1GC"><a href="#G1GC" class="headerlink" title="G1GC"></a>G1GC</h3><p>G1GC是jdk9的默认垃圾回收机制。但在大内存的场景下，g1gc在jdk8下也有不错的表现。G1GC把堆内存进行了分区，默认分1024个区，巨型对象会有专门的Humongous分区，如果一个分区放不下，甚至会给它安全连续的内存分区。此处略过1万字。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/" data-id="cjrls85jt0005mqi9i3m6muki" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2019/02/01/java/gc-online/" data-id="cjrls85k4000pmqi9fp8j8eux" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -145,19 +134,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/06/20/es/xpack-sqlvselasticsearch-sql/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          es 6.3内置sql vs NLPChina elasticsearch-sql
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/05/04/es/lucene-2-core/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/08/07/es/es集群概况/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">lucene源码阅读2-core部分-创建索引</div>
+      <div class="article-nav-title"></div>
     </a>
   
 </nav>

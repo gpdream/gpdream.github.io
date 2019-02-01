@@ -68,6 +68,85 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-java/gc-online" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/02/01/java/gc-online/" class="article-date">
+  <time datetime="2019-02-01T08:59:34.000Z" itemprop="datePublished">2019-02-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/01/java/gc-online/">java gc生产环境实践</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>基于真实环境的gc配置，得出的gc性能调优配置<br>
+        
+          <p class="article-more-link">
+            <a href="/2019/02/01/java/gc-online/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2019/02/01/java/gc-online/" data-id="cjrls85k4000pmqi9fp8j8eux" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-es/es集群概况" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/07/es/es集群概况/" class="article-date">
+  <time datetime="2018-08-07T07:34:27.000Z" itemprop="datePublished">2018-08-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="es集群概况"><a href="#es集群概况" class="headerlink" title="es集群概况"></a>es集群概况</h3><p>es集群2018年1月份部署， 物理机3台，当前有数据量 2TB（含副本），数据行数113亿。数据有字段多，需要全索引，结构不稳定等特点。</p>
+<h3 id="接入的业务"><a href="#接入的业务" class="headerlink" title="接入的业务"></a>接入的业务</h3><h4 id="反欺诈平台"><a href="#反欺诈平台" class="headerlink" title="反欺诈平台"></a>反欺诈平台</h4><ol>
+<li><p>用户风险库: 行数107.6m，日增量数据10万级别。update动作若干。</p>
+</li>
+<li><p>用户资料库: 行数 393.5m。日增数据量40万级别。</p>
+</li>
+</ol>
+<h4 id="流程引擎"><a href="#流程引擎" class="headerlink" title="流程引擎"></a>流程引擎</h4><p>流程引擎用es存储节点、边的执行状况以及宽表的生成。<br>we节点记录(we_node_trace): 数据量： 2千1百万，日增20万<br>we边记录(we_transition_trace): 数据量2千4百万，日增20万<br>we宽表(we_process_activity): 数据量100万，日增2.5万<br>we事件表(we_event_trace): 数据量1258万，日增3-4万</p>
+<h4 id="深蓝"><a href="#深蓝" class="headerlink" title="深蓝"></a>深蓝</h4><p>设备指纹流水表： 数据量3.7亿，日增500万。该表字段79个，全部索引。</p>
+<h4 id="设备指纹ios"><a href="#设备指纹ios" class="headerlink" title="设备指纹ios"></a>设备指纹ios</h4><p>device_fingerprint_ios，数据量31万，日增百行左右。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/08/07/es/es集群概况/" data-id="cjrls85jr0004mqi96zatjd9e" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="title-es/es-source-env" class="article article-type-title" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/08/02/es/es-source-env/" class="article-date">
@@ -99,7 +178,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/08/02/es/es-source-env/" data-id="cjkc5i3sn0000xhi9moxqqrny" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/08/02/es/es-source-env/" data-id="cjrls85jn0001mqi9oina0n1w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -142,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/07/11/es/es-xpack-sql-optimizer/" data-id="cjkc5i3t20004xhi9pblpo42n" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/07/11/es/es-xpack-sql-optimizer/" data-id="cjrls85jq0003mqi9fh7iyvqu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -185,93 +264,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/06/20/es/xpack-sqlvselasticsearch-sql/" data-id="cjkc5i3t60008xhi9j1r90wia" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="title-es/lucene-2-core" class="article article-type-title" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/04/es/lucene-2-core/" class="article-date">
-  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>主要介绍lucene创建索引的源码部分<br>
-        
-          <p class="article-more-link">
-            <a href="/2018/05/04/es/lucene-2-core/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-2-core/" data-id="cjkc5i3t30005xhi9rgllsnyw" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="title-es/lucene-3-flush" class="article article-type-title" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/04/es/lucene-3-flush/" class="article-date">
-  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/04/es/lucene-3-flush/">lucene源码阅读3-flush</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>跟着debug走读flush全流程代码<br>
-        
-          <p class="article-more-link">
-            <a href="/2018/05/04/es/lucene-3-flush/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/" data-id="cjkc5i3t8000axhi958tv6cnl" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/06/20/es/xpack-sqlvselasticsearch-sql/" data-id="cjrls85jw0009mqi9l4i5vi9v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -314,7 +307,93 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/" data-id="cjkc5i3t10003xhi94ionaixw" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/" data-id="cjrls85jt0005mqi9i3m6muki" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="title-es/lucene-2-core" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/04/es/lucene-2-core/" class="article-date">
+  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主要介绍lucene创建索引的源码部分<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/04/es/lucene-2-core/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-2-core/" data-id="cjrls85ju0008mqi985powcr6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="title-es/lucene-3-flush" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/04/es/lucene-3-flush/" class="article-date">
+  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/04/es/lucene-3-flush/">lucene源码阅读3-flush</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>跟着debug走读flush全流程代码<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/04/es/lucene-3-flush/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/" data-id="cjrls85kq001pmqi99uu02rwl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -357,7 +436,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/02/09/es/es-intro/" data-id="cjkc5i3sv0001xhi96n69v3g9" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/02/09/es/es-intro/" data-id="cjrls85kg001cmqi9ovfptk67" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -400,98 +479,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/07/03/influxdb/influxdb-term/" data-id="cjkc5i3tx0010xhi983ybbz2b" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/07/03/influxdb/influxdb-term/" data-id="cjrls85k8000vmqi9nkz9hz0s" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/influxdb/">influxdb</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-java/Pattern和Matcher-find源码解读" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/" class="article-date">
-  <time datetime="2017-06-08T09:49:10.000Z" itemprop="datePublished">2017-06-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/08/java/Pattern和Matcher-find源码解读/">Pattern和Matcher.find源码解读</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Pattern和Matcher.find做的动作，以及Matcher.find可能带来的指数级性能下降原因分析.
-        
-          <p class="article-more-link">
-            <a href="/2017/06/08/java/Pattern和Matcher-find源码解读/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/06/08/java/Pattern和Matcher-find源码解读/" data-id="cjkc5i3ty0012xhi9bier4bek" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-java/maven详解" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/08/java/maven详解/" class="article-date">
-  <time datetime="2017-05-08T11:59:34.000Z" itemprop="datePublished">2017-05-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/08/java/maven详解/">maven详解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>Making the build process easy 使编译更简单，一句maven命令就能编译掉整个项目，可以把包含的类似代码混淆，前端代码压缩等都包含进去。</li>
-<li>Providing a uniform build system 提供统一编译环境，在pom.xml里指定编译需要的环境，例如java/nodejs等的版本，项目的自动依赖等
-        
-          <p class="article-more-link">
-            <a href="/2017/05/08/java/maven详解/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/05/08/java/maven详解/" data-id="cjkc5i3u10016xhi93nl6ecfm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -526,7 +517,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/aliyun/" style="font-size: 13.33px;">aliyun</a> <a href="/tags/es/" style="font-size: 20px;">es</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 13.33px;">hadoop</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/mycat/" style="font-size: 16.67px;">mycat</a>
+      <a href="/tags/aliyun/" style="font-size: 12.5px;">aliyun</a> <a href="/tags/es/" style="font-size: 20px;">es</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 12.5px;">hadoop</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
     </div>
   </div>
 
@@ -535,7 +526,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
     </div>
   </div>
 
@@ -548,6 +539,14 @@
       <ul>
         
           <li>
+            <a href="/2019/02/01/java/gc-online/">java gc生产环境实践</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/07/es/es集群概况/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2018/08/02/es/es-source-env/">es 6源码debug环境搭建</a>
           </li>
         
@@ -557,14 +556,6 @@
         
           <li>
             <a href="/2018/06/20/es/xpack-sqlvselasticsearch-sql/">es 6.3内置sql vs NLPChina elasticsearch-sql</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/04/es/lucene-2-core/">lucene源码阅读2-core部分-创建索引</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/04/es/lucene-3-flush/">lucene源码阅读3-flush</a>
           </li>
         
       </ul>
@@ -579,7 +570,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2018 甲鱼<br>
+      &copy; 2019 甲鱼<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

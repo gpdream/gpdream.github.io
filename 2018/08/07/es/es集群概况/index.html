@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: mycat | 甲鱼的大数据之旅</title>
+  <title>甲鱼的大数据之旅</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="有空就写没空就不写，懒癌晚期也不写">
-<meta property="og:type" content="website">
+  <meta name="description" content="es集群概况es集群2018年1月份部署， 物理机3台，当前有数据量 2TB（含副本），数据行数113亿。数据有字段多，需要全索引，结构不稳定等特点。 接入的业务反欺诈平台 用户风险库: 行数107.6m，日增量数据10万级别。update动作若干。  用户资料库: 行数 393.5m。日增数据量40万级别。   流程引擎流程引擎用es存储节点、边的执行状况以及宽表的生成。we节点记录(we_no">
+<meta property="og:type" content="article">
 <meta property="og:title" content="甲鱼的大数据之旅">
-<meta property="og:url" content="https://gpdream.github.io/tags/mycat/index.html">
+<meta property="og:url" content="https://gpdream.github.io/2018/08/07/es/es集群概况/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
-<meta property="og:description" content="有空就写没空就不写，懒癌晚期也不写">
+<meta property="og:description" content="es集群概况es集群2018年1月份部署， 物理机3台，当前有数据量 2TB（含副本），数据行数113亿。数据有字段多，需要全索引，结构不稳定等特点。 接入的业务反欺诈平台 用户风险库: 行数107.6m，日增量数据10万级别。update动作若干。  用户资料库: 行数 393.5m。日增数据量40万级别。   流程引擎流程引擎用es存储节点、边的执行状况以及宽表的生成。we节点记录(we_no">
+<meta property="og:updated_time" content="2018-08-07T07:34:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="甲鱼的大数据之旅">
-<meta name="twitter:description" content="有空就写没空就不写，懒癌晚期也不写">
+<meta name="twitter:description" content="es集群概况es集群2018年1月份部署， 物理机3台，当前有数据量 2TB（含副本），数据行数113亿。数据有字段多，需要全索引，结构不稳定等特点。 接入的业务反欺诈平台 用户风险库: 行数107.6m，日增量数据10万级别。update动作若干。  用户资料库: 行数 393.5m。日增数据量40万级别。   流程引擎流程引擎用es存储节点、边的执行状况以及宽表的生成。we节点记录(we_no">
   
     <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
   
@@ -66,77 +67,60 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/02/14/mycat/mycat-code-1/" class="archive-article-date">
-  <time datetime="2017-02-14T05:28:51.000Z" itemprop="datePublished">2月 14</time>
+        <section id="main"><article id="post-es/es集群概况" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/07/es/es集群概况/" class="article-date">
+  <time datetime="2018-08-07T07:34:27.000Z" itemprop="datePublished">2018-08-07</time>
 </a>
-      
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/14/mycat/mycat-code-1/">mycat源码解读3-请求数据库</a>
-    </h1>
-  
-
-    </header>
+    
   </div>
-</article>
-  
+  <div class="article-inner">
     
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/02/14/mycat/mycat-code-2/" class="archive-article-date">
-  <time datetime="2017-02-14T05:28:51.000Z" itemprop="datePublished">2月 14</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/14/mycat/mycat-code-2/">mycat源码解读1-登录mycat</a>
-    </h1>
-  
+        <h3 id="es集群概况"><a href="#es集群概况" class="headerlink" title="es集群概况"></a>es集群概况</h3><p>es集群2018年1月份部署， 物理机3台，当前有数据量 2TB（含副本），数据行数113亿。数据有字段多，需要全索引，结构不稳定等特点。</p>
+<h3 id="接入的业务"><a href="#接入的业务" class="headerlink" title="接入的业务"></a>接入的业务</h3><h4 id="反欺诈平台"><a href="#反欺诈平台" class="headerlink" title="反欺诈平台"></a>反欺诈平台</h4><ol>
+<li><p>用户风险库: 行数107.6m，日增量数据10万级别。update动作若干。</p>
+</li>
+<li><p>用户资料库: 行数 393.5m。日增数据量40万级别。</p>
+</li>
+</ol>
+<h4 id="流程引擎"><a href="#流程引擎" class="headerlink" title="流程引擎"></a>流程引擎</h4><p>流程引擎用es存储节点、边的执行状况以及宽表的生成。<br>we节点记录(we_node_trace): 数据量： 2千1百万，日增20万<br>we边记录(we_transition_trace): 数据量2千4百万，日增20万<br>we宽表(we_process_activity): 数据量100万，日增2.5万<br>we事件表(we_event_trace): 数据量1258万，日增3-4万</p>
+<h4 id="深蓝"><a href="#深蓝" class="headerlink" title="深蓝"></a>深蓝</h4><p>设备指纹流水表： 数据量3.7亿，日增500万。该表字段79个，全部索引。</p>
+<h4 id="设备指纹ios"><a href="#设备指纹ios" class="headerlink" title="设备指纹ios"></a>设备指纹ios</h4><p>device_fingerprint_ios，数据量31万，日增百行左右。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/02/14/mycat/mycat-code-3/" class="archive-article-date">
-  <time datetime="2017-02-14T05:28:51.000Z" itemprop="datePublished">2月 14</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/14/mycat/mycat-code-3/">mycat源码解读2-sql处理</a>
-    </h1>
-  
-
-    </header>
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/08/07/es/es集群概况/" data-id="cjrls85jr0004mqi96zatjd9e" class="article-share-link">Share</a>
+      
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/02/01/java/gc-online/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          java gc生产环境实践
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/02/es/es-source-env/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">es 6源码debug环境搭建</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
