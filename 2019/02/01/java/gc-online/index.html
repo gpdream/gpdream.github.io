@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://gpdream.github.io/2019/02/01/java/gc-online/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
 <meta property="og:description" content="基于真实环境的gc配置，得出的gc性能调优配置">
-<meta property="og:updated_time" content="2019-02-01T08:18:47.000Z">
+<meta property="og:updated_time" content="2019-02-01T08:28:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java gc生产环境实践">
 <meta name="twitter:description" content="基于真实环境的gc配置，得出的gc性能调优配置">
@@ -95,12 +95,7 @@
 <p>java -verbose:gc -Xloggc:gc.log -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=java.hprof -XX:ErrorFile=java_error.log -Djava.awt.headless=true -DLOG_HOME=app_log -Dapp.log.dir=/data/program/logs/com.wacai.portal/antifraud-service/app_log -Dserver.tomcat.access-log-enabled=true -Dserver.tomcat.basedir=/data/program/com.wacai.portal/antifraud-service -Dmanagement.port=-1 -Dendpoints.shutdown.enabled=true -Dshell.telnet.enabled=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Xms2g -Xmx2g -XX:MetaspaceSize=38m -XX:MaxMetaspaceSize=380m -Djava.security.egd=file:/dev/./urandom -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=500m -XX:NewSize=600m -XX:MaxNewSize=750m -XX:+UseConcMarkSweepGC -XX:CMSMaxAbortablePrecleanTime=5000 -XX:+CMSClassUnloadingEnabled -XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly -Dlogging.config=./config/logback.xml -jar app.jar</p>
 <h4 id="大内存应用"><a href="#大内存应用" class="headerlink" title="大内存应用"></a>大内存应用</h4><p>设置大内存为32g。回收阈值从80下调到75，打开AlwaysPreTouch，提前把内存分配给Jvm,让jvm可以顺畅访问内存，DisableExplicitGC禁止代码显示调用gc。</p>
 <p>/java -Xms32g -Xmx32g -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -server -Xss1m -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Djna.nosys=true -Djdk.io.permissionsUseCanonicalPath=true -Dio.netty.noUnsafe=true -Dio.netty.noKeySetOptimization=true -Dio.netty.recycler.maxCapacityPerThread=0 -Dlog4j.shutdownHookEnabled=false -Dlog4j2.disable.jmx=true -Dlog4j.skipJansi=true -XX:+HeapDumpOnOutOfMemoryError -Des.path.home=/data/program/data-es/elasticsearch-5.4.1 -cp /data/program/data-es/elasticsearch-5.4.1/lib/* org.elasticsearch.bootstrap.Elasticsearch -d</p>
-<h3 id="配置信息详解"><a href="#配置信息详解" class="headerlink" title="配置信息详解"></a>配置信息详解</h3><ul>
-<li><strong>verbose:gc</strong> 打开gc的详细输出</li>
-<li><strong>-Xloggc:gc.log</strong> 配置gc日志</li>
-</ul>
-<h4 id="XX配置项"><a href="#XX配置项" class="headerlink" title="-XX配置项"></a>-XX配置项</h4><p> -XX 的选项是不稳定、不建议随便使用的,但是线上jdk版本稳定，线上环境有在使用这些参数</p>
-<ul>
+<h4 id="gc配置信息详解"><a href="#gc配置信息详解" class="headerlink" title="gc配置信息详解"></a>gc配置信息详解</h4><ul>
 <li><strong>-XX:+PrintGCDetails</strong> 输出gc详细信息 </li>
 <li><strong>-XX:+PrintGCDateStamps</strong> 垃圾回收统计信息  </li>
 <li><strong>-XX:+HeapDumpOnOutOfMemoryError</strong> oom的时候dump heap文件 </li>
@@ -117,13 +112,14 @@
 <li><strong>-XX:CMSClassUnloadingEnabled</strong> cms垃圾回收对永久带的class unloading也生效</li>
 <li><strong>XX:CMSInitiatingOccupancyFraction=80</strong> 占比达到80%的时候触发垃圾回收机制</li>
 <li><strong>-XX:+UseCMSInitiatingOccupancyOnly</strong> 关闭动态检查机制，如果不关闭,cms默认会根据历史记录预测老年代需要多久回收一次内存，cms根据自己的预测执行</li>
+<li><strong>AlwaysPreTouch</strong> 提前分配内存，大内存应用时很有用。</li>
 </ul>
 <h3 id="G1GC"><a href="#G1GC" class="headerlink" title="G1GC"></a>G1GC</h3><p>G1GC是jdk9的默认垃圾回收机制。但在大内存的场景下，g1gc在jdk8下也有不错的表现。G1GC把堆内存进行了分区，默认分1024个区，巨型对象会有专门的Humongous分区，如果一个分区放不下，甚至会给它安全连续的内存分区。此处略过1万字。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2019/02/01/java/gc-online/" data-id="cjrls85k4000pmqi9fp8j8eux" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2019/02/01/java/gc-online/" data-id="cjrlsfog2000lovi9n8i07a7b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://gpdream.github.io/"/>
-  <updated>2019-02-01T08:18:47.000Z</updated>
+  <updated>2019-02-01T08:28:22.000Z</updated>
   <id>https://gpdream.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://gpdream.github.io/2019/02/01/java/gc-online/"/>
     <id>https://gpdream.github.io/2019/02/01/java/gc-online/</id>
     <published>2019-02-01T08:59:34.000Z</published>
-    <updated>2019-02-01T08:18:47.000Z</updated>
+    <updated>2019-02-01T08:28:22.000Z</updated>
     
     <summary type="html">
     
@@ -104,6 +104,24 @@
   </entry>
   
   <entry>
+    <title>lucene源码阅读3-flush</title>
+    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
+    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
+    <published>2018-05-04T08:13:33.000Z</published>
+    <updated>2018-05-04T08:43:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
+    
+  </entry>
+  
+  <entry>
     <title>luene源码目录</title>
     <link href="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/"/>
     <id>https://gpdream.github.io/2018/05/04/es/lucene-1-dir/</id>
@@ -131,24 +149,6 @@
     <summary type="html">
     
       &lt;p&gt;主要介绍lucene创建索引的源码部分&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lucene源码阅读3-flush</title>
-    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
-    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
-    <published>2018-05-04T08:13:33.000Z</published>
-    <updated>2018-05-04T08:43:50.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
     
     </summary>
     
@@ -232,6 +232,27 @@
   </entry>
   
   <entry>
+    <title>阿里云EDAS介绍</title>
+    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/"/>
+    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/</id>
+    <published>2017-03-17T05:28:51.000Z</published>
+    <updated>2017-03-17T05:46:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
+    
+  </entry>
+  
+  <entry>
     <title>阿里云tableStore介绍</title>
     <link href="https://gpdream.github.io/2017/03/17/aliyun/tableStore/"/>
     <id>https://gpdream.github.io/2017/03/17/aliyun/tableStore/</id>
@@ -247,27 +268,6 @@
 &lt;li&gt;表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提供非常高的服务可用性。&lt;/li&gt;
 &lt;li&gt;表格存储管理的数据全部存储在 SSD 中并具有多个备份，提供了快速的访问性能和极高的数据可靠性。&lt;/li&gt;
 &lt;li&gt;用户在使用表格存储服务时，只需要按照预留和使用的资源进行付费，无需关心数据库的软硬件升级维护、集群缩容扩容等复杂问题。
-    
-    </summary>
-    
-    
-      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>阿里云EDAS介绍</title>
-    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/"/>
-    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/</id>
-    <published>2017-03-17T05:28:51.000Z</published>
-    <updated>2017-03-17T05:46:50.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
-&lt;/blockquote&gt;
     
     </summary>
     
@@ -295,15 +295,15 @@
   </entry>
   
   <entry>
-    <title>mycat源码解读2-sql处理</title>
-    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/"/>
-    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/</id>
+    <title>mycat源码解读1-登录mycat</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/</id>
     <published>2017-02-14T05:28:51.000Z</published>
-    <updated>2017-02-14T06:38:42.000Z</updated>
+    <updated>2017-02-14T06:35:10.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;本章解读mycat接收到一条sql命令后使如何处理的&lt;br&gt;
+      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
     
     </summary>
     
@@ -331,15 +331,15 @@
   </entry>
   
   <entry>
-    <title>mycat源码解读1-登录mycat</title>
-    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/"/>
-    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/</id>
+    <title>mycat源码解读2-sql处理</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-3/</id>
     <published>2017-02-14T05:28:51.000Z</published>
-    <updated>2017-02-14T06:35:10.000Z</updated>
+    <updated>2017-02-14T06:38:42.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
+      &lt;p&gt;本章解读mycat接收到一条sql命令后使如何处理的&lt;br&gt;
     
     </summary>
     
@@ -367,16 +367,22 @@
   </entry>
   
   <entry>
-    <title>greenplum OOM的难问题定位</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/gp%20OOM/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/gp OOM/</id>
+    <title>greenplum的worlkoad详解</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gp%20workload/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gp workload/</id>
     <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:14:04.000Z</updated>
+    <updated>2017-01-04T06:19:06.000Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;背景描述&quot;&gt;&lt;a href=&quot;#背景描述&quot; class=&quot;headerlink&quot; title=&quot;背景描述&quot;&gt;&lt;/a&gt;背景描述&lt;/h2&gt;&lt;p&gt;使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。&lt;/p&gt;
-&lt;h2 id=&quot;问题定位&quot;&gt;&lt;a href=&quot;#问题定位&quot; class=&quot;headerlink&quot; title=&quot;问题定位&quot;&gt;&lt;/a&gt;问题定位&lt;/h2&gt;&lt;h3 id=&quot;用户的最大进程数导致segment失效&quot;&gt;&lt;a href=&quot;#用户的最大进程数导致segment失效&quot; class=&quot;headerlink&quot; title=&quot;用户的最大进程数导致segment失效&quot;&gt;&lt;/a&gt;用户的最大进程数导致segment失效&lt;/h3&gt;&lt;p&gt;查询pg_log日志，发现如下信息&lt;code&gt;could not fork new process for connection: Resource temporarily unavailable。&lt;/code&gt;&lt;br&gt;
+      &lt;p&gt;默认8192，内存资源限制。计算公式为（x&lt;em&gt;单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1&lt;/em&gt;126)/16=7.875GB.则该值设置为7875.&lt;br&gt;gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被statement_mem和resource queue memory limits所限，设置为none,当设置为None，memory management与4.1版本GP相同。当设置为eager_free时，将会最大程度的使用内存，但不超过max_statement_mem和resourece queue的内存限制。&lt;/p&gt;
+&lt;h1 id=&quot;描述&quot;&gt;&lt;a href=&quot;#描述&quot; class=&quot;headerlink&quot; title=&quot;描述&quot;&gt;&lt;/a&gt;描述&lt;/h1&gt;&lt;p&gt;主要起控制查询队列和防止系统过载的作用。&lt;br&gt;当用户提交一个查询的时候，这个查询会被评估是否超过了资源队列的限制。如果这个查询没有超过资源限制，则会被立即执行。如果该查询超过了资源队列的限制，则查询必须等到资源队列里前面的查询执行结束有空闲才会进行。查询请求默认先进先出。如果启用了查询优先级的设置，超级管理员的。&lt;br&gt;使Workload生效需要如下几步：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;配置workload Managermnat的配置项（可使用默认配置）&lt;/li&gt;
+&lt;li&gt;创建资源队列，并设置资源队列的limit值&lt;/li&gt;
+&lt;li&gt;将用户添加到资源队列中&lt;/li&gt;
+&lt;li&gt;检查/监控资源队列状态&lt;/li&gt;
+&lt;/ul&gt;
     
     </summary>
     

@@ -68,9 +68,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-greenplum/gpstart failed beause semp" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-java/jvm oom beacuse of system vm config" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gpstart failed beause semp/" class="article-date">
+    <a href="/2017/01/04/java/jvm oom beacuse of system vm config/" class="article-date">
   <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
 </a>
     
@@ -82,7 +82,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gpstart failed beause semp/">信号量问题导致gp启动失败</a>
+      <a class="article-title" href="/2017/01/04/java/jvm oom beacuse of system vm config/">机器有大量剩余内存时但java进程还是报OOM错误</a>
     </h1>
   
 
@@ -90,24 +90,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>[toc]</p>
-<h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:</p>
-<blockquote>
-<p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–</p>
-<p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…<br>.. </p>
-<p>20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.<br>
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。<br>但在运行<code>java -version</code>的时候出错，提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 tmp]# Error occurred during initialization of VM</div><div class="line">Could not reserve enough space for object heap</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div></pre></td></tr></table></figure></p>
+<p>通过<code>free -h</code>查看发现机器有很大的空余内存，但还是报内存不够初始化jvm。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 ~]# free -h</div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:            94G        1.4G         90G        2.2G        2.5G         90G</div><div class="line">Swap:          4.0G          0B        4.0G</div></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gpstart failed beause semp/#more">Read More</a>
+            <a href="/2017/01/04/java/jvm oom beacuse of system vm config/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/" data-id="cjrls85ki001gmqi9fgntow65" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/" data-id="cjrlsfog4000povi9pmipqsz6" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -149,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/" data-id="cjrls85k1000jmqi98x1a8ev5" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/" data-id="cjrlsfog1000jovi9pyobchph" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -161,9 +158,9 @@
 
 
   
-    <article id="post-java/jvm oom beacuse of system vm config" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-greenplum/gp OOM" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/04/java/jvm oom beacuse of system vm config/" class="article-date">
+    <a href="/2017/01/04/greenplum/gp OOM/" class="article-date">
   <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
 </a>
     
@@ -175,7 +172,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/java/jvm oom beacuse of system vm config/">机器有大量剩余内存时但java进程还是报OOM错误</a>
+      <a class="article-title" href="/2017/01/04/greenplum/gp OOM/">greenplum OOM的难问题定位</a>
     </h1>
   
 
@@ -183,21 +180,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>当前环境下有tomcat和ambari-server,zookeeper等java进程在运行，其中tomcat未设置堆大小，ambari-server和zookeeper均在有设置内存大小，大小为几GB。<br>但在运行<code>java -version</code>的时候出错，提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 tmp]# Error occurred during initialization of VM</div><div class="line">Could not reserve enough space for object heap</div><div class="line">Error: Could not create the Java Virtual Machine.</div><div class="line">Error: A fatal exception has occurred. Program will exit.</div></pre></td></tr></table></figure></p>
-<p>通过<code>free -h</code>查看发现机器有很大的空余内存，但还是报内存不够初始化jvm。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@m1 ~]# free -h</div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:            94G        1.4G         90G        2.2G        2.5G         90G</div><div class="line">Swap:          4.0G          0B        4.0G</div></pre></td></tr></table></figure>
+        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="用户的最大进程数导致segment失效"><a href="#用户的最大进程数导致segment失效" class="headerlink" title="用户的最大进程数导致segment失效"></a>用户的最大进程数导致segment失效</h3><p>查询pg_log日志，发现如下信息<code>could not fork new process for connection: Resource temporarily unavailable。</code><br>
         
           <p class="article-more-link">
-            <a href="/2017/01/04/java/jvm oom beacuse of system vm config/#more">Read More</a>
+            <a href="/2017/01/04/greenplum/gp OOM/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/" data-id="cjrls85k7000tmqi9i1nzz5u5" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM/" data-id="cjrlsfofy000eovi9lbgw3brv" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
 
     </footer>
   </div>
@@ -243,7 +239,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp motion/" data-id="cjrls85jz000emqi9pxmq3e8h" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp motion/" data-id="cjrlsfog0000hovi95noth0rl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -287,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/" data-id="cjrls85jy000cmqi9l15eyj5p" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/" data-id="cjrlsfofx000covi95146fz91" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -330,7 +326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/" data-id="cjrls85kx001rmqi9fnnultwr" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/" data-id="cjrlsfoh7001rovi9zu5ym1ld" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -342,9 +338,9 @@
 
 
   
-    <article id="post-greenplum/gp workload" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-greenplum/gpstart failed beause semp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gp workload/" class="article-date">
+    <a href="/2017/01/04/greenplum/gpstart failed beause semp/" class="article-date">
   <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
 </a>
     
@@ -356,7 +352,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gp workload/">greenplum的worlkoad详解</a>
+      <a class="article-title" href="/2017/01/04/greenplum/gpstart failed beause semp/">信号量问题导致gp启动失败</a>
     </h1>
   
 
@@ -364,23 +360,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>默认8192，内存资源限制。计算公式为（x<em>单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1</em>126)/16=7.875GB.则该值设置为7875.<br>gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被statement_mem和resource queue memory limits所限，设置为none,当设置为None，memory management与4.1版本GP相同。当设置为eager_free时，将会最大程度的使用内存，但不超过max_statement_mem和resourece queue的内存限制。</p>
-<h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p>主要起控制查询队列和防止系统过载的作用。<br>当用户提交一个查询的时候，这个查询会被评估是否超过了资源队列的限制。如果这个查询没有超过资源限制，则会被立即执行。如果该查询超过了资源队列的限制，则查询必须等到资源队列里前面的查询执行结束有空闲才会进行。查询请求默认先进先出。如果启用了查询优先级的设置，超级管理员的。<br>使Workload生效需要如下几步：</p>
-<ul>
-<li>配置workload Managermnat的配置项（可使用默认配置）</li>
-<li>创建资源队列，并设置资源队列的limit值</li>
-<li>将用户添加到资源队列中</li>
-<li>检查/监控资源队列状态</li>
-</ul>
+        <p>[toc]</p>
+<h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><p>在执行gpinitsystem的时候，最后执行失败，返回错误日志如下:</p>
+<blockquote>
+<p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Process results…<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[ERROR]:-No segment started for content: 1.<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-dumping success segments: [‘lin.g3.s1:/gpadmin/data/mirror/gpseg3:content=3:dbid=9:mode=s:status=u’]<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:4  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:5  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/primary/gpseg3’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:7  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:6  FAILED  host:’lin.g3.s2’ datadir:’/gpadmin/data/mirror/gpseg0’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:8  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/mirror/gpseg2’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:3  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg1’ with reason:’PG_CTL failed.’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-DBID:2  FAILED  host:’lin.g3.s1’ datadir:’/gpadmin/data/primary/gpseg0’ with reason:’Failure in segment mirroring; check segment logfile’<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–</p>
+<p>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Successful segment starts                                                     = 1<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed segment starts, from mirroring connection between primary and mirror   = 1   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Other failed segment starts                                                   = 6   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)            = 0<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Successfully started 1 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Segment instance startup failures reported<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Failed start 7 of 8 segment instances &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[WARNING]:-Review /home/gpadmin/gpAdminLogs/gpstart_20160910.log<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:—————————————————–<br>20160910:21:51:01:017775 gpstart:lin:gpadmin-[INFO]:-Commencing parallel segment instance shutdown, please wait…<br>.. </p>
+<p>20160910:21:51:05:017775 gpstart:lin:gpadmin-[ERROR]:-gpstart error: Do not have enough valid segments to start the array.<br>
         
           <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gp workload/#more">Read More</a>
+            <a href="/2017/01/04/greenplum/gpstart failed beause semp/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp workload/" data-id="cjrls85kh001emqi93vdhpiot" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/" data-id="cjrlsfogr001govi9c740bjgr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
