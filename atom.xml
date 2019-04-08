@@ -34,22 +34,6 @@
   </entry>
   
   <entry>
-    <title></title>
-    <link href="https://gpdream.github.io/2018/08/07/es/es%E9%9B%86%E7%BE%A4%E6%A6%82%E5%86%B5/"/>
-    <id>https://gpdream.github.io/2018/08/07/es/es集群概况/</id>
-    <published>2018-08-07T07:34:27.000Z</published>
-    <updated>2018-08-07T07:34:35.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;es集群概况&quot;&gt;&lt;a href=&quot;#es集群概况&quot; class=&quot;headerlink&quot; title=&quot;es集群概况&quot;&gt;&lt;/a&gt;es集群概况&lt;/h3&gt;&lt;p&gt;es集群2018年1月份部署， 物理机3台，当前有数据量 2TB（含副本），数据行数113亿。数据有字段多，
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>es 6源码debug环境搭建</title>
     <link href="https://gpdream.github.io/2018/08/02/es/es-source-env/"/>
     <id>https://gpdream.github.io/2018/08/02/es/es-source-env/</id>
@@ -104,24 +88,6 @@
   </entry>
   
   <entry>
-    <title>lucene源码阅读3-flush</title>
-    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
-    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
-    <published>2018-05-04T08:13:33.000Z</published>
-    <updated>2018-05-04T08:43:50.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
-    
-  </entry>
-  
-  <entry>
     <title>luene源码目录</title>
     <link href="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/"/>
     <id>https://gpdream.github.io/2018/05/04/es/lucene-1-dir/</id>
@@ -149,6 +115,24 @@
     <summary type="html">
     
       &lt;p&gt;主要介绍lucene创建索引的源码部分&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>lucene源码阅读3-flush</title>
+    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
+    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
+    <published>2018-05-04T08:13:33.000Z</published>
+    <updated>2018-05-04T08:43:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
     
     </summary>
     
@@ -367,22 +351,36 @@
   </entry>
   
   <entry>
-    <title>greenplum的worlkoad详解</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/gp%20workload/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/gp workload/</id>
+    <title>由于缓存文件存在导致gpinitsystem失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/</id>
     <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:19:06.000Z</updated>
+    <updated>2017-01-04T06:15:38.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;默认8192，内存资源限制。计算公式为（x&lt;em&gt;单台机器物理内存)/主segment数目。x为1到1.5之间。例如物理机126G内存，主segment16个。则该值为(1&lt;/em&gt;126)/16=7.875GB.则该值设置为7875.&lt;br&gt;gp_vmem_idle_resource_timeout ：默认 eager_free，有none, auto, eager_free三种。当设置为auto，查询内存使用被statement_mem和resource queue memory limits所限，设置为none,当设置为None，memory management与4.1版本GP相同。当设置为eager_free时，将会最大程度的使用内存，但不超过max_statement_mem和resourece queue的内存限制。&lt;/p&gt;
-&lt;h1 id=&quot;描述&quot;&gt;&lt;a href=&quot;#描述&quot; class=&quot;headerlink&quot; title=&quot;描述&quot;&gt;&lt;/a&gt;描述&lt;/h1&gt;&lt;p&gt;主要起控制查询队列和防止系统过载的作用。&lt;br&gt;当用户提交一个查询的时候，这个查询会被评估是否超过了资源队列的限制。如果这个查询没有超过资源限制，则会被立即执行。如果该查询超过了资源队列的限制，则查询必须等到资源队列里前面的查询执行结束有空闲才会进行。查询请求默认先进先出。如果启用了查询优先级的设置，超级管理员的。&lt;br&gt;使Workload生效需要如下几步：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;配置workload Managermnat的配置项（可使用默认配置）&lt;/li&gt;
-&lt;li&gt;创建资源队列，并设置资源队列的limit值&lt;/li&gt;
-&lt;li&gt;将用户添加到资源队列中&lt;/li&gt;
-&lt;li&gt;检查/监控资源队列状态&lt;/li&gt;
-&lt;/ul&gt;
+      &lt;p&gt;GP集群：master, segment1, segment2&lt;/p&gt;
+&lt;p&gt;问题描述：&lt;br&gt;segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。&lt;/p&gt;
+&lt;p&gt;在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>由于gpstop -M immediate导致gp reciverseg失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/GP%20recoverseg/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/</id>
+    <published>2017-01-04T05:28:51.000Z</published>
+    <updated>2017-01-04T06:01:16.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;h3 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h3&gt;&lt;p&gt;有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。&lt;/p&gt;
+&lt;h3 id=&quot;现象-1&quot;&gt;&lt;a href=&quot;#现象-1&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h3&gt;&lt;p&gt;gpstart -a 集群启动成功，但带告警&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
     
     </summary>
     
