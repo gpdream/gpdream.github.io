@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://gpdream.github.io/"/>
-  <updated>2019-04-17T07:37:18.000Z</updated>
+  <updated>2019-04-17T07:45:53.000Z</updated>
   <id>https://gpdream.github.io/</id>
   
   <author>
@@ -20,12 +20,11 @@
     <link href="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/"/>
     <id>https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/</id>
     <published>2019-04-13T08:59:34.000Z</published>
-    <updated>2019-04-17T07:37:18.000Z</updated>
+    <updated>2019-04-17T07:45:53.000Z</updated>
     
     <summary type="html">
     
       &lt;p&gt;本文是一次手把手的使用jupter跑机器学习的教程，训练出来的结果不保证可用。环境为jupter，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。&lt;/p&gt;
-&lt;h2 id=&quot;uid2wifi-评分&quot;&gt;&lt;a href=&quot;#uid
     
     </summary>
     
@@ -235,6 +234,27 @@
   </entry>
   
   <entry>
+    <title>阿里云EDAS介绍</title>
+    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/"/>
+    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/</id>
+    <published>2017-03-17T05:28:51.000Z</published>
+    <updated>2017-03-17T05:46:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+    
+      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
+    
+  </entry>
+  
+  <entry>
     <title>阿里云tableStore介绍</title>
     <link href="https://gpdream.github.io/2017/03/17/aliyun/tableStore/"/>
     <id>https://gpdream.github.io/2017/03/17/aliyun/tableStore/</id>
@@ -250,27 +270,6 @@
 &lt;li&gt;表格存储向应用程序屏蔽底层硬件平台的故障和错误，能自动从各类错误中快速恢复，提供非常高的服务可用性。&lt;/li&gt;
 &lt;li&gt;表格存储管理的数据全部存储在 SSD 中并具有多个备份，提供了快速的访问性能和极高的数据可靠性。&lt;/li&gt;
 &lt;li&gt;用户在使用表格存储服务时，只需要按照预留和使用的资源进行付费，无需关心数据库的软硬件升级维护、集群缩容扩容等复杂问题。
-    
-    </summary>
-    
-    
-      <category term="aliyun" scheme="https://gpdream.github.io/tags/aliyun/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>阿里云EDAS介绍</title>
-    <link href="https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/"/>
-    <id>https://gpdream.github.io/2017/03/17/aliyun/aliyunEDAS/</id>
-    <published>2017-03-17T05:28:51.000Z</published>
-    <updated>2017-03-17T05:46:50.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一言不合上官网简介&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;企业级分布式应用服务（Enterprise Distributed Application Service, 简称 EDAS）以阿里巴巴中间件团队多款久经沙场的分布式产品作为核心基础组件，面向企业级云计算市场提供高可用分布式解决方案，是阿里巴巴企业级互联网架构解决方案的核心产品。&lt;/p&gt;
-&lt;/blockquote&gt;
     
     </summary>
     
@@ -370,17 +369,16 @@
   </entry>
   
   <entry>
-    <title>由于缓存文件存在导致gpinitsystem失败</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/</id>
+    <title>由于gpstop -M immediate导致gp reciverseg失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/GP%20recoverseg/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/</id>
     <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:15:38.000Z</updated>
+    <updated>2017-01-04T06:01:16.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;GP集群：master, segment1, segment2&lt;/p&gt;
-&lt;p&gt;问题描述：&lt;br&gt;segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。&lt;/p&gt;
-&lt;p&gt;在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。&lt;br&gt;
+      &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;h3 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h3&gt;&lt;p&gt;有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。&lt;/p&gt;
+&lt;h3 id=&quot;现象-1&quot;&gt;&lt;a href=&quot;#现象-1&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h3&gt;&lt;p&gt;gpstart -a 集群启动成功，但带告警&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
     
     </summary>
     
