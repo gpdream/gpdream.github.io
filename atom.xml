@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://gpdream.github.io/"/>
-  <updated>2019-04-17T07:35:13.000Z</updated>
+  <updated>2019-04-17T07:37:18.000Z</updated>
   <id>https://gpdream.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>通过机器学习计算人和wifi的亲密度,用jupter跑机器学习手把手教程</title>
+    <title>人和wifi的亲密度,机器学习手把手教程</title>
     <link href="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/"/>
     <id>https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/</id>
     <published>2019-04-13T08:59:34.000Z</published>
-    <updated>2019-04-17T07:35:13.000Z</updated>
+    <updated>2019-04-17T07:37:18.000Z</updated>
     
     <summary type="html">
     
@@ -107,15 +107,15 @@
   </entry>
   
   <entry>
-    <title>lucene源码阅读3-flush</title>
-    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
-    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
+    <title>luene源码目录</title>
+    <link href="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/"/>
+    <id>https://gpdream.github.io/2018/05/04/es/lucene-1-dir/</id>
     <published>2018-05-04T08:13:33.000Z</published>
-    <updated>2018-05-04T08:43:50.000Z</updated>
+    <updated>2018-05-04T08:30:42.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
+      &lt;p&gt;luene源码目录概览&lt;br&gt;
     
     </summary>
     
@@ -143,15 +143,15 @@
   </entry>
   
   <entry>
-    <title>luene源码目录</title>
-    <link href="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/"/>
-    <id>https://gpdream.github.io/2018/05/04/es/lucene-1-dir/</id>
+    <title>lucene源码阅读3-flush</title>
+    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
+    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
     <published>2018-05-04T08:13:33.000Z</published>
-    <updated>2018-05-04T08:30:42.000Z</updated>
+    <updated>2018-05-04T08:43:50.000Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;luene源码目录概览&lt;br&gt;
+      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
     
     </summary>
     
@@ -298,24 +298,6 @@
   </entry>
   
   <entry>
-    <title>mycat源码解读1-登录mycat</title>
-    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/"/>
-    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/</id>
-    <published>2017-02-14T05:28:51.000Z</published>
-    <updated>2017-02-14T06:35:10.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
-    
-  </entry>
-  
-  <entry>
     <title>mycat源码解读3-请求数据库</title>
     <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-1/"/>
     <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-1/</id>
@@ -325,6 +307,24 @@
     <summary type="html">
     
       &lt;p&gt;上篇讲了mycat接受到sql后是如何处理的，本篇讲mycat在接受到sql后如何数据库连接并将执行结果返回给客户端。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="mycat" scheme="https://gpdream.github.io/tags/mycat/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mycat源码解读1-登录mycat</title>
+    <link href="https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/"/>
+    <id>https://gpdream.github.io/2017/02/14/mycat/mycat-code-2/</id>
+    <published>2017-02-14T05:28:51.000Z</published>
+    <updated>2017-02-14T06:35:10.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;mycat的启动过程及mycat登录部分代码&lt;br&gt;
     
     </summary>
     
@@ -370,16 +370,17 @@
   </entry>
   
   <entry>
-    <title>由于gpstop -M immediate导致gp reciverseg失败</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/GP%20recoverseg/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/</id>
+    <title>由于缓存文件存在导致gpinitsystem失败</title>
+    <link href="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem%20faild%20by%20cache%20file/"/>
+    <id>https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/</id>
     <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:01:16.000Z</updated>
+    <updated>2017-01-04T06:15:38.000Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;h3 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h3&gt;&lt;p&gt;有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。&lt;/p&gt;
-&lt;h3 id=&quot;现象-1&quot;&gt;&lt;a href=&quot;#现象-1&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h3&gt;&lt;p&gt;gpstart -a 集群启动成功，但带告警&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+      &lt;p&gt;GP集群：master, segment1, segment2&lt;/p&gt;
+&lt;p&gt;问题描述：&lt;br&gt;segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。&lt;/p&gt;
+&lt;p&gt;在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。&lt;br&gt;
     
     </summary>
     

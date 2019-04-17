@@ -68,55 +68,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-greenplum/gp motion" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gp motion/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gp motion/">greenplum的motion机制</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>查询计划会根据sql语句的预估开销来决策选择哪种motion，一般情况下，假设我有语句GP相比其他数据库有的操作类型，有一个额外操作类型叫做motion,一个motion操作会涉及segment进行查询时的数据移动。并非所有的操作都会触发moiton操作。例如精确查询，不会涉及到segment之间的数据交互。当sql语句涉及到join、aggregation、sort（或其他对于行的操作)，就会有移动数据的需求，GP生成查询计划的时候会有motion node出现。</p>
-<p>GP有如下几种motion方式：</p>
-<ul>
-<li>Broadcast Motion：广播方式，每个节点向其他节点广播需要发送的数据。</li>
-<li>redistribute motion：重分布移动数据，当sql语句做join的时候，join的列值hash不同，将筛选后的数据在其他segment重新发布.</li>
-<li>explicit redistribute motion：</li>
-<li>gather motion : segment数据汇聚到master。
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gp motion/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp motion/" data-id="cjukwheug0004pii9peontjft" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-greenplum/gpstart failed beause semp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/01/04/greenplum/gpstart failed beause semp/" class="article-date">
@@ -153,7 +104,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/" data-id="cjukwhev3000rpii9ehbk7xqj" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpstart failed beause semp/" data-id="cjukwl3l3001jqhi996ggk7o7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -198,10 +149,190 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/" data-id="cjukwheum000bpii9p2qs6ioc" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/java/jvm oom beacuse of system vm config/" data-id="cjukwl3kl000mqhi9k8b8o06b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-greenplum/gp OOM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gp OOM/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/gp OOM/">greenplum OOM的难问题定位</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。</p>
+<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="用户的最大进程数导致segment失效"><a href="#用户的最大进程数导致segment失效" class="headerlink" title="用户的最大进程数导致segment失效"></a>用户的最大进程数导致segment失效</h3><p>查询pg_log日志，发现如下信息<code>could not fork new process for connection: Resource temporarily unavailable。</code><br>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/gp OOM/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM/" data-id="cjukwl3kg000cqhi98nwxghd7" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-greenplum/gp motion" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gp motion/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/gp motion/">greenplum的motion机制</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>查询计划会根据sql语句的预估开销来决策选择哪种motion，一般情况下，假设我有语句GP相比其他数据库有的操作类型，有一个额外操作类型叫做motion,一个motion操作会涉及segment进行查询时的数据移动。并非所有的操作都会触发moiton操作。例如精确查询，不会涉及到segment之间的数据交互。当sql语句涉及到join、aggregation、sort（或其他对于行的操作)，就会有移动数据的需求，GP生成查询计划的时候会有motion node出现。</p>
+<p>GP有如下几种motion方式：</p>
+<ul>
+<li>Broadcast Motion：广播方式，每个节点向其他节点广播需要发送的数据。</li>
+<li>redistribute motion：重分布移动数据，当sql语句做join的时候，join的列值hash不同，将筛选后的数据在其他segment重新发布.</li>
+<li>explicit redistribute motion：</li>
+<li>gather motion : segment数据汇聚到master。
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/gp motion/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp motion/" data-id="cjukwl3kh000eqhi9mtowxfag" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-greenplum/GP recoverseg" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/GP recoverseg/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/GP recoverseg/">由于gpstop -M immediate导致gp reciverseg失败</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h2><h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><p>有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。</p>
+<h3 id="现象-1"><a href="#现象-1" class="headerlink" title="现象"></a>现象</h3><p>gpstart -a 集群启动成功，但带告警<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------</div><div class="line">20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1</div><div class="line">20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active</div><div class="line">20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)</div></pre></td></tr></table></figure></p>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/GP recoverseg/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/" data-id="cjukwl3ke0009qhi9tc29e5ri" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-greenplum/gpconfig" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/04/greenplum/gpconfig/" class="article-date">
+  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/04/greenplum/gpconfig/">gp参数详解</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 官方文档：<a href="http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html" target="_blank" rel="external">http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html</a></p>
+        
+          <p class="article-more-link">
+            <a href="/2017/01/04/greenplum/gpconfig/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/" data-id="cjukwl3lk001uqhi92kmh1ssk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
 
     </footer>
   </div>
@@ -248,139 +379,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp workload/" data-id="cjukwhev2000ppii9t7qqqk66" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-greenplum/gp OOM" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gp OOM/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gp OOM/">greenplum OOM的难问题定位</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="背景描述"><a href="#背景描述" class="headerlink" title="背景描述"></a>背景描述</h2><p>使用的环境是2+3，2台当计算节点，3台当计算节点，总共起了48个primary segment和48个mirror segment。该gp集群是业务程序项目测试使用，运行一段时间后，gp会出现突然宕机的情况。</p>
-<h2 id="问题定位"><a href="#问题定位" class="headerlink" title="问题定位"></a>问题定位</h2><h3 id="用户的最大进程数导致segment失效"><a href="#用户的最大进程数导致segment失效" class="headerlink" title="用户的最大进程数导致segment失效"></a>用户的最大进程数导致segment失效</h3><p>查询pg_log日志，发现如下信息<code>could not fork new process for connection: Resource temporarily unavailable。</code><br>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gp OOM/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp OOM/" data-id="cjukwheuf0003pii9l6klz4li" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-greenplum/gpconfig" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gpconfig/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gpconfig/">gp参数详解</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p> 官方文档：<a href="http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html" target="_blank" rel="external">http://gpdb.docs.pivotal.io/4330/ref_guide/guc_config.html</a></p>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gpconfig/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpconfig/" data-id="cjukwhevz001tpii9f233jnks" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-greenplum/gpinitsystem faild by cache file" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/" class="article-date">
-  <time datetime="2017-01-04T05:28:51.000Z" itemprop="datePublished">2017-01-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/04/greenplum/gpinitsystem faild by cache file/">由于缓存文件存在导致gpinitsystem失败</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>GP集群：master, segment1, segment2</p>
-<p>问题描述：<br>segment1和segment2上各配置8个primary segment，8个mirror segment，集群初始化，gpinitsystem过程中遇到了问题,集群初始化失败。</p>
-<p>在集群初始化过程中，segment实例目录已按照预期分别在segment1和segment2上建立，在后续的gpstart启动集群时，有些segment找不到DBID启动不了，输出提示集群为初始化完全。<br>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/04/greenplum/gpinitsystem faild by cache file/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gpinitsystem faild by cache file/" data-id="cjukwheuh0005pii9azfvtu8c" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/01/04/greenplum/gp workload/" data-id="cjukwl3l2001hqhi93a74ur87" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/greenplum/">greenplum</a></li></ul>
@@ -440,7 +439,7 @@
       <ul>
         
           <li>
-            <a href="/2019/04/13/machine_learn/ml_lrcv/">通过机器学习计算人和wifi的亲密度,用jupter跑机器学习手把手教程</a>
+            <a href="/2019/04/13/machine_learn/ml_lrcv/">人和wifi的亲密度,机器学习手把手教程</a>
           </li>
         
           <li>
