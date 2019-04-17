@@ -5,17 +5,17 @@
   
   <title>手把手用jupter跑机器学习教程 | 甲鱼的大数据之旅</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。">
+  <meta name="description" content="本文是一次手把手的使用jupter跑机器学习的教程，训练出来的结果不保证可用。环境为jupter，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。 uid2wifi 评分uid2wifi模型训练使用的jupter环境。 数据准备下载hive中打好分数的数据，prepare_data -i tmp.uid2wifi_feature -o . --me">
 <meta name="keywords" content="machine-line">
 <meta property="og:type" content="article">
 <meta property="og:title" content="手把手用jupter跑机器学习教程">
 <meta property="og:url" content="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/index.html">
 <meta property="og:site_name" content="甲鱼的大数据之旅">
-<meta property="og:description" content="本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。">
-<meta property="og:updated_time" content="2019-04-17T07:14:49.000Z">
+<meta property="og:description" content="本文是一次手把手的使用jupter跑机器学习的教程，训练出来的结果不保证可用。环境为jupter，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。 uid2wifi 评分uid2wifi模型训练使用的jupter环境。 数据准备下载hive中打好分数的数据，prepare_data -i tmp.uid2wifi_feature -o . --me">
+<meta property="og:updated_time" content="2019-04-17T07:17:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="手把手用jupter跑机器学习教程">
-<meta name="twitter:description" content="本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。">
+<meta name="twitter:description" content="本文是一次手把手的使用jupter跑机器学习的教程，训练出来的结果不保证可用。环境为jupter，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。 uid2wifi 评分uid2wifi模型训练使用的jupter环境。 数据准备下载hive中打好分数的数据，prepare_data -i tmp.uid2wifi_feature -o . --me">
   
     <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
   
@@ -90,8 +90,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。<br><a id="more"></a></p>
-<h2 id="手把手用jupter跑机器学习教程"><a href="#手把手用jupter跑机器学习教程" class="headerlink" title="手把手用jupter跑机器学习教程"></a>手把手用jupter跑机器学习教程</h2><p>本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。环境为jupter，基础数据准备，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。</p>
+        <p>本文是一次手把手的使用jupter跑机器学习的教程，训练出来的结果不保证可用。环境为jupter，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。</p>
 <h2 id="uid2wifi-评分"><a href="#uid2wifi-评分" class="headerlink" title="uid2wifi 评分"></a>uid2wifi 评分</h2><h3 id="uid2wifi模型训练"><a href="#uid2wifi模型训练" class="headerlink" title="uid2wifi模型训练"></a>uid2wifi模型训练</h3><p>使用的jupter环境。</p>
 <h4 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h4><p>下载hive中打好分数的数据，<code>prepare_data -i tmp.uid2wifi_feature -o . --merge true -db bi</code>。 tmp.uid2wifi_feature数据取10天使用频率32周的flag认为1，只使用过一次的为0.总共5个特征，分别是<code>hour_count，ten_days_count，night_count,daytime_count,weekend_count</code>。训练结果5个特征的没有2个特征的效果好，2个最终采取2个特征<code>hour_count，ten_days_count</code>。</p>
 <p><strong>抽取训练数据</strong></p>
@@ -117,7 +116,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/" data-id="cjukvsj80000okki9k1i3mahf" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/" data-id="cjukvv5cl000llki9lutfymer" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-line/">machine-line</a></li></ul>
