@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>手把手用jupter跑机器学习教程 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。">
+<meta name="keywords" content="machine-line">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手用jupter跑机器学习教程">
+<meta property="og:url" content="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。">
+<meta property="og:updated_time" content="2019-04-17T07:14:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手用jupter跑机器学习教程">
+<meta name="twitter:description" content="本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-machine_learn/ml_lrcv" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/13/machine_learn/ml_lrcv/" class="article-date">
+  <time datetime="2019-04-13T08:59:34.000Z" itemprop="datePublished">2019-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      手把手用jupter跑机器学习教程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。<br><a id="more"></a></p>
+<h2 id="手把手用jupter跑机器学习教程"><a href="#手把手用jupter跑机器学习教程" class="headerlink" title="手把手用jupter跑机器学习教程"></a>手把手用jupter跑机器学习教程</h2><p>本文是一次手把手的使用jupter进行，训练出来的结果不保证可用。环境为jupter，基础数据准备，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。</p>
+<h2 id="uid2wifi-评分"><a href="#uid2wifi-评分" class="headerlink" title="uid2wifi 评分"></a>uid2wifi 评分</h2><h3 id="uid2wifi模型训练"><a href="#uid2wifi模型训练" class="headerlink" title="uid2wifi模型训练"></a>uid2wifi模型训练</h3><p>使用的jupter环境。</p>
+<h4 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h4><p>下载hive中打好分数的数据，<code>prepare_data -i tmp.uid2wifi_feature -o . --merge true -db bi</code>。 tmp.uid2wifi_feature数据取10天使用频率32周的flag认为1，只使用过一次的为0.总共5个特征，分别是<code>hour_count，ten_days_count，night_count,daytime_count,weekend_count</code>。训练结果5个特征的没有2个特征的效果好，2个最终采取2个特征<code>hour_count，ten_days_count</code>。</p>
+<p><strong>抽取训练数据</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> tmp.uid2wifi_feature;</div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> tmp.uid2wifi_feature <span class="keyword">as</span></div><div class="line"><span class="keyword">select</span> uid,<span class="keyword">size</span>(four_hour_set) hour_count</div><div class="line">,<span class="keyword">size</span>(ten_days_set) ten_days_count</div><div class="line">,night_count </div><div class="line">,daytime_count</div><div class="line">,weekend_count</div><div class="line">,<span class="number">0</span> <span class="keyword">as</span> label</div><div class="line"><span class="keyword">from</span> tmp.tmp_uid2wifi_flag </div><div class="line">  <span class="keyword">where</span> uid <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">and</span> <span class="keyword">size</span>(ten_days_set)=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">size</span>(four_hour_set)&lt;<span class="number">6</span> <span class="keyword">and</span> night_count&lt;<span class="number">3</span> <span class="keyword">and</span> weekend_count&lt;<span class="number">3</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">60000</span>;</div><div class="line"></div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tmp.uid2wifi_feature </div><div class="line"><span class="keyword">select</span> uid</div><div class="line">, <span class="keyword">case</span> <span class="keyword">when</span> <span class="keyword">size</span>(four_hour_set)&gt;=<span class="number">32</span>  <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> <span class="keyword">size</span>(four_hour_set) <span class="keyword">end</span> <span class="keyword">as</span> hour_count</div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> <span class="keyword">size</span>(ten_days_set)&gt;=<span class="number">32</span>  <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> <span class="keyword">size</span>(ten_days_set) <span class="keyword">end</span> <span class="keyword">as</span> ten_days_count</div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> night_count&gt;=<span class="number">32</span> <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> night_count <span class="keyword">end</span> <span class="keyword">as</span> night_count </div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> daytime_count&gt;=<span class="number">32</span> <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> daytime_count <span class="keyword">end</span> <span class="keyword">as</span> daytime_count</div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> weekend_count&gt;=<span class="number">32</span> <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> weekend_count <span class="keyword">end</span> <span class="keyword">as</span> weekend_count</div><div class="line">,<span class="number">1</span> <span class="keyword">as</span> label</div><div class="line">  <span class="keyword">from</span> tmp.tmp_uid2wifi_flag </div><div class="line">  <span class="keyword">where</span> </div><div class="line"></div><div class="line">   <span class="comment">-- 99%以上的4小时片段</span></div><div class="line"><span class="comment">--   size(four_hour_set)&gt;=90</span></div><div class="line">      <span class="comment">-- 32以下，十天数在99%以上  </span></div><div class="line">   (<span class="keyword">size</span>(four_hour_set)&lt;<span class="number">32</span> <span class="keyword">and</span> <span class="keyword">size</span>(ten_days_set)&gt;<span class="number">6</span>)</div><div class="line">  <span class="comment">-- 90%以上的小时数，90%以上的十天数</span></div><div class="line">   <span class="keyword">or</span> <span class="keyword">size</span>(ten_days_set)&gt;<span class="number">5</span></div><div class="line">  <span class="comment">-- 80%以上的10天数量，95%以上的周末数,</span></div><div class="line">  <span class="keyword">or</span>  (<span class="keyword">size</span>(ten_days_set)&gt;=<span class="number">3</span> <span class="keyword">and</span> weekend_count&gt;=<span class="number">4</span> ) </div><div class="line">  <span class="comment">-- 80%以上的10天数量，%95的夜晚片段或95%的白天片段,</span></div><div class="line">  <span class="keyword">or</span> (<span class="keyword">size</span>(ten_days_set)&gt;=<span class="number">3</span> <span class="keyword">and</span> night_count&gt;=<span class="number">10</span> ) </div><div class="line">  <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">60000</span>;</div></pre></td></tr></table></figure>
+<h4 id="python的模型训练脚本"><a href="#python的模型训练脚本" class="headerlink" title="python的模型训练脚本"></a>python的模型训练脚本</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment"># 加载数据</span></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegressionCV</div><div class="line">df = pd.read_csv(<span class="string">'tmp.uid2wifi_feature.csv'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 抽取30%的数据为测试数据，其余为训练数据</span></div><div class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</div><div class="line"><span class="comment">#feature_names=['hour_count','ten_days_count','night_count','daytime_count','weekend_count']</span></div><div class="line">feature_names=[<span class="string">'hour_count'</span>,<span class="string">'ten_days_count'</span>]</div><div class="line">label=[<span class="string">'label'</span>]</div><div class="line">x_train, x_test, y_train, y_test = train_test_split(df[feature_names], df[label], test_size=<span class="number">0.3</span>, random_state=<span class="number">111</span>)</div><div class="line"></div><div class="line"><span class="comment"># 运行逻辑回归</span></div><div class="line">clf = LogisticRegressionCV(cv=<span class="number">5</span>, random_state=<span class="number">0</span>, multi_class=<span class="string">'multinomial'</span>, penalty=<span class="string">'l2'</span>, class_weight=<span class="string">'balanced'</span>)</div><div class="line">clf.fit(x_train.values, y_train.values)</div><div class="line"></div><div class="line"><span class="comment"># 计算auc,ks的函数</span></div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> cross_validation, metrics </div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_auc_ks</span><span class="params">(y_true, y_pred)</span>:</span></div><div class="line">    fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred)</div><div class="line">    auc = metrics.auc(fpr, tpr)</div><div class="line">    ks = (tpr - fpr).max()</div><div class="line">    <span class="keyword">return</span> auc, ks</div><div class="line">    </div><div class="line"><span class="comment"># 拿那30%的数据预测一波</span></div><div class="line">fn_pred = clf.predict_proba(x_test.values)[:,<span class="number">1</span>]    </div><div class="line"></div><div class="line"><span class="comment"># 查看auc,ks；日了狗了，我这返回auc 1.0,ks 1.0</span></div><div class="line">compute_auc_ks(y_test,fn_pred)</div><div class="line"><span class="comment"># 查看准确率</span></div><div class="line">score = clf.score(x_train, y_train)</div></pre></td></tr></table></figure>
+<h3 id="uid2wifi-模型测试"><a href="#uid2wifi-模型测试" class="headerlink" title="uid2wifi 模型测试"></a>uid2wifi 模型测试</h3><h4 id="数据准备-1"><a href="#数据准备-1" class="headerlink" title="数据准备"></a>数据准备</h4><p>随机抽取1000条数据。<code>prepare_data -i tmp.uid2wifi_feature -o . --merge true -db bi</code>,</p>
+<h4 id="python的测试脚本"><a href="#python的测试脚本" class="headerlink" title="python的测试脚本"></a>python的测试脚本</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 加载数据</span></div><div class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div><div class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegressionCV</div><div class="line">predict_df = pd.read_csv(<span class="string">'tmp.uid2wifi_predict.csv'</span>)</div><div class="line"></div><div class="line"><span class="comment"># 加载列</span></div><div class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</div><div class="line">predict_feature_names=[<span class="string">'hour_count'</span>,<span class="string">'ten_days_count'</span>,<span class="string">'night_count'</span>,<span class="string">'daytime_count'</span>,<span class="string">'weekend_count'</span>]</div><div class="line">label=[<span class="string">'label'</span>]</div><div class="line">x_pred_train, x_pred_test, y_pred_train, y_pred_test = train_test_split(predict_df[predict_feature_names], predict_df[label], test_size=<span class="number">0.3</span>, random_state=<span class="number">111</span>)</div><div class="line"></div><div class="line"><span class="comment"># 预测</span></div><div class="line">x_pred_test_result = clf.predict_proba(x_pred_test[[<span class="string">'hour_count'</span>,<span class="string">'ten_days_count'</span>]].values)</div><div class="line"></div><div class="line"><span class="comment"># 查看预测结果</span></div><div class="line">pred_test_df = x_pred_test.loc[::]</div><div class="line">pred_test_df[<span class="string">'score'</span>] = x_pred_test_result[:,<span class="number">1</span>]</div><div class="line">pred_test_df</div><div class="line"></div><div class="line"><span class="comment"># 查看公式</span></div><div class="line">clf.coef_,clf.intercept_</div></pre></td></tr></table></figure>
+<p>特征权重(array([[ 0.94491135,  2.06726915]]), array([-14.6439925]))。</p>
+<p>对应的公式 <code>y=0.94491135*hour_count + 2.06726915*ten_days_count - -14.6439925</code></p>
+<p>对应的得分为 <code>score=(1/( 1 + Math.pow(Math.E,(-1*y)))）</code>。公式比较简单，直接写个方法，比到处pml文件更加方便。</p>
+<h3 id="生成pml文件"><a href="#生成pml文件" class="headerlink" title="生成pml文件"></a>生成pml文件</h3><ul>
+<li>安装依赖包:<code>pip install sklearn2pmml -t /notebook/shared/extra/</code></li>
+<li>下载把二进制文件转换为pml文件的工具:git clone <a href="https://github.com/jpmml/jpmml-sklearn.git" target="_blank" rel="external">https://github.com/jpmml/jpmml-sklearn.git</a></li>
+<li>编译jpmml-sklearn:mvn clean install -D skipTests</li>
+<li>使用python脚本输出二进制文件</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> sys</div><div class="line">sys.path.append(<span class="string">'/notebook/shared/extra/'</span>)</div><div class="line"></div><div class="line"><span class="keyword">from</span> sklearn2pmml <span class="keyword">import</span> PMMLPipeline</div><div class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</div><div class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</div><div class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib</div><div class="line"></div><div class="line"></div><div class="line">iris = load_iris()</div><div class="line">pipeline = PMMLPipeline([(<span class="string">"classifier"</span>, clf)])</div><div class="line">pipeline.fit(iris.data, iris.target)</div><div class="line"></div><div class="line"></div><div class="line">joblib.dump(pipeline, <span class="string">"uid-wifi-score.pkl.z"</span>, compress = <span class="number">9</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>把二进制文件转换成Pml文件. <code>java -jar target/jpmml-sklearn-executable-1.5-SNAPSHOT.jar --pkl-input ~/uid-wifi-score.pkl.z --pmml-output uid-wifi-score.pmml</code> </li>
+</ul>
+<p>大功告成</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/" data-id="cjukvsj80000okki9k1i3mahf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-line/">machine-line</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/01/java/gc-online/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">java gc生产环境实践</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/">es</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-line/">machine-line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 12.5px;">aliyun</a> <a href="/tags/es/" style="font-size: 20px;">es</a> <a href="/tags/greenplum/" style="font-size: 20px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 12.5px;">hadoop</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 17.5px;">java</a> <a href="/tags/machine-line/" style="font-size: 10px;">machine-line</a> <a href="/tags/mycat/" style="font-size: 15px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/13/machine_learn/ml_lrcv/">手把手用jupter跑机器学习教程</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/01/java/gc-online/">java gc生产环境实践</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/02/es/es-source-env/">es 6源码debug环境搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/es/es-xpack-sql-optimizer/">x-pack sql做的sql优化</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/20/es/xpack-sqlvselasticsearch-sql/">es 6.3内置sql vs NLPChina elasticsearch-sql</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
