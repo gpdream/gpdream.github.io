@@ -82,7 +82,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/machine_learn/ml_lrcv/">手把手用jupter跑机器学习教程</a>
+      <a class="article-title" href="/2019/04/13/machine_learn/ml_lrcv/">通过机器学习计算人和wifi的亲密度,用jupter跑机器学习手把手教程</a>
     </h1>
   
 
@@ -91,7 +91,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>本文是一次手把手的使用jupter跑机器学习的教程，训练出来的结果不保证可用。环境为jupter，可以跳过数据准备部分直接看Python脚本。采用wifi数据，选择2个特征，使用逻辑回归进行训练。</p>
-<h2 id="uid2wifi-评分"><a href="#uid2wifi-评分" class="headerlink" title="uid2wifi 评分"></a>uid2wifi 评分</h2><h3 id="uid2wifi模型训练"><a href="#uid2wifi模型训练" class="headerlink" title="uid2wifi模型训练"></a>uid2wifi模型训练</h3><p>使用的jupter环境。</p>
+<h2 id="uid2wifi-评分"><a href="#uid2wifi-评分" class="headerlink" title="uid2wifi 评分"></a>uid2wifi 评分</h2><h3 id="uid2wifi模型训练"><a href="#uid2wifi模型训练" class="headerlink" title="uid2wifi模型训练"></a>uid2wifi模型训练</h3><p>基础数据为用户使用wifi的数据，训练出来的最后得分为用户和该wifi的紧密度，采取的特征为用户使用对应wifi的频率。</p>
 <h4 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h4><p>下载hive中打好分数的数据，<code>prepare_data -i tmp.uid2wifi_feature -o . --merge true -db bi</code>。 tmp.uid2wifi_feature数据取10天使用频率32周的flag认为1，只使用过一次的为0.总共5个特征，分别是<code>hour_count，ten_days_count，night_count,daytime_count,weekend_count</code>。训练结果5个特征的没有2个特征的效果好，2个最终采取2个特征<code>hour_count，ten_days_count</code>。</p>
 <p><strong>抽取训练数据</strong></p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">if</span> <span class="keyword">exists</span> tmp.uid2wifi_feature;</div><div class="line"><span class="keyword">create</span> <span class="keyword">table</span> tmp.uid2wifi_feature <span class="keyword">as</span></div><div class="line"><span class="keyword">select</span> uid,<span class="keyword">size</span>(four_hour_set) hour_count</div><div class="line">,<span class="keyword">size</span>(ten_days_set) ten_days_count</div><div class="line">,night_count </div><div class="line">,daytime_count</div><div class="line">,weekend_count</div><div class="line">,<span class="number">0</span> <span class="keyword">as</span> label</div><div class="line"><span class="keyword">from</span> tmp.tmp_uid2wifi_flag </div><div class="line">  <span class="keyword">where</span> uid <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">and</span> <span class="keyword">size</span>(ten_days_set)=<span class="number">1</span> <span class="keyword">and</span> <span class="keyword">size</span>(four_hour_set)&lt;<span class="number">6</span> <span class="keyword">and</span> night_count&lt;<span class="number">3</span> <span class="keyword">and</span> weekend_count&lt;<span class="number">3</span> <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">60000</span>;</div><div class="line"></div><div class="line"><span class="keyword">insert</span> <span class="keyword">into</span> tmp.uid2wifi_feature </div><div class="line"><span class="keyword">select</span> uid</div><div class="line">, <span class="keyword">case</span> <span class="keyword">when</span> <span class="keyword">size</span>(four_hour_set)&gt;=<span class="number">32</span>  <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> <span class="keyword">size</span>(four_hour_set) <span class="keyword">end</span> <span class="keyword">as</span> hour_count</div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> <span class="keyword">size</span>(ten_days_set)&gt;=<span class="number">32</span>  <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> <span class="keyword">size</span>(ten_days_set) <span class="keyword">end</span> <span class="keyword">as</span> ten_days_count</div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> night_count&gt;=<span class="number">32</span> <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> night_count <span class="keyword">end</span> <span class="keyword">as</span> night_count </div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> daytime_count&gt;=<span class="number">32</span> <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> daytime_count <span class="keyword">end</span> <span class="keyword">as</span> daytime_count</div><div class="line">,<span class="keyword">case</span> <span class="keyword">when</span> weekend_count&gt;=<span class="number">32</span> <span class="keyword">then</span> <span class="number">32</span> <span class="keyword">else</span> weekend_count <span class="keyword">end</span> <span class="keyword">as</span> weekend_count</div><div class="line">,<span class="number">1</span> <span class="keyword">as</span> label</div><div class="line">  <span class="keyword">from</span> tmp.tmp_uid2wifi_flag </div><div class="line">  <span class="keyword">where</span> </div><div class="line"></div><div class="line">   <span class="comment">-- 99%以上的4小时片段</span></div><div class="line"><span class="comment">--   size(four_hour_set)&gt;=90</span></div><div class="line">      <span class="comment">-- 32以下，十天数在99%以上  </span></div><div class="line">   (<span class="keyword">size</span>(four_hour_set)&lt;<span class="number">32</span> <span class="keyword">and</span> <span class="keyword">size</span>(ten_days_set)&gt;<span class="number">6</span>)</div><div class="line">  <span class="comment">-- 90%以上的小时数，90%以上的十天数</span></div><div class="line">   <span class="keyword">or</span> <span class="keyword">size</span>(ten_days_set)&gt;<span class="number">5</span></div><div class="line">  <span class="comment">-- 80%以上的10天数量，95%以上的周末数,</span></div><div class="line">  <span class="keyword">or</span>  (<span class="keyword">size</span>(ten_days_set)&gt;=<span class="number">3</span> <span class="keyword">and</span> weekend_count&gt;=<span class="number">4</span> ) </div><div class="line">  <span class="comment">-- 80%以上的10天数量，%95的夜晚片段或95%的白天片段,</span></div><div class="line">  <span class="keyword">or</span> (<span class="keyword">size</span>(ten_days_set)&gt;=<span class="number">3</span> <span class="keyword">and</span> night_count&gt;=<span class="number">10</span> ) </div><div class="line">  <span class="keyword">order</span> <span class="keyword">by</span> <span class="keyword">rand</span>() <span class="keyword">limit</span> <span class="number">60000</span>;</div></pre></td></tr></table></figure>
@@ -116,7 +116,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/" data-id="cjukvv5cl000llki9lutfymer" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2019/04/13/machine_learn/ml_lrcv/" data-id="cjukwhevc0016pii91ez7uxai" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-line/">machine-line</a></li></ul>
@@ -159,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2019/02/01/java/gc-online/" data-id="cjukvv5c60009lki93kj0ajyl" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2019/02/01/java/gc-online/" data-id="cjukwheuk0009pii93mrp8n91" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
@@ -202,7 +202,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/08/02/es/es-source-env/" data-id="cjukvv5cf000dlki94udcgqph" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/08/02/es/es-source-env/" data-id="cjukwheva0012pii93thvqrr2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -245,7 +245,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/07/11/es/es-xpack-sql-optimizer/" data-id="cjukvv5ci000flki9bdtxa1yi" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/07/11/es/es-xpack-sql-optimizer/" data-id="cjukwhev8000zpii9kqk0kcrl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -288,7 +288,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/06/20/es/xpack-sqlvselasticsearch-sql/" data-id="cjukvv5cm000nlki9eieimgys" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/06/20/es/xpack-sqlvselasticsearch-sql/" data-id="cjukwhevf001bpii9j6kim59d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -331,50 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/" data-id="cjukvv5dk001tlki9hdp0spes" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="title-es/lucene-1-dir" class="article article-type-title" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/05/04/es/lucene-1-dir/" class="article-date">
-  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/04/es/lucene-1-dir/">luene源码目录</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>luene源码目录概览<br>
-        
-          <p class="article-more-link">
-            <a href="/2018/05/04/es/lucene-1-dir/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/" data-id="cjukvv5cj000hlki9s19t97fj" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/" data-id="cjukwhevs001rpii94ty2fam1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -417,7 +374,50 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-2-core/" data-id="cjukvv5cl000jlki9ls1bgrjj" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-2-core/" data-id="cjukwhevb0013pii986oxep2a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="title-es/lucene-1-dir" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/04/es/lucene-1-dir/" class="article-date">
+  <time datetime="2018-05-04T08:13:33.000Z" itemprop="datePublished">2018-05-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/04/es/lucene-1-dir/">luene源码目录</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>luene源码目录概览<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/04/es/lucene-1-dir/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/" data-id="cjukwhev90011pii9kctmm89h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -460,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2018/02/09/es/es-intro/" data-id="cjukvv5df001olki9tzv1fp05" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2018/02/09/es/es-intro/" data-id="cjukwhev7000xpii9zmmy3zq2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
@@ -503,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://gpdream.github.io/2017/07/03/influxdb/influxdb-term/" data-id="cjukvv5cn000plki9kgv0knhb" class="article-share-link">Share</a>
+      <a data-url="https://gpdream.github.io/2017/07/03/influxdb/influxdb-term/" data-id="cjukwhevd0018pii9s26ouww6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/influxdb/">influxdb</a></li></ul>
@@ -563,7 +563,7 @@
       <ul>
         
           <li>
-            <a href="/2019/04/13/machine_learn/ml_lrcv/">手把手用jupter跑机器学习教程</a>
+            <a href="/2019/04/13/machine_learn/ml_lrcv/">通过机器学习计算人和wifi的亲密度,用jupter跑机器学习手把手教程</a>
           </li>
         
           <li>
