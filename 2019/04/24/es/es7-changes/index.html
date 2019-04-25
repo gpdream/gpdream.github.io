@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>elasticsearch 7重要更新内容 | 甲鱼的大数据之旅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="elasticsearch 7更新了,其中有一些很不错的功能点。比如集群间的备份，查询熔断器，索引生命周期管理，生产环境级别的xpack-sql,完善的hive-level-rest-client等。">
+<meta name="keywords" content="es">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch 7重要更新内容">
+<meta property="og:url" content="https://gpdream.github.io/2019/04/24/es/es7-changes/index.html">
+<meta property="og:site_name" content="甲鱼的大数据之旅">
+<meta property="og:description" content="elasticsearch 7更新了,其中有一些很不错的功能点。比如集群间的备份，查询熔断器，索引生命周期管理，生产环境级别的xpack-sql,完善的hive-level-rest-client等。">
+<meta property="og:updated_time" content="2019-04-25T09:28:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="elasticsearch 7重要更新内容">
+<meta name="twitter:description" content="elasticsearch 7更新了,其中有一些很不错的功能点。比如集群间的备份，查询熔断器，索引生命周期管理，生产环境级别的xpack-sql,完善的hive-level-rest-client等。">
+  
+    <link rel="alternate" href="/atom.xml" title="甲鱼的大数据之旅" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">甲鱼的大数据之旅</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">从入门到跑路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://gpdream.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="title-es/es7-changes" class="article article-type-title" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/24/es/es7-changes/" class="article-date">
+  <time datetime="2019-04-24T13:13:33.000Z" itemprop="datePublished">2019-04-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      elasticsearch 7重要更新内容
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>elasticsearch 7更新了,其中有一些很不错的功能点。比如集群间的备份，查询熔断器，索引生命周期管理，生产环境级别的xpack-sql,完善的hive-level-rest-client等。<br><a id="more"></a></p>
+<h4 id="重要更新"><a href="#重要更新" class="headerlink" title="重要更新"></a>重要更新</h4><h5 id="默认自适应选择分片"><a href="#默认自适应选择分片" class="headerlink" title="默认自适应选择分片"></a>默认自适应选择分片</h5><p>在6.x及以前的版本，请求是会轮询发放给主分片和副本分片的，如果其中一个分片出现了超长的gc，那这时候响应就会很慢。6.1的时候新增了个配置项，可以让es自适应选择性能较好的分片优先查询，但该配置项是默认关闭的，在7.0里该配置项默认打开。</p>
+<h5 id="分片搜索空闲时跳过refresh"><a href="#分片搜索空闲时跳过refresh" class="headerlink" title="分片搜索空闲时跳过refresh"></a>分片搜索空闲时跳过refresh</h5><p>以前版本的数据插入，每一秒都会有refresh动作，这使得es能成为一个近实时的搜索引擎。但是当没有查询需求的时候，该动作会使得es的资源得到较大的浪费。</p>
+<p>在es7中，如果一个分片处于搜索空闲状态(30秒内都没有查询)，那么插入数据不会被refresh，直到有一个查询过来触发refresh，或者显示的触发refresh。该改动可以显著的插入索引性能。</p>
+<h5 id="默认单分片"><a href="#默认单分片" class="headerlink" title="默认单分片"></a>默认单分片</h5><p>往前的版本默认都是5个分片，在数据量有限的情况下，如果是日增索引，那么每天都会有5个索引，会导致索引非常的多，使得master在管理的内存上开销比较大。新版本上变成了默认1个分片。</p>
+<h5 id="Lucene升级为lucene-8"><a href="#Lucene升级为lucene-8" class="headerlink" title="Lucene升级为lucene 8"></a>Lucene升级为lucene 8</h5><p>es可以看过是分布式lucene，lucene的性能直接决定es的性能。lucene8在top k及其他查询上有很大的性能提升。</p>
+<h5 id="跨集群搜索的优化"><a href="#跨集群搜索的优化" class="headerlink" title="跨集群搜索的优化"></a>跨集群搜索的优化</h5><p>es 5.3开始提供了跨集群搜索的功能。es7的跨集群搜索增加了<code>ccs_minimize_roundtrips</code>模式，暂不细究该模式的实现方式，该模式会减少不需要的网络交互，在高延迟的场景下，该模式能带来更好的性能。</p>
+<h5 id="新的集群调度系统实现"><a href="#新的集群调度系统实现" class="headerlink" title="新的集群调度系统实现"></a>新的集群调度系统实现</h5><p>以前版本的es统一用一套方便的可插板的集群调度ZenDiscovery,详见:<a href="http://note.youdao.com/noteshare?id=cf568cab9970d55e14b2a9c2a6ba2b6a" target="_blank" rel="external">http://note.youdao.com/noteshare?id=cf568cab9970d55e14b2a9c2a6ba2b6a</a> ;该调度系统非常方便，但是<code>minimum_master_nodes</code>这个配置项经常被遗忘，可能会导致脑裂。在存活的大集群中维护该配置项也是个成本很大的工作。</p>
+<p>在es7中，该部分已被重构。新版本的只需要亚秒级就可以完成选举，而老的Zen那套可能需要几秒钟才能完成。也不再需要配置<code>minimum_master_nodes</code>，不用担心脑裂问题。 据说该改动的重构也为es后期的扩展性得到了提升。</p>
+<h5 id="更好的熔断器"><a href="#更好的熔断器" class="headerlink" title="更好的熔断器"></a>更好的熔断器</h5><p>在查询的时候，熔断器会拒绝掉大查询以避免节点出现oom，集群被拖垮的情况。</p>
+<h5 id="跨集群备份可在生产环境使用"><a href="#跨集群备份可在生产环境使用" class="headerlink" title="跨集群备份可在生产环境使用"></a>跨集群备份可在生产环境使用</h5><p>非常非常非常有用的功能，跨集群备份！！！</p>
+<p>该功能在6.5的时候还处于beta地步，现在可以在线上环境使用了，跨集群备份！可以做集群双活了。</p>
+<h5 id="索引生命周期管理"><a href="#索引生命周期管理" class="headerlink" title="索引生命周期管理"></a>索引生命周期管理</h5><p>索引声明周期管理(Index Lifecycle Management )，简称ILM,ILM在es 6.6的时候为beta版，在7中可在生产环境使用，该功能可以轻松的控制es中的数据，很实用的功能。内容较多，具体查看<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.0/index-lifecycle-management.html" target="_blank" rel="external">https://www.elastic.co/guide/en/elasticsearch/reference/7.0/index-lifecycle-management.html</a></p>
+<h5 id="xpack-sql在生产环境ready"><a href="#xpack-sql在生产环境ready" class="headerlink" title="xpack-sql在生产环境ready"></a>xpack-sql在生产环境ready</h5><p>es 6.3中内置了sql，当时还是GA版的，由于很多功能的缺失，用起来比较鸡肋，现在终于是正式版了，并且提供了GA版的jdbc。</p>
+<h5 id="java-High-Level-REST-Client客户端功能完善"><a href="#java-High-Level-REST-Client客户端功能完善" class="headerlink" title="java  High Level REST Client客户端功能完善"></a>java  High Level REST Client客户端功能完善</h5><p>es 6后就主推了Rest Client，但是在早期的版本中，由于很多功能未实现，需要通过Low level Cient来模拟发送http请求来获取返回内容。 在es7中该部分功能得到了极大的完善。</p>
+<h5 id="支持纳秒级的时间"><a href="#支持纳秒级的时间" class="headerlink" title="支持纳秒级的时间"></a>支持纳秒级的时间</h5><p>老版本的时间只支持到毫秒级，现在使用<code>date_nanos</code>字段可以写入到纳秒级的时间。</p>
+<h5 id="更快的top-k查询"><a href="#更快的top-k查询" class="headerlink" title="更快的top k查询"></a>更快的top k查询</h5><p>es 7在top k上查询进行了性能优化，得分最高的若干个是可配置的，默认值为10000.大概原理为查top k的时候会跳过得分低于10000的文档来达到更快的性能。在命中的结果集小于10000的情况下，该性能优化并不会生效。 该方法是通过跳过较低的排名记录得到的实现，所以在聚合查询上并不生效。详细原理点击查看:<a href="https://www.elastic.co/blog/faster-retrieval-of-top-hits-in-elasticsearch-with-block-max-wand" target="_blank" rel="external">https://www.elastic.co/blog/faster-retrieval-of-top-hits-in-elasticsearch-with-block-max-wand</a></p>
+<h5 id="支持TLS-1-3协议"><a href="#支持TLS-1-3协议" class="headerlink" title="支持TLS 1.3协议"></a>支持TLS 1.3协议</h5><p>然并卵的功能，TLS 1.3协议对开发来说能带来什么好处呢？</p>
+<h5 id="支持自定义的jdk版本"><a href="#支持自定义的jdk版本" class="headerlink" title="支持自定义的jdk版本"></a>支持自定义的jdk版本</h5><p>以前只能用open jdk，现在公司自己的jdk版本也可以支持了。</p>
+<h5 id="Rank-Features"><a href="#Rank-Features" class="headerlink" title="Rank Features"></a>Rank Features</h5><p>增加了rank_feature 和 rank_features两个字段类型，不知道这类型有什么作用。</p>
+<h4 id="一些不算亮点的改动"><a href="#一些不算亮点的改动" class="headerlink" title="一些不算亮点的改动"></a>一些不算亮点的改动</h4><h5 id="Aggregations"><a href="#Aggregations" class="headerlink" title="Aggregations"></a>Aggregations</h5><pre><code>- 老版本中统计函数遇到控制返回为null，百分比函数返回为NaN;百分比统计函数和排序统计函数当遇到空值的时候返回值为null;
+- 老版本中当field1不存在时，sum(field1)=0,而stats.sum(field1)=null;统一都返回为0。
+- 上个版本_agg 中的一些decprecated函数被移除。
+</code></pre><h5 id="一些权限相关的"><a href="#一些权限相关的" class="headerlink" title="一些权限相关的"></a>一些权限相关的</h5><pre><code>- 略过不谈
+</code></pre><h5 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h5><pre><code>- 然并卵的版本冲突提示优化，老版本提示冲突版本号为-1，新版本提示版本号不存在
+- UpdateRequest加入了ObjectParser，老版本中会有一些肯定无法执行的update script，会被接受但不会具体执行，新版本则是拒绝。
+- 移除并发控制时候cas指定内部版本号的功能。这个功能会带来比较严重的问题,[详见链接](https://github.com/elastic/elasticsearch/pull/38254)        
+</code></pre><h5 id="Indices-APIs"><a href="#Indices-APIs" class="headerlink" title="Indices APIs"></a>Indices APIs</h5><pre><code>- 没什么重要的更新,nested字段默认10000上限，exists索引不存在时候返回404之类的
+</code></pre><h5 id="Java-Low-Level-REST-Client"><a href="#Java-Low-Level-REST-Client" class="headerlink" title="Java Low Level REST Client"></a>Java Low Level REST Client</h5><pre><code>- 画重点，不再支持jdk7!
+</code></pre><h5 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h5><pre><code>- 存储上增加了一个叫elasticsearch-shard的东西，删除掉了index.shard.check_on_startup: fix这个配置和elasticsearch-translog。起因是他们认为这个配置项太危险，同时他们需要一个自动删除腐化分片的工具。详见:https://github.com/elastic/elasticsearch/issues/31389
+</code></pre><h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><pre><code>- 略
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://gpdream.github.io/2019/04/24/es/es7-changes/" data-id="cjuwg3jvv0000d8i9l35k887d" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/es/">es</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/13/machine_learn/ml_lrcv/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">人和wifi的亲密度,机器学习手把手教程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/aliyun/">aliyun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/es/">es</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/greenplum/">greenplum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/influxdb/">influxdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-line/">machine-line</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mycat/">mycat</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/aliyun/" style="font-size: 12px;">aliyun</a> <a href="/tags/es/" style="font-size: 20px;">es</a> <a href="/tags/greenplum/" style="font-size: 18px;">greenplum</a> <a href="/tags/hadoop/" style="font-size: 12px;">hadoop</a> <a href="/tags/influxdb/" style="font-size: 10px;">influxdb</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/machine-line/" style="font-size: 10px;">machine-line</a> <a href="/tags/mycat/" style="font-size: 14px;">mycat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/24/es/es7-changes/">elasticsearch 7重要更新内容</a>
+          </li>
+        
+          <li>
+            <a href="/2019/04/13/machine_learn/ml_lrcv/">人和wifi的亲密度,机器学习手把手教程</a>
+          </li>
+        
+          <li>
+            <a href="/2019/02/01/java/gc-online/">java gc生产环境实践</a>
+          </li>
+        
+          <li>
+            <a href="/2018/08/02/es/es-source-env/">es 6源码debug环境搭建</a>
+          </li>
+        
+          <li>
+            <a href="/2018/07/11/es/es-xpack-sql-optimizer/">x-pack sql做的sql优化</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 甲鱼<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://gpdream.github.io/"/>
-  <updated>2019-04-17T07:45:53.000Z</updated>
+  <updated>2019-04-25T09:28:41.000Z</updated>
   <id>https://gpdream.github.io/</id>
   
   <author>
@@ -14,6 +14,24 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>elasticsearch 7重要更新内容</title>
+    <link href="https://gpdream.github.io/2019/04/24/es/es7-changes/"/>
+    <id>https://gpdream.github.io/2019/04/24/es/es7-changes/</id>
+    <published>2019-04-24T13:13:33.000Z</published>
+    <updated>2019-04-25T09:28:41.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;elasticsearch 7更新了,其中有一些很不错的功能点。比如集群间的备份，查询熔断器，索引生命周期管理，生产环境级别的xpack-sql,完善的hive-level-rest-client等。&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
+    
+  </entry>
   
   <entry>
     <title>人和wifi的亲密度,机器学习手把手教程</title>
@@ -106,6 +124,24 @@
   </entry>
   
   <entry>
+    <title>lucene源码阅读3-flush</title>
+    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
+    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
+    <published>2018-05-04T08:13:33.000Z</published>
+    <updated>2018-05-04T08:43:50.000Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
+    
+  </entry>
+  
+  <entry>
     <title>luene源码目录</title>
     <link href="https://gpdream.github.io/2018/05/04/es/lucene-1-dir/"/>
     <id>https://gpdream.github.io/2018/05/04/es/lucene-1-dir/</id>
@@ -133,24 +169,6 @@
     <summary type="html">
     
       &lt;p&gt;主要介绍lucene创建索引的源码部分&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="es" scheme="https://gpdream.github.io/tags/es/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>lucene源码阅读3-flush</title>
-    <link href="https://gpdream.github.io/2018/05/04/es/lucene-3-flush/"/>
-    <id>https://gpdream.github.io/2018/05/04/es/lucene-3-flush/</id>
-    <published>2018-05-04T08:13:33.000Z</published>
-    <updated>2018-05-04T08:43:50.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;跟着debug走读flush全流程代码&lt;br&gt;
     
     </summary>
     
@@ -365,25 +383,6 @@
     
     
       <category term="hadoop" scheme="https://gpdream.github.io/tags/hadoop/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>由于gpstop -M immediate导致gp reciverseg失败</title>
-    <link href="https://gpdream.github.io/2017/01/04/greenplum/GP%20recoverseg/"/>
-    <id>https://gpdream.github.io/2017/01/04/greenplum/GP recoverseg/</id>
-    <published>2017-01-04T05:28:51.000Z</published>
-    <updated>2017-01-04T06:01:16.000Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;现象&quot;&gt;&lt;a href=&quot;#现象&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h2&gt;&lt;h3 id=&quot;操作&quot;&gt;&lt;a href=&quot;#操作&quot; class=&quot;headerlink&quot; title=&quot;操作&quot;&gt;&lt;/a&gt;操作&lt;/h3&gt;&lt;p&gt;有个主segment挂了，运行了gprecoverseg，在gprecoverseg进程还未结束的时候运行gpstop -M immediate.然后运行gpstart -a启动集群出现问题。&lt;/p&gt;
-&lt;h3 id=&quot;现象-1&quot;&gt;&lt;a href=&quot;#现象-1&quot; class=&quot;headerlink&quot; title=&quot;现象&quot;&gt;&lt;/a&gt;现象&lt;/h3&gt;&lt;p&gt;gpstart -a 集群启动成功，但带告警&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Successful segment starts                                            = 4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Failed segment starts                                                = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-   Skipped segment starts (segments are marked down in configuration)   = 0&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Successfully started 4 of 4 segment instances&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-----------------------------------------------------&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:39:023724 gpstart:mdw1:gpadmin-[INFO]:-Starting Master instance mdw1.com directory /home/gpadmin/data/master/gpseg-1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:56:40:023724 gpstart:mdw1:gpadmin-[INFO]:-Command pg_ctl reports Master mdw1.com instance active&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;20161031:09:57:05:023724 gpstart:mdw1:gpadmin-[WARNING]:-FATAL:  DTM initialization: failure during startup recovery, retry failed, check segment status (cdbtm.c:1602)&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="greenplum" scheme="https://gpdream.github.io/tags/greenplum/"/>
     
   </entry>
   
