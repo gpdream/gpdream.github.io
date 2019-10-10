@@ -2,7 +2,7 @@
 
 elasticsearch的架构以及内部分片的原理
 
-## ### 基本概念
+## 基本概念
 
 - **节点** :一个elasticsearch进程，节点分datanode(数据节点)，masternode(管控节点)，ingestnode(接入节点)三种。1个进程可以同时担任这3个角色。
 - **索引库** :Index,document数据以及倒排索引的合集。
