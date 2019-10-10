@@ -1,6 +1,6 @@
 # elasticsearch介绍
 
-elasticsearch的架构以及内部分片的原理
+一句话描述es:一个基于lucene的分布式搜索引擎，也可以作为nosql数据库使用。本文会介绍elasticsearch的架构以及内部分片的原理。
 
 ## 基本概念
 
